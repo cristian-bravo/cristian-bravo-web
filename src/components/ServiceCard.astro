@@ -1,17 +1,12 @@
----
+﻿---
 const { title, description } = Astro.props;
 ---
-<article class="card service-card">
-  <h3>{title}</h3>
-  <p>{description}</p>
-  <style>
-    .service-card h3 {
-      margin: 0 0 12px;
-    }
-
-    .service-card p {
-      color: var(--muted);
-      margin: 0;
-    }
-  </style>
+<article class="group relative flex min-h-[200px] flex-col gap-3 overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm transition hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow dark:hover:border-brand-purple/50">
+  <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/15 via-transparent to-brand-blue/10"></div>
+  </div>
+  <div class="relative z-10">
+    <h3 class="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">{title}</h3>
+    <p class="mt-2 text-sm text-slate-600 dark:text-brand-muted">{description}</p>
+  </div>
 </article>

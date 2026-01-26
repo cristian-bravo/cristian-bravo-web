@@ -1,43 +1,65 @@
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div>
-      <p class="brand">CYSTEMS</p>
-      <p>Innovación tecnológica para empresas que crecen.</p>
+﻿---
+const year = new Date().getFullYear();
+---
+<footer class="border-t border-slate-200/70 bg-slate-50/70 backdrop-blur dark:border-brand-purple/15 dark:bg-brand-bg/85">
+  <div class="mx-auto w-full max-w-[1120px] px-4 py-16 sm:px-6">
+    <div class="grid gap-10 lg:grid-cols-[1.2fr,1fr]">
+      <div class="grid gap-3">
+        <p class="font-display text-sm font-semibold uppercase tracking-[0.3em] text-slate-900 dark:text-brand-text">
+          CYSTEMS
+        </p>
+        <p class="text-[0.75rem] uppercase tracking-[0.2em] text-slate-500 dark:text-brand-mutedStrong">
+          Transforma ideas en tecnología
+        </p>
+        <p class="text-base text-slate-600 dark:text-brand-muted">
+          Ingeniería digital, productos escalables y soporte continuo para equipos exigentes.
+        </p>
+      </div>
+      <div class="grid gap-8 sm:grid-cols-2">
+        <div>
+          <p class="mb-3 text-sm font-semibold text-slate-900 dark:text-brand-text">Compañía</p>
+          <div class="grid gap-2 text-sm text-slate-600 dark:text-brand-muted">
+            <a
+              class="transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:hover:text-brand-text dark:focus-visible:ring-offset-brand-bg"
+              href="/servicios"
+            >
+              Servicios
+            </a>
+            <a
+              class="transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:hover:text-brand-text dark:focus-visible:ring-offset-brand-bg"
+              href="/proyectos"
+            >
+              Proyectos
+            </a>
+          </div>
+        </div>
+        <div>
+          <p class="mb-3 text-sm font-semibold text-slate-900 dark:text-brand-text">Contacto</p>
+          <div class="grid gap-2 text-sm text-slate-600 dark:text-brand-muted">
+            <a
+              class="transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:hover:text-brand-text dark:focus-visible:ring-offset-brand-bg"
+              href="/contacto"
+            >
+              Agenda una llamada
+            </a>
+            <a
+              class="transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:hover:text-brand-text dark:focus-visible:ring-offset-brand-bg"
+              href="/solicitar-desarrollo"
+            >
+              Solicitar desarrollo
+            </a>
+            <a
+              class="transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:hover:text-brand-text dark:focus-visible:ring-offset-brand-bg"
+              href="/perfil/cristian-bravo"
+            >
+              Perfil profesional
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="footer-links">
-      <a href="/contacto">Contacto</a>
-      <a href="/blog">Blog</a>
-      <a href="/perfil/cristian-bravo">Perfil profesional</a>
+    <div class="mt-10 border-t border-slate-200/70 pt-6 text-sm text-slate-500 dark:border-brand-purple/15 dark:text-brand-mutedStrong">
+      (c) {year} CYSTEMS. Desarrollo de software y arquitectura moderna.
     </div>
   </div>
-  <style>
-    .site-footer {
-      padding: 40px 0 56px;
-      background: #0d0b1f;
-      color: #f4f1ff;
-    }
-
-    .footer-inner {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .brand {
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      margin: 0 0 8px;
-    }
-
-    .footer-links {
-      display: grid;
-      gap: 8px;
-    }
-
-    .footer-links a {
-      color: #f4f1ff;
-      opacity: 0.8;
-    }
-  </style>
 </footer>

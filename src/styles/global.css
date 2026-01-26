@@ -1,0 +1,29 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .bg-tech {
+    background-color: #f4f6fb;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(124, 60, 255, 0.12), transparent 48%),
+      radial-gradient(circle at 80% 0%, rgba(59, 130, 246, 0.12), transparent 52%),
+      radial-gradient(circle at 70% 80%, rgba(124, 60, 255, 0.08), transparent 50%),
+      linear-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+    background-size: auto, auto, auto, 48px 48px, 48px 48px;
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+
+  .dark .bg-tech {
+    background-color: #0a0a12;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(124, 60, 255, 0.18), transparent 45%),
+      radial-gradient(circle at 80% 0%, rgba(59, 130, 246, 0.2), transparent 48%),
+      radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.12), transparent 52%),
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: auto, auto, auto, 48px 48px, 48px 48px;
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+}

@@ -1,76 +1,63 @@
----
+﻿---
 const {
   title = 'Transforma ideas en tecnología',
-  subtitle = 'Soluciones digitales para empresas que buscan velocidad, seguridad y escalabilidad.',
-  cta = 'Conversemos',
-  ctaLink = '/contacto',
+  subtitle =
+    'Estrategia, diseño y desarrollo de plataformas digitales para empresas que necesitan velocidad, seguridad y escalabilidad.',
+  cta = 'Solicitar desarrollo',
+  ctaLink = '/solicitar-desarrollo',
 } = Astro.props;
 ---
-<section class="hero">
-  <div class="container hero-inner">
-    <div>
-      <p class="eyebrow">CYSTEMS · Ingeniería digital</p>
-      <h1>{title}</h1>
-      <p class="subtitle">{subtitle}</p>
-      <a class="button" href={ctaLink}>{cta}</a>
-    </div>
-    <div class="hero-card">
-      <p class="hero-label">Deploy target</p>
-      <p class="hero-value">Contabo VPS</p>
-      <p class="hero-meta">Arquitecturas robustas para infraestructura dedicada.</p>
+<section class="relative overflow-hidden py-20 sm:py-24 lg:py-28">
+  <div class="pointer-events-none absolute inset-0 bg-hero-glow"></div>
+  <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+    <div class="grid items-center gap-10 lg:grid-cols-[1.1fr,0.9fr]">
+      <div class="grid gap-5">
+        <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">
+          CYSTEMS - Ingeniería digital
+        </p>
+        <h1 class="font-display text-4xl font-semibold leading-tight tracking-tight text-transparent sm:text-5xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
+          {title}
+        </h1>
+        <p class="max-w-xl text-base text-slate-600 sm:text-lg dark:text-brand-muted">{subtitle}</p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            class="inline-flex items-center justify-center rounded-full bg-brand-gradient px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:shadow-glow dark:focus-visible:ring-offset-brand-bg"
+            href={ctaLink}
+          >
+            {cta}
+          </a>
+          <a
+            class="inline-flex items-center justify-center rounded-full border border-slate-200/70 bg-white/70 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-brand-purple/40 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-brand-purple/40 dark:bg-white/5 dark:text-brand-text dark:hover:border-brand-purple/60 dark:focus-visible:ring-offset-brand-bg"
+            href="/proyectos"
+          >
+            Ver proyectos
+          </a>
+        </div>
+        <div class="grid gap-4 border-t border-slate-200/70 pt-6 text-sm text-slate-600 dark:border-brand-purple/20 dark:text-brand-muted">
+          <div>
+            <p class="text-[0.7rem] uppercase tracking-[0.2em] text-slate-500 dark:text-brand-mutedStrong">Enfoque</p>
+            <p class="font-semibold text-slate-900 dark:text-brand-text">
+              Plataformas web, automatización y cloud
+            </p>
+          </div>
+          <div>
+            <p class="text-[0.7rem] uppercase tracking-[0.2em] text-slate-500 dark:text-brand-mutedStrong">Entrega</p>
+            <p class="font-semibold text-slate-900 dark:text-brand-text">Roadmaps claros y despliegues seguros</p>
+          </div>
+        </div>
+      </div>
+      <div class="relative overflow-hidden rounded-[28px] border border-slate-200/70 bg-gradient-to-br from-brand-purple/10 via-white/80 to-white p-8 shadow-lg shadow-slate-900/10 backdrop-blur-sm dark:border-brand-purple/30 dark:bg-gradient-to-br dark:from-brand-purple/20 dark:via-brand-surface/90 dark:to-brand-surface dark:shadow-glow">
+        <div class="pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full bg-brand-purple/20 opacity-60 blur-3xl"></div>
+        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-brand-mutedStrong">Capacidades clave</p>
+        <h2 class="mt-3 font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+          Arquitectura + producto + operación
+        </h2>
+        <ul class="mt-4 grid list-disc gap-3 pl-5 text-sm text-slate-600 marker:text-brand-purple/60 dark:text-brand-muted">
+          <li>Diseño de soluciones a medida para equipos técnicos y negocio.</li>
+          <li>Integraciones críticas con APIs, pagos y sistemas internos.</li>
+          <li>Observabilidad, performance y escalabilidad sobre infraestructura dedicada.</li>
+        </ul>
+      </div>
     </div>
   </div>
-  <style>
-    .hero {
-      padding: 88px 0 72px;
-    }
-
-    .hero-inner {
-      display: grid;
-      align-items: center;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 32px;
-    }
-
-    .eyebrow {
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-
-    h1 {
-      font-size: clamp(2.4rem, 3vw, 3.4rem);
-      margin: 12px 0 16px;
-    }
-
-    .subtitle {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 520px;
-    }
-
-    .hero-card {
-      padding: 28px;
-      border-radius: 24px;
-      background: linear-gradient(140deg, rgba(107, 44, 255, 0.18), rgba(58, 124, 255, 0.1));
-      border: 1px solid rgba(107, 44, 255, 0.2);
-    }
-
-    .hero-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      color: var(--muted);
-    }
-
-    .hero-value {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 12px 0 8px;
-    }
-
-    .hero-meta {
-      color: var(--muted);
-    }
-  </style>
 </section>

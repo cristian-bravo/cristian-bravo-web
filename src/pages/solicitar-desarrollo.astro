@@ -1,21 +1,38 @@
----
+﻿---
 import CystemsLayout from '../layouts/CystemsLayout.astro';
 import ContactForm from '../components/ContactForm.astro';
 ---
 <CystemsLayout title="Solicitar desarrollo | CYSTEMS">
-  <section class="section">
-    <div class="container">
-      <h1 class="gradient-text">Solicitar desarrollo</h1>
-      <p class="lead">
-        Comparte la necesidad de tu empresa. Diseñamos un plan de implementación y despliegue en Contabo VPS.
-      </p>
-      <ContactForm />
+  <section class="py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+      <div class="grid items-start gap-10 lg:grid-cols-[1.1fr,0.9fr]">
+        <div class="grid gap-4">
+          <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">Inicio de proyecto</p>
+          <h1 class="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
+            Solicitar desarrollo
+          </h1>
+          <p class="max-w-xl text-base text-slate-600 dark:text-brand-muted sm:text-lg">
+            Comparte la necesidad de tu empresa. Diseñamos un plan de implementación y despliegue alineado con tus
+            objetivos.
+          </p>
+          <div class="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow">
+            <div class="pointer-events-none absolute inset-0 opacity-40">
+              <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/15 via-transparent to-brand-blue/10"></div>
+            </div>
+            <div class="relative z-10">
+              <h3 class="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+                Información recomendada
+              </h3>
+              <ul class="mt-4 grid list-disc gap-3 pl-5 text-sm text-slate-600 marker:text-brand-purple/60 dark:text-brand-muted">
+                <li>Objetivos de negocio y métricas clave.</li>
+                <li>Plazos, alcance y equipos involucrados.</li>
+                <li>Integraciones actuales o sistemas críticos.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <ContactForm />
+      </div>
     </div>
   </section>
-  <style>
-    .lead {
-      color: var(--muted);
-      max-width: 640px;
-    }
-  </style>
 </CystemsLayout>

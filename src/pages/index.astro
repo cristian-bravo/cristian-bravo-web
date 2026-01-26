@@ -1,59 +1,121 @@
----
+﻿---
 import CystemsLayout from '../layouts/CystemsLayout.astro';
 import Hero from '../components/Hero.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 ---
-<CystemsLayout title="CYSTEMS | Transformación digital">
+<CystemsLayout title="CYSTEMS | Transforma ideas en tecnología">
   <Hero />
 
-  <section class="section">
-    <div class="container">
-      <h2 class="gradient-text">Servicios corporativos</h2>
-      <div class="grid grid-3">
+  <section class="border-y border-slate-200/70 bg-slate-50/70 py-16 dark:border-brand-purple/15 dark:bg-white/5 sm:py-20 lg:py-24">
+    <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+      <div class="mb-8 grid gap-3">
+        <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">Servicios</p>
+        <h2 class="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
+          Soluciones digitales para equipos exigentes
+        </h2>
+        <p class="max-w-2xl text-base text-slate-600 dark:text-brand-muted sm:text-lg">
+          Acompañamos a empresas con estrategia, diseño y desarrollo de plataformas enfocadas en resultados reales.
+        </p>
+      </div>
+      <div class="grid gap-6 md:grid-cols-3">
         <ServiceCard
-          title="Arquitectura Cloud"
-          description="Diseño de infraestructuras escalables y seguras para entornos corporativos."
+          title="Arquitectura cloud & DevOps"
+          description="Infraestructura segura, pipelines de despliegue y operación eficiente para crecer sin fricciones."
         />
         <ServiceCard
-          title="Desarrollo a medida"
-          description="Aplicaciones web y móviles con enfoque en rendimiento y UX empresarial."
+          title="Desarrollo de producto"
+          description="Aplicaciones web modernas con foco en experiencia, métricas y escalabilidad."
         />
         <ServiceCard
-          title="Automatización y datos"
-          description="Integraciones, analítica y procesos automáticos que aceleran decisiones."
+          title="Automatización e integraciones"
+          description="Conectamos sistemas críticos, datos y procesos para acelerar decisiones y operaciones."
         />
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <h2>Soluciones para compañías globales</h2>
-      <p class="lead">
-        En CYSTEMS combinamos estrategia digital, ingeniería de software y soporte continuo para
-        transformar operaciones de negocio en plataformas tecnológicas modernas.
-      </p>
+  <section class="py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+      <div class="mb-8 grid gap-3">
+        <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">Método</p>
+        <h2 class="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
+          Cómo trabajamos en CYSTEMS
+        </h2>
+        <p class="max-w-2xl text-base text-slate-600 dark:text-brand-muted sm:text-lg">
+          Un proceso claro para transformar requerimientos complejos en soluciones digitales de alto impacto.
+        </p>
+      </div>
+      <div class="grid gap-6 md:grid-cols-3">
+        <article class="group relative flex min-h-[200px] flex-col gap-3 overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm transition hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow dark:hover:border-brand-purple/50">
+          <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/15 via-transparent to-brand-blue/10"></div>
+          </div>
+          <div class="relative z-10">
+            <h3 class="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+              Diagnóstico estratégico
+            </h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-brand-muted">
+              Analizamos objetivos, métricas y restricciones técnicas para definir la ruta correcta.
+            </p>
+          </div>
+        </article>
+        <article class="group relative flex min-h-[200px] flex-col gap-3 overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm transition hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow dark:hover:border-brand-purple/50">
+          <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/15 via-transparent to-brand-blue/10"></div>
+          </div>
+          <div class="relative z-10">
+            <h3 class="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+              Diseño y ejecución
+            </h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-brand-muted">
+              Diseñamos arquitectura, UX y entregas por etapas con visibilidad total.
+            </p>
+          </div>
+        </article>
+        <article class="group relative flex min-h-[200px] flex-col gap-3 overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm transition hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow dark:hover:border-brand-purple/50">
+          <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/15 via-transparent to-brand-blue/10"></div>
+          </div>
+          <div class="relative z-10">
+            <h3 class="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+              Operación continua
+            </h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-brand-muted">
+              Monitoreo, performance y soporte para asegurar estabilidad y evolución constante.
+            </p>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container card callout">
-      <h2>¿Listo para iniciar?</h2>
-      <p>Coordina un diagnóstico sin costo y define el roadmap tecnológico de tu empresa.</p>
-      <a class="button" href="/solicitar-desarrollo">Solicitar desarrollo</a>
+  <section class="py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+      <div class="grid gap-6 rounded-[28px] border border-brand-purple/20 bg-gradient-to-br from-brand-purple/20 via-white/80 to-white p-8 shadow-lg shadow-slate-900/10 backdrop-blur-sm dark:border-brand-purple/40 dark:bg-gradient-to-br dark:from-brand-purple/30 dark:via-brand-surface/90 dark:to-brand-surface dark:shadow-glow md:grid-cols-[1.2fr,0.8fr] md:items-center">
+        <div class="grid gap-3">
+          <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">Siguiente paso</p>
+          <h2 class="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
+            Conversemos sobre tu plataforma
+          </h2>
+          <p class="max-w-xl text-base text-slate-600 dark:text-brand-muted sm:text-lg">
+            Agenda una sesión de discovery y recibe un roadmap tecnológico alineado con tu negocio.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a
+            class="inline-flex items-center justify-center rounded-full bg-brand-gradient px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:shadow-glow dark:focus-visible:ring-offset-brand-bg"
+            href="/solicitar-desarrollo"
+          >
+            Solicitar desarrollo
+          </a>
+          <a
+            class="inline-flex items-center justify-center rounded-full border border-slate-200/70 bg-white/70 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-brand-purple/40 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-brand-purple/40 dark:bg-white/5 dark:text-brand-text dark:hover:border-brand-purple/60 dark:focus-visible:ring-offset-brand-bg"
+            href="/contacto"
+          >
+            Contacto
+          </a>
+        </div>
+      </div>
     </div>
   </section>
-
-  <style>
-    .lead {
-      color: var(--muted);
-      max-width: 640px;
-    }
-
-    .callout {
-      display: grid;
-      gap: 12px;
-      align-items: start;
-    }
-  </style>
 </CystemsLayout>

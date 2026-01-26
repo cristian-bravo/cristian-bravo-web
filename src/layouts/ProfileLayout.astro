@@ -1,13 +1,16 @@
----
+﻿---
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-const { title = 'Perfil | Cristian Bravo', description } = Astro.props;
+const {
+  title = 'Perfil | Cristian Bravo',
+  description = 'Perfil profesional, experiencia y enfoque técnico en CYSTEMS.',
+} = Astro.props;
 ---
 <BaseLayout title={title} description={description}>
   <Header />
-  <main>
+  <main class="min-h-[60vh]">
     <slot />
   </main>
   <Footer />

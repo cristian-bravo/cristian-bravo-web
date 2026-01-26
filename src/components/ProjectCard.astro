@@ -1,32 +1,15 @@
+﻿---
+const { title, description, visibility = 'Público' } = Astro.props;
 ---
-const { title, description, visibility = 'Publico' } = Astro.props;
----
-<article class="card project-card">
-  <div class="badge">{visibility}</div>
-  <h3>{title}</h3>
-  <p>{description}</p>
-  <style>
-    .project-card {
-      position: relative;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      background: rgba(107, 44, 255, 0.12);
-      color: var(--purple);
-      margin-bottom: 12px;
-    }
-
-    .project-card h3 {
-      margin: 0 0 12px;
-    }
-
-    .project-card p {
-      color: var(--muted);
-      margin: 0;
-    }
-  </style>
+<article class="group relative flex min-h-[200px] flex-col gap-3 overflow-hidden rounded-3xl border border-slate-200/70 bg-gradient-to-br from-brand-blue/10 via-white/80 to-white p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm transition hover:-translate-y-1 hover:border-brand-blue/40 hover:shadow-xl dark:border-brand-blue/30 dark:bg-gradient-to-br dark:from-brand-blue/15 dark:via-brand-surface/90 dark:to-brand-surface dark:shadow-glow dark:hover:border-brand-blue/60">
+  <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-blue/15 via-transparent to-brand-purple/15"></div>
+  </div>
+  <div class="relative z-10">
+    <span class="inline-flex w-fit items-center rounded-full border border-brand-blue/40 bg-brand-blue/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-brand-blue shadow-sm dark:text-blue-200">
+      {visibility}
+    </span>
+    <h3 class="mt-3 font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">{title}</h3>
+    <p class="mt-2 text-sm text-slate-600 dark:text-brand-muted">{description}</p>
+  </div>
 </article>
