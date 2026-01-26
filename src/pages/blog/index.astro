@@ -1,0 +1,35 @@
+---
+import CystemsLayout from '../../layouts/CystemsLayout.astro';
+---
+<CystemsLayout title="Blog | CYSTEMS">
+  <section class="section">
+    <div class="container">
+      <h1 class="gradient-text">Blog</h1>
+      <p class="lead">Insights sobre tecnología corporativa, arquitectura y operación en Contabo VPS.</p>
+      <div class="grid">
+        <article class="card">
+          <h2><a href="/blog/infraestructura-critica">Infraestructura crítica en 2024</a></h2>
+          <p>Cómo preparar plataformas empresariales para cargas exigentes y alta disponibilidad.</p>
+        </article>
+        <article class="card">
+          <h2><a href="/blog/productividad-digital">Productividad digital para equipos</a></h2>
+          <p>Automatización y datos que aceleran la toma de decisiones.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+  <style>
+    .lead {
+      color: var(--muted);
+      max-width: 640px;
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+    }
+
+    .card a {
+      color: var(--purple);
+    }
+  </style>
+</CystemsLayout>

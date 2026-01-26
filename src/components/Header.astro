@@ -1,0 +1,49 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="/">
+      <span class="logo-mark">CYSTEMS</span>
+    </a>
+    <nav class="nav">
+      <a href="/servicios">Servicios</a>
+      <a href="/proyectos">Proyectos</a>
+      <a href="/solicitar-desarrollo">Solicitar desarrollo</a>
+      <a href="/contacto">Contacto</a>
+      <a href="/perfil/cristian-bravo">Perfil</a>
+    </nav>
+  </div>
+  <style>
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(246, 244, 255, 0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(107, 44, 255, 0.12);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      gap: 24px;
+    }
+
+    .logo-mark {
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .nav a:hover {
+      color: var(--purple);
+    }
+  </style>
+</header>

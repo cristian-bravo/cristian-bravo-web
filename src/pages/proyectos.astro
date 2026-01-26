@@ -1,0 +1,49 @@
+---
+import CystemsLayout from '../layouts/CystemsLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+---
+<CystemsLayout title="Proyectos | CYSTEMS">
+  <section class="section">
+    <div class="container">
+      <h1 class="gradient-text">Proyectos</h1>
+      <p class="lead">
+        Entregas enfocadas en impacto. Algunos casos públicos y menciones confidenciales.
+      </p>
+      <div class="grid grid-2">
+        <ProjectCard
+          title="Fualtec"
+          description="Plataforma digital para procesos industriales y operaciones B2B."
+        />
+        <ProjectCard
+          title="Alkosto"
+          description="Integraciones de catálogo y experiencia de compra omnicanal."
+        />
+        <ProjectCard
+          title="NYProject"
+          description="Portal de proyectos con indicadores de avance en tiempo real."
+        />
+        <ProjectCard
+          title="360 Integration"
+          description="Proyecto confidencial de integraciones empresariales."
+          visibility="Privado"
+        />
+        <ProjectCard
+          title="Club Guías"
+          description="Ecosistema privado para fidelización y contenido especializado."
+          visibility="Privado"
+        />
+        <ProjectCard
+          title="Plataformas educativas"
+          description="Suite privada para formación y seguimiento académico." 
+          visibility="Privado"
+        />
+      </div>
+    </div>
+  </section>
+  <style>
+    .lead {
+      color: var(--muted);
+      max-width: 640px;
+    }
+  </style>
+</CystemsLayout>

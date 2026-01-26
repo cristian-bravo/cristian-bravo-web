@@ -1,0 +1,76 @@
+---
+const {
+  title = 'Transforma ideas en tecnología',
+  subtitle = 'Soluciones digitales para empresas que buscan velocidad, seguridad y escalabilidad.',
+  cta = 'Conversemos',
+  ctaLink = '/contacto',
+} = Astro.props;
+---
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <p class="eyebrow">CYSTEMS · Ingeniería digital</p>
+      <h1>{title}</h1>
+      <p class="subtitle">{subtitle}</p>
+      <a class="button" href={ctaLink}>{cta}</a>
+    </div>
+    <div class="hero-card">
+      <p class="hero-label">Deploy target</p>
+      <p class="hero-value">Contabo VPS</p>
+      <p class="hero-meta">Arquitecturas robustas para infraestructura dedicada.</p>
+    </div>
+  </div>
+  <style>
+    .hero {
+      padding: 88px 0 72px;
+    }
+
+    .hero-inner {
+      display: grid;
+      align-items: center;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 3vw, 3.4rem);
+      margin: 12px 0 16px;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+    }
+
+    .hero-card {
+      padding: 28px;
+      border-radius: 24px;
+      background: linear-gradient(140deg, rgba(107, 44, 255, 0.18), rgba(58, 124, 255, 0.1));
+      border: 1px solid rgba(107, 44, 255, 0.2);
+    }
+
+    .hero-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+    }
+
+    .hero-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 12px 0 8px;
+    }
+
+    .hero-meta {
+      color: var(--muted);
+    }
+  </style>
+</section>

@@ -1,0 +1,59 @@
+---
+import CystemsLayout from '../layouts/CystemsLayout.astro';
+import Hero from '../components/Hero.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+---
+<CystemsLayout title="CYSTEMS | Transformación digital">
+  <Hero />
+
+  <section class="section">
+    <div class="container">
+      <h2 class="gradient-text">Servicios corporativos</h2>
+      <div class="grid grid-3">
+        <ServiceCard
+          title="Arquitectura Cloud"
+          description="Diseño de infraestructuras escalables y seguras para entornos corporativos."
+        />
+        <ServiceCard
+          title="Desarrollo a medida"
+          description="Aplicaciones web y móviles con enfoque en rendimiento y UX empresarial."
+        />
+        <ServiceCard
+          title="Automatización y datos"
+          description="Integraciones, analítica y procesos automáticos que aceleran decisiones."
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Soluciones para compañías globales</h2>
+      <p class="lead">
+        En CYSTEMS combinamos estrategia digital, ingeniería de software y soporte continuo para
+        transformar operaciones de negocio en plataformas tecnológicas modernas.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container card callout">
+      <h2>¿Listo para iniciar?</h2>
+      <p>Coordina un diagnóstico sin costo y define el roadmap tecnológico de tu empresa.</p>
+      <a class="button" href="/solicitar-desarrollo">Solicitar desarrollo</a>
+    </div>
+  </section>
+
+  <style>
+    .lead {
+      color: var(--muted);
+      max-width: 640px;
+    }
+
+    .callout {
+      display: grid;
+      gap: 12px;
+      align-items: start;
+    }
+  </style>
+</CystemsLayout>
