@@ -1,0 +1,28 @@
+---
+import CystemsLayout from '../layouts/CystemsLayout.astro';
+---
+<CystemsLayout title="Contacto | CYSTEMS">
+  <section class="section">
+    <div class="container">
+      <h1 class="gradient-text">Contacto</h1>
+      <p class="lead">Escríbenos para propuestas estratégicas, soporte o alianzas.</p>
+      <div class="card contact-card">
+        <p><strong>Email:</strong> cristianhbravo@outlook.es</p>
+        <p>Agenda reuniones ejecutivas y sesiones de discovery con el equipo CYSTEMS.</p>
+        <a class="button" href="/solicitar-desarrollo">Solicitar desarrollo</a>
+      </div>
+    </div>
+  </section>
+  <style>
+    .lead {
+      color: var(--muted);
+      max-width: 640px;
+    }
+
+    .contact-card {
+      display: grid;
+      gap: 12px;
+      max-width: 520px;
+    }
+  </style>
+</CystemsLayout>

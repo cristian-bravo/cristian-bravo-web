@@ -1,0 +1,34 @@
+---
+import CystemsLayout from '../../layouts/CystemsLayout.astro';
+const { slug } = Astro.params;
+---
+<CystemsLayout title={`Blog | ${slug} | CYSTEMS`}>
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Blog CYSTEMS</p>
+      <h1 class="gradient-text">{slug.replace(/-/g, ' ')}</h1>
+      <p class="lead">
+        Esta es una entrada de ejemplo para mostrar contenido técnico y novedades de CYSTEMS.
+      </p>
+      <article class="card">
+        <p>
+          Próximamente compartiremos guías de arquitectura, casos de uso y mejores prácticas para
+          despliegues en Contabo VPS.
+        </p>
+      </article>
+    </div>
+  </section>
+  <style>
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 640px;
+    }
+  </style>
+</CystemsLayout>

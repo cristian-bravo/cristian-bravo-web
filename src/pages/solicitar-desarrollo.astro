@@ -1,0 +1,21 @@
+---
+import CystemsLayout from '../layouts/CystemsLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+---
+<CystemsLayout title="Solicitar desarrollo | CYSTEMS">
+  <section class="section">
+    <div class="container">
+      <h1 class="gradient-text">Solicitar desarrollo</h1>
+      <p class="lead">
+        Comparte la necesidad de tu empresa. Diseñamos un plan de implementación y despliegue en Contabo VPS.
+      </p>
+      <ContactForm />
+    </div>
+  </section>
+  <style>
+    .lead {
+      color: var(--muted);
+      max-width: 640px;
+    }
+  </style>
+</CystemsLayout>

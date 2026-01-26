@@ -1,0 +1,40 @@
+---
+import ProfileLayout from '../../layouts/ProfileLayout.astro';
+---
+<ProfileLayout title="Perfil | Cristian Bravo">
+  <section class="section">
+    <div class="container">
+      <h1 class="gradient-text">Cristian Bravo</h1>
+      <p class="lead">
+        Director técnico en CYSTEMS, enfocado en diseño de plataformas, automatización y escalabilidad en la nube.
+      </p>
+      <div class="grid grid-2">
+        <article class="card">
+          <h2>Especialidades</h2>
+          <ul>
+            <li>Arquitectura cloud para empresas.</li>
+            <li>Productos digitales orientados a métricas.</li>
+            <li>Integraciones con APIs críticas.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h2>Disponibilidad</h2>
+          <p>Consultoría estratégica, mentoría técnica y acompañamiento de equipos.</p>
+          <a class="button" href="/contacto">Contactar</a>
+        </article>
+      </div>
+    </div>
+  </section>
+  <style>
+    .lead {
+      color: var(--muted);
+      max-width: 640px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+  </style>
+</ProfileLayout>

@@ -1,0 +1,47 @@
+<form class="card contact-form">
+  <label>
+    Nombre
+    <input type="text" name="name" placeholder="Tu nombre" />
+  </label>
+  <label>
+    Correo
+    <input type="email" name="email" placeholder="correo@empresa.com" />
+  </label>
+  <label>
+    Mensaje
+    <textarea name="message" rows="4" placeholder="Cuéntanos sobre tu proyecto"></textarea>
+  </label>
+  <button class="button" type="submit">Enviar solicitud</button>
+  <style>
+    .contact-form {
+      display: grid;
+      gap: 16px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    input,
+    textarea {
+      border-radius: 12px;
+      border: 1px solid rgba(107, 44, 255, 0.2);
+      padding: 12px 14px;
+      font: inherit;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      justify-self: start;
+    }
+  </style>
+</form>

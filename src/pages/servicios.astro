@@ -1,0 +1,34 @@
+---
+import CystemsLayout from '../layouts/CystemsLayout.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+---
+<CystemsLayout title="Servicios | CYSTEMS">
+  <section class="section">
+    <div class="container">
+      <h1 class="gradient-text">Servicios</h1>
+      <p class="lead">
+        Soluciones diseñadas para compañías que requieren tecnología confiable y resultados medibles.
+      </p>
+      <div class="grid grid-3">
+        <ServiceCard
+          title="Consultoría digital"
+          description="Evaluación de procesos, arquitectura y roadmap tecnológico."
+        />
+        <ServiceCard
+          title="Plataformas empresariales"
+          description="ERP, CRM, portales B2B y suites internas con UX moderna."
+        />
+        <ServiceCard
+          title="Operación y soporte"
+          description="Monitoreo, mejora continua y escalabilidad sobre Contabo VPS."
+        />
+      </div>
+    </div>
+  </section>
+  <style>
+    .lead {
+      color: var(--muted);
+      max-width: 640px;
+    }
+  </style>
+</CystemsLayout>

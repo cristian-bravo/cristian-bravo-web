@@ -1,0 +1,32 @@
+---
+const { title, description, visibility = 'Publico' } = Astro.props;
+---
+<article class="card project-card">
+  <div class="badge">{visibility}</div>
+  <h3>{title}</h3>
+  <p>{description}</p>
+  <style>
+    .project-card {
+      position: relative;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: rgba(107, 44, 255, 0.12);
+      color: var(--purple);
+      margin-bottom: 12px;
+    }
+
+    .project-card h3 {
+      margin: 0 0 12px;
+    }
+
+    .project-card p {
+      color: var(--muted);
+      margin: 0;
+    }
+  </style>
+</article>
