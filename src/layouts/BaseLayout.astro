@@ -10,11 +10,85 @@ const { title = 'CYSTEMS', description = 'Soluciones tecnológicas modernas' } =
     <script is:inline>
       const storageKey = 'theme';
       const root = document.documentElement;
-      const stored = localStorage.getItem(storageKey);
-      const prefersDark = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)').matches : true;
-      const theme = stored ? stored : prefersDark ? 'dark' : 'light';
-      root.classList.toggle('dark', theme === 'dark');
-      root.style.colorScheme = theme;
+      const toggleSelector = '[data-theme-toggle]';
+
+      const safeStorage = {
+        get() {
+          try {
+            return localStorage.getItem(storageKey);
+          } catch (error) {
+            return null;
+          }
+        },
+        set(value) {
+          try {
+            localStorage.setItem(storageKey, value);
+          } catch (error) {
+            // Ignore storage errors (privacy modes, disabled storage).
+          }
+        },
+      };
+
+      const normalizeTheme = (value) => (value === 'dark' ? 'dark' : 'light');
+      const getPreferredTheme = () =>
+        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const setToggleState = (theme) => {
+        const toggle = document.querySelector(toggleSelector);
+        if (!toggle) return;
+        const isDark = theme === 'dark';
+        toggle.setAttribute('data-theme', theme);
+        toggle.setAttribute('aria-pressed', String(isDark));
+        toggle.setAttribute('aria-label', isDark ? 'Activar modo claro' : 'Activar modo oscuro');
+        toggle.setAttribute('title', isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+      };
+
+      const applyTheme = (value, persist) => {
+        const theme = normalizeTheme(value);
+        root.classList.toggle('dark', theme === 'dark');
+        root.style.colorScheme = theme;
+        root.setAttribute('data-theme', theme);
+        if (persist) {
+          safeStorage.set(theme);
+        }
+        setToggleState(theme);
+      };
+
+      const initialTheme = safeStorage.get() || getPreferredTheme();
+      applyTheme(initialTheme, false);
+
+      const bindToggle = () => {
+        const toggle = document.querySelector(toggleSelector);
+        if (!toggle || toggle.dataset.themeBound === 'true') return;
+        toggle.dataset.themeBound = 'true';
+        setToggleState(root.classList.contains('dark') ? 'dark' : 'light');
+        toggle.addEventListener('click', () => {
+          const isDark = root.classList.contains('dark');
+          applyTheme(isDark ? 'light' : 'dark', true);
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindToggle, { once: true });
+      } else {
+        bindToggle();
+      }
+
+      window.addEventListener('astro:page-load', bindToggle);
+
+      if (window.matchMedia) {
+        const media = window.matchMedia('(prefers-color-scheme: dark)');
+        media.addEventListener?.('change', (event) => {
+          if (!safeStorage.get()) {
+            applyTheme(event.matches ? 'dark' : 'light', false);
+          }
+        });
+      }
+
+      window.addEventListener('storage', (event) => {
+        if (event.key === storageKey) {
+          applyTheme(event.newValue || getPreferredTheme(), false);
+        }
+      });
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
@@ -30,31 +104,5 @@ const { title = 'CYSTEMS', description = 'Soluciones tecnológicas modernas' } =
     class="min-h-screen bg-tech font-sans text-slate-900 antialiased leading-relaxed transition-colors duration-300 selection:bg-brand-purple/40 selection:text-white dark:text-brand-text"
   >
     <slot />
-    <script is:inline>
-      const root = document.documentElement;
-      const toggle = document.querySelector('[data-theme-toggle]');
-      const storageKey = 'theme';
-
-      const setTheme = (theme, persist) => {
-        root.classList.toggle('dark', theme === 'dark');
-        root.style.colorScheme = theme;
-        if (persist) {
-          localStorage.setItem(storageKey, theme);
-        }
-        if (toggle) {
-          toggle.checked = theme === 'dark';
-          toggle.setAttribute('aria-checked', theme === 'dark');
-        }
-      };
-
-      if (toggle) {
-        const initial = root.classList.contains('dark') ? 'dark' : 'light';
-        setTheme(initial, false);
-        toggle.addEventListener('change', () => {
-          const next = toggle.checked ? 'dark' : 'light';
-          setTheme(next, true);
-        });
-      }
-    </script>
   </body>
 </html>

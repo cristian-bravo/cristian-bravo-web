@@ -1,78 +1,106 @@
-﻿<header class="sticky top-0 z-40 border-b border-slate-200/70 bg-slate-50/75 backdrop-blur-xl dark:border-brand-purple/20 dark:bg-brand-bg/70">
-  <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
-    <div class="flex flex-col gap-4 py-4 md:flex-row md:items-center">
-      <a class="flex flex-col gap-1" href="/">
-        <span class="font-display text-sm font-semibold uppercase tracking-[0.3em] text-slate-900 dark:text-brand-text">
-          CYSTEMS
-        </span>
-        <span class="text-[0.7rem] uppercase tracking-[0.2em] text-slate-500 dark:text-brand-mutedStrong">
-          Transforma ideas en tecnología
-        </span>
+---
+type NavLink = { href: string; label: string };
+
+const cleanPath = (value: string | null | undefined): string => {
+  if (!value) return '/';
+  const normalized = value.replace(/\/+$/, '');
+  return normalized || '/';
+};
+
+const pathname = cleanPath(Astro.url.pathname);
+const navLinks: NavLink[] = [
+  { href: '/', label: 'Inicio' },
+  { href: '/servicios', label: 'Servicios' },
+  { href: '/proyectos', label: 'Proyectos' },
+  { href: '/perfil/cristian-bravo', label: 'Perfil' },
+  { href: '/contacto', label: 'Contacto' },
+];
+
+const isActivePath = (href: string): boolean => {
+  const target = cleanPath(href);
+  if (target === '/') return pathname === '/';
+  return pathname === target || pathname.startsWith(`${target}/`);
+};
+---
+
+<header class="header-shell sticky top-0 z-40">
+  <div class="header-container mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+    <div class="header-frame">
+      <a class="brand-logo-link group" href="/" aria-label="Inicio CYSTEMS">
+        <span class="brand-logo-aura" aria-hidden="true"></span>
+        <img
+          src="/logos/logo-header-black.webp"
+          alt="CYSTEMS"
+          class="brand-logo-img brand-logo-light"
+          width="220"
+          height="44"
+          decoding="async"
+          fetchpriority="high"
+        />
+        <img
+          src="/logos/logo-header-ligth.webp"
+          alt=""
+          aria-hidden="true"
+          class="brand-logo-img brand-logo-dark"
+          width="220"
+          height="44"
+          decoding="async"
+        />
       </a>
-      <div class="flex flex-1 flex-wrap items-center gap-4 md:ml-8 md:justify-end">
-        <nav class="flex flex-wrap items-center gap-4 text-sm text-slate-600 dark:text-brand-muted" aria-label="Principal">
-          <a
-            class="relative transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:hover:text-brand-text dark:focus-visible:ring-offset-brand-bg"
-            href="/servicios"
-          >
-            Servicios
-          </a>
-          <a
-            class="relative transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:hover:text-brand-text dark:focus-visible:ring-offset-brand-bg"
-            href="/proyectos"
-          >
-            Proyectos
-          </a>
-          <a
-            class="relative transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:hover:text-brand-text dark:focus-visible:ring-offset-brand-bg"
-            href="/perfil/cristian-bravo"
-          >
-            Perfil
-          </a>
-          <a
-            class="relative transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:hover:text-brand-text dark:focus-visible:ring-offset-brand-bg"
-            href="/contacto"
-          >
-            Contacto
-          </a>
+
+      <div class="header-center">
+        <nav class="header-nav" aria-label="Principal">
+          {navLinks.map((item) => {
+            const isActive = isActivePath(item.href);
+            return (
+              <a
+                class:list={['header-nav-link', isActive && 'is-active']}
+                href={item.href}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                <span>{item.label}</span>
+              </a>
+            );
+          })}
         </nav>
+
         <a
-          class="inline-flex items-center justify-center rounded-full bg-brand-gradient px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:shadow-glow dark:focus-visible:ring-offset-brand-bg"
+          class:list={['header-cta', isActivePath('/solicitar-desarrollo') && 'is-active']}
           href="/solicitar-desarrollo"
+          aria-current={isActivePath('/solicitar-desarrollo') ? 'page' : undefined}
         >
-          Solicitar desarrollo
+          <span>Solicitar desarrollo</span>
         </a>
-        <label class="ml-auto inline-flex items-center cursor-pointer">
-          <span class="sr-only">Cambiar tema</span>
-          <input
-            id="theme-toggle"
-            data-theme-toggle
-            type="checkbox"
-            role="switch"
-            aria-checked="true"
-            aria-label="Cambiar tema"
-            class="peer sr-only"
-          />
-          <span
-            class="relative h-6 w-11 rounded-full border border-slate-200/80 bg-white/70 p-0.5 shadow-sm transition-colors duration-300 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-purple/50 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-slate-50 peer-checked:border-brand-purple/40 peer-checked:bg-gradient-to-r peer-checked:from-brand-purple/70 peer-checked:to-brand-blue/70 dark:border-brand-purple/30 dark:bg-white/5 dark:peer-focus-visible:ring-offset-brand-bg"
-          >
-            <span class="pointer-events-none absolute left-1 top-1 h-4 w-4 text-slate-500 transition-opacity duration-300 peer-checked:opacity-0 dark:text-brand-mutedStrong">
-              <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="12" r="4" />
-                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-              </svg>
-            </span>
-            <span class="pointer-events-none absolute right-1 top-1 h-4 w-4 text-slate-700 opacity-0 transition-opacity duration-300 peer-checked:opacity-100 dark:text-blue-200">
-              <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4" stroke="currentColor" stroke-width="1.5">
-                <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
-              </svg>
-            </span>
-            <span
-              class="block h-4 w-4 translate-x-0 rounded-full bg-white shadow transition-transform duration-300 peer-checked:translate-x-5 dark:bg-brand-text"
-            ></span>
-          </span>
-        </label>
       </div>
+
+      <button
+        id="theme-toggle"
+        data-theme-toggle
+        type="button"
+        class="theme-toggle-btn header-theme-toggle"
+        aria-label="Activar modo oscuro"
+        aria-pressed="false"
+        title="Cambiar tema"
+      >
+        <span class="sr-only">Cambiar tema</span>
+        <span class="theme-toggle-orbit" aria-hidden="true"></span>
+        <span class="theme-toggle-icon theme-toggle-sun" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="4.1" />
+            <path
+              stroke-linecap="round"
+              d="M12 1.8v2.3M12 19.9v2.3M4.3 4.3 5.9 5.9M18.1 18.1l1.6 1.6M1.8 12h2.3M19.9 12h2.3M4.3 19.7l1.6-1.6M18.1 5.9l1.6-1.6"
+            />
+          </svg>
+        </span>
+        <span class="theme-toggle-icon theme-toggle-moon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.8 14.1a8.9 8.9 0 1 1-10.9-10.9 7.2 7.2 0 0 0 10.9 10.9Z" />
+          </svg>
+        </span>
+        <span class="theme-toggle-star theme-toggle-star-a" aria-hidden="true"></span>
+        <span class="theme-toggle-star theme-toggle-star-b" aria-hidden="true"></span>
+      </button>
     </div>
   </div>
 </header>

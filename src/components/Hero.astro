@@ -1,8 +1,8 @@
 ﻿---
 const {
-  title = 'Transforma ideas en tecnología',
+  title = 'Arquitectura de software para empresas',
   subtitle =
-    'Estrategia, diseño y desarrollo de plataformas digitales para empresas que necesitan velocidad, seguridad y escalabilidad.',
+    'Diseñamos y desarrollamos plataformas que optimizan procesos, centralizan información y escalan con tu empresa.',
   cta = 'Solicitar desarrollo',
   ctaLink = '/solicitar-desarrollo',
 } = Astro.props;
@@ -30,7 +30,7 @@ const {
             class="inline-flex items-center justify-center rounded-full border border-slate-200/70 bg-white/70 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-brand-purple/40 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-brand-purple/40 dark:bg-white/5 dark:text-brand-text dark:hover:border-brand-purple/60 dark:focus-visible:ring-offset-brand-bg"
             href="/proyectos"
           >
-            Ver proyectos
+            Ver casos de éxito
           </a>
         </div>
         <div class="grid gap-4 border-t border-slate-200/70 pt-6 text-sm text-slate-600 dark:border-brand-purple/20 dark:text-brand-muted">
@@ -46,17 +46,38 @@ const {
           </div>
         </div>
       </div>
-      <div class="relative overflow-hidden rounded-[28px] border border-slate-200/70 bg-gradient-to-br from-brand-purple/10 via-white/80 to-white p-8 shadow-lg shadow-slate-900/10 backdrop-blur-sm dark:border-brand-purple/30 dark:bg-gradient-to-br dark:from-brand-purple/20 dark:via-brand-surface/90 dark:to-brand-surface dark:shadow-glow">
-        <div class="pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full bg-brand-purple/20 opacity-60 blur-3xl"></div>
-        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-brand-mutedStrong">Capacidades clave</p>
-        <h2 class="mt-3 font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
-          Arquitectura + producto + operación
-        </h2>
-        <ul class="mt-4 grid list-disc gap-3 pl-5 text-sm text-slate-600 marker:text-brand-purple/60 dark:text-brand-muted">
-          <li>Diseño de soluciones a medida para equipos técnicos y negocio.</li>
-          <li>Integraciones críticas con APIs, pagos y sistemas internos.</li>
-          <li>Observabilidad, performance y escalabilidad sobre infraestructura dedicada.</li>
-        </ul>
+      <div class="hero-visual-card group/hero-visual">
+        <div class="hero-visual-noise" aria-hidden="true"></div>
+        <div class="hero-visual-grid" aria-hidden="true"></div>
+        <img
+          src="/hero/yuki-light.png"
+          alt="Vista principal de plataforma digital en modo claro"
+          width="1536"
+          height="1024"
+          class="hero-visual-image hero-visual-image-light"
+          loading="eager"
+          decoding="async"
+        />
+        <img
+          src="/hero/yuki-dark.png"
+          alt=""
+          aria-hidden="true"
+          width="1536"
+          height="1024"
+          class="hero-visual-image hero-visual-image-dark"
+          loading="eager"
+          decoding="async"
+        />
+        <div class="hero-visual-vignette" aria-hidden="true"></div>
+        <div class="hero-visual-meta">
+          <p class="hero-visual-kicker">Capacidades clave</p>
+          <h2 class="hero-visual-title">Arquitectura + producto + operación</h2>
+          <div class="hero-visual-tags">
+            <span>Arquitectura</span>
+            <span>Integraciones</span>
+            <span>Escalabilidad</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
