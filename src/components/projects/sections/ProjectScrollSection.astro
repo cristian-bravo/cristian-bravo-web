@@ -1,0 +1,143 @@
+---
+import type { ProjectGalleryItemContent, ProjectReferenceContent } from '../../../data/projects';
+
+interface Props {
+  project: ProjectReferenceContent;
+  groupTitle: string;
+  groupDescription?: string;
+  stepIndex: number;
+  totalSteps: number;
+}
+
+const { project, groupTitle, groupDescription, stepIndex, totalSteps } = Astro.props;
+
+const titleLetters = Array.from(project.title);
+
+const getVariantClass = (item: ProjectGalleryItemContent) => {
+  if (item.variant === 'wide') return 'project-scroll__media-item--wide';
+  if (item.variant === 'tall') return 'project-scroll__media-item--tall';
+  return 'project-scroll__media-item--square';
+};
+---
+<section
+  class:list={[
+    'project-scroll-step',
+    'project-section',
+    project.isConfidential && 'project-scroll-step--private',
+  ]}
+  data-project-scroll-step
+  data-animation="portfolio-step"
+  data-step-index={stepIndex}
+  data-step-total={totalSteps}
+  data-theme-tone={stepIndex % 4}
+>
+  <div class="project-scroll-step__inner mx-auto w-full max-w-[1200px] px-4 sm:px-6">
+    <div class="project-scroll-step__layout">
+      <aside class="project-scroll-step__rail">
+        <div class="project-scroll-step__avatar-shell">
+          <div class="project-scroll-step__avatar" aria-hidden="true" data-project-step-avatar>
+            <span>{String(stepIndex + 1).padStart(2, '0')}</span>
+          </div>
+          <div class="project-scroll-step__progress" aria-hidden="true">
+            <span class="project-scroll-step__progress-line"></span>
+          </div>
+        </div>
+      </aside>
+
+      <div class="project-scroll-step__content">
+        <article class="project-scroll__panel" data-project-panel data-animation="project-panel">
+          <div
+            class="project-scroll__active-glow"
+            aria-hidden="true"
+            data-project-glow
+            data-animation="project-glow"
+          ></div>
+
+          <header class="project-scroll__header">
+            <div class="project-scroll__header-meta">
+              <p class="project-scroll__eyebrow">
+                <span>{groupTitle}</span>
+                <span class="project-scroll__eyebrow-separator" aria-hidden="true">•</span>
+                <span>{project.visibility}</span>
+              </p>
+              {project.isConfidential && (
+                <p class="project-scroll__private-pill" data-project-private-pill>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V8Zm2 8a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 12 16Z" />
+                  </svg>
+                  {project.confidentialLabel ?? 'Proyecto confidencial'}
+                </p>
+              )}
+            </div>
+
+            <h2 class="project-scroll__title">
+              <span class="sr-only">{project.title}</span>
+              <span aria-hidden="true">
+                {titleLetters.map((character) => (
+                  <span
+                    class="project-scroll__title-letter"
+                    data-project-title-letter
+                    data-animation="project-title-letter"
+                  >
+                    {character === ' ' ? '\u00A0' : character}
+                  </span>
+                ))}
+              </span>
+            </h2>
+
+            <p class="project-scroll__description" data-project-description>
+              {project.description}
+            </p>
+
+            {groupDescription && (
+              <p class="project-scroll__group-note" data-project-description>
+                {groupDescription}
+              </p>
+            )}
+          </header>
+
+          <div class="project-scroll__media-grid" data-project-gallery>
+            {project.gallery.map((item, galleryIndex) => (
+              <figure
+                class:list={['project-scroll__media-item', getVariantClass(item)]}
+                data-project-media-item
+                data-animation="project-media-item"
+                data-media-depth={(galleryIndex % 3) + 1}
+              >
+                {item.src ? (
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    loading="lazy"
+                    decoding="async"
+                    width="800"
+                    height="520"
+                    class="project-scroll__media-image"
+                  />
+                ) : (
+                  <div class="project-scroll__media-placeholder" aria-hidden="true">
+                    <span>{item.caption}</span>
+                  </div>
+                )}
+                <figcaption class="project-scroll__media-caption">{item.caption}</figcaption>
+                {project.isConfidential && (
+                  <div class="project-scroll__media-lock" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V8Z" />
+                    </svg>
+                  </div>
+                )}
+              </figure>
+            ))}
+          </div>
+
+          <ul class="project-scroll__tags" aria-label="Etiquetas del proyecto">
+            {project.tags.map((tag) => (
+              <li class="project-scroll__tag">{tag}</li>
+            ))}
+          </ul>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>

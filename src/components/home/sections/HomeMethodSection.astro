@@ -1,0 +1,30 @@
+---
+import SectionHeader from '../../shared/SectionHeader.astro';
+import type { HomeMethodContent } from '../../../data/home';
+
+interface Props {
+  content: HomeMethodContent;
+}
+
+const { content } = Astro.props;
+---
+<section class="home-method-section py-12 sm:py-14 lg:py-16">
+  <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+    <SectionHeader content={content.header} className="mb-6 grid gap-3" headingTag="h2" />
+    <div class="method-cards-grid grid gap-6 md:grid-cols-3 lg:pt-10 lg:pb-0">
+      {content.steps.map((step) => (
+        <article class="method-card group relative flex min-h-[200px] flex-col gap-3 overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm transition hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-xl dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow dark:hover:border-brand-purple/50">
+          <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="method-card-glow absolute inset-0 bg-gradient-to-br from-brand-purple/15 via-transparent to-brand-blue/10"></div>
+          </div>
+          <div class="method-card-body relative z-10">
+            <h3 class="method-card-title font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+              {step.title}
+            </h3>
+            <p class="method-card-copy mt-2 text-sm text-slate-600 dark:text-brand-muted">{step.description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

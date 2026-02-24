@@ -1,0 +1,43 @@
+---
+import type { ServicesModalContent } from '../../../data/services';
+
+interface Props extends ServicesModalContent {}
+
+const {
+  id,
+  kicker,
+  title,
+  description,
+  bullets,
+  actionLabel,
+  actionHref,
+  closeLabel = 'Cerrar',
+} = Astro.props;
+
+const titleId = `${id}-title`;
+---
+<div
+  id={id}
+  class="services-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby={titleId}
+  hidden
+>
+  <button class="services-modal-backdrop" type="button" data-modal-close aria-label="Cerrar modal"></button>
+  <div class="services-modal-panel" role="document">
+    <button class="services-modal-close" type="button" data-modal-close aria-label="Cerrar modal">×</button>
+    <p class="services-modal-kicker">{kicker}</p>
+    <h3 id={titleId} class="services-modal-title">{title}</h3>
+    <p class="services-modal-description">{description}</p>
+    <ul class="services-modal-list">
+      {bullets.map((bullet) => (
+        <li>{bullet}</li>
+      ))}
+    </ul>
+    <div class="services-modal-actions">
+      <a class="services-modal-link" href={actionHref}>{actionLabel}</a>
+      <button class="services-modal-btn-ghost" type="button" data-modal-close>{closeLabel}</button>
+    </div>
+  </div>
+</div>

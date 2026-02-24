@@ -1,0 +1,86 @@
+---
+import type { HomeHeroContent } from '../../../data/home';
+
+interface Props {
+  content: HomeHeroContent;
+}
+
+const { content } = Astro.props;
+---
+<section id="home-hero" class="hero-motion-root relative overflow-hidden py-14 sm:py-16 lg:py-20">
+  <div class="hero-bg-breathing pointer-events-none absolute inset-0 bg-hero-glow"></div>
+  <div class="hero-motion-shell mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+    <div class="grid items-center gap-10 lg:grid-cols-[1.1fr,0.9fr]">
+      <div class="hero-motion-content grid gap-5">
+        <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">
+          {content.kicker}
+        </p>
+        <h1 class="font-display text-4xl font-semibold leading-tight tracking-tight text-transparent sm:text-5xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
+          {content.title}
+        </h1>
+        <p class="max-w-xl text-base text-slate-600 sm:text-lg dark:text-brand-muted">{content.subtitle}</p>
+        <div class="hidden flex-wrap gap-3 sm:flex">
+          <a
+            class="hero-motion-btn inline-flex items-center justify-center rounded-full bg-brand-gradient px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:shadow-glow dark:focus-visible:ring-offset-brand-bg"
+            href={content.primaryAction.href}
+          >
+            {content.primaryAction.label}
+          </a>
+          <a
+            class="hero-motion-btn inline-flex items-center justify-center rounded-full border border-slate-200/70 bg-white/70 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-brand-purple/40 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-brand-purple/40 dark:bg-white/5 dark:text-brand-text dark:hover:border-brand-purple/60 dark:focus-visible:ring-offset-brand-bg"
+            href={content.secondaryAction.href}
+          >
+            {content.secondaryAction.label}
+          </a>
+        </div>
+        <div class="grid gap-4 border-t border-slate-200/70 pt-6 text-sm text-slate-600 dark:border-brand-purple/20 dark:text-brand-muted">
+          <div>
+            <p class="text-[0.7rem] uppercase tracking-[0.2em] text-slate-500 dark:text-brand-mutedStrong">
+              {content.focusLabel}
+            </p>
+            <p class="font-semibold text-slate-900 dark:text-brand-text">{content.focusValue}</p>
+          </div>
+          <div>
+            <p class="text-[0.7rem] uppercase tracking-[0.2em] text-slate-500 dark:text-brand-mutedStrong">
+              {content.deliveryLabel}
+            </p>
+            <p class="font-semibold text-slate-900 dark:text-brand-text">{content.deliveryValue}</p>
+          </div>
+        </div>
+      </div>
+      <div class="hero-motion-visual hero-visual-card group/hero-visual">
+        <div class="hero-visual-noise" aria-hidden="true"></div>
+        <div class="hero-visual-grid" aria-hidden="true"></div>
+        <img
+          src={content.lightImageSrc}
+          alt={content.lightImageAlt}
+          width="1536"
+          height="1024"
+          class="hero-visual-image hero-visual-image-light"
+          loading="eager"
+          decoding="async"
+        />
+        <img
+          src={content.darkImageSrc}
+          alt=""
+          aria-hidden="true"
+          width="1536"
+          height="1024"
+          class="hero-visual-image hero-visual-image-dark"
+          loading="eager"
+          decoding="async"
+        />
+        <div class="hero-visual-vignette" aria-hidden="true"></div>
+        <div class="hero-visual-meta">
+          <p class="hero-visual-kicker">{content.visualKicker}</p>
+          <h2 class="hero-visual-title">{content.visualTitle}</h2>
+          <div class="hero-visual-tags">
+            {content.visualTags.map((tag) => (
+              <span>{tag}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

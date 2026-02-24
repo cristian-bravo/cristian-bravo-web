@@ -1,70 +1,90 @@
-﻿---
-import CystemsLayout from '../layouts/CystemsLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 ---
-<CystemsLayout title="Proyectos | CYSTEMS">
-  <section class="py-16 sm:py-20 lg:py-24">
-    <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
-      <div class="mb-10 grid gap-3">
-        <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">Portafolio</p>
-        <h1 class="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
-          Proyectos con impacto real
-        </h1>
-        <p class="max-w-2xl text-base text-slate-600 dark:text-brand-muted sm:text-lg">
-          Casos públicos y menciones confidenciales que reflejan experiencia en plataformas empresariales.
-        </p>
-      </div>
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import ProjectsStory from '../components/projects/sections/ProjectsPortfolioSection.astro';
+import { projectsPageMeta, projectsPortfolioContent } from '../data/projects';
+import '../styles/projects.css';
 
-      <div class="grid gap-8">
-        <div class="grid gap-4">
-          <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
-            Proyectos públicos
-          </h2>
-          <div class="grid gap-6 md:grid-cols-2">
-            <ProjectCard
-              title="Fualtec"
-              description="Plataforma digital para procesos industriales y operaciones B2B."
-              visibility="Público"
-            />
-            <ProjectCard
-              title="Alkosto"
-              description="Integraciones de catálogo y experiencia de compra omnicanal."
-              visibility="Público"
-            />
-            <ProjectCard
-              title="NYProject"
-              description="Portal de proyectos con indicadores de avance en tiempo real."
-              visibility="Público"
-            />
+const projectSteps = projectsPortfolioContent.groups.flatMap((group) => group.references);
+---
+<BaseLayout title={projectsPageMeta.title} description={projectsPageMeta.description}>
+  <Header />
+  <main class="story-root" data-story-root>
+    <div class="story-scroll" data-story-scroll>
+      <div class="story-stage" data-story-stage>
+        <section class="projects-story portfolio-story" data-projects-story-root data-active-tone="0">
+          <div class="projects-story__theme-layers" aria-hidden="true">
+            <span class="projects-story__theme-layer" data-tone="0"></span>
+            <span class="projects-story__theme-layer" data-tone="1"></span>
+            <span class="projects-story__theme-layer" data-tone="2"></span>
+            <span class="projects-story__theme-layer" data-tone="3"></span>
           </div>
-        </div>
+          <div class="projects-story__grid-overlay" aria-hidden="true"></div>
 
-        <div class="grid gap-4">
-          <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
-            Proyectos privados (menciones)
-          </h2>
-          <p class="text-sm text-slate-500 dark:text-brand-muted">
-            Por acuerdos de confidencialidad, compartimos solo una referencia general de estos trabajos.
-          </p>
-          <div class="grid gap-6 md:grid-cols-2">
-            <ProjectCard
-              title="360 Integration"
-              description="Integraciones empresariales de alto volumen para múltiples unidades de negocio."
-              visibility="Privado"
-            />
-            <ProjectCard
-              title="Club Guías"
-              description="Ecosistema privado para fidelización y contenido especializado."
-              visibility="Privado"
-            />
-            <ProjectCard
-              title="Plataformas educativas"
-              description="Suite privada para formación, analítica y seguimiento académico."
-              visibility="Privado"
-            />
+          <aside class="projects-story-progress" aria-label="Progreso del portafolio" data-projects-progress>
+            <div class="projects-story-progress__track" aria-hidden="true">
+              <span class="projects-story-progress__fill" data-projects-progress-fill></span>
+            </div>
+            <ol class="projects-story-progress__dots">
+              {projectSteps.map((project, index) => (
+                <li>
+                  <button
+                    type="button"
+                    class="projects-story-progress__dot"
+                    data-project-progress-dot
+                    data-step-index={index}
+                    title={project.title}
+                    aria-label={`Ir al proyecto ${index + 1}: ${project.title}`}
+                  ></button>
+                </li>
+              ))}
+            </ol>
+          </aside>
+
+          <div class="story-track" data-story-track>
+            <ProjectsStory content={projectsPortfolioContent} />
           </div>
-        </div>
+        </section>
       </div>
     </div>
-  </section>
-</CystemsLayout>
+  </main>
+
+  <script>
+    import { initScrollPortfolioAnimations } from '../scripts/scrollPortfolioAnimations';
+
+    const resetStoryScroll = () => {
+      window.scrollTo(0, 0);
+    };
+
+    let cleanup = () => {};
+
+    const initialize = () => {
+      const root = document.querySelector('[data-projects-story-root]');
+      if (!root) return;
+
+      resetStoryScroll();
+      cleanup();
+      cleanup = initScrollPortfolioAnimations(root);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initialize, { once: true });
+    } else {
+      initialize();
+    }
+
+    const onPageLoad = () => {
+      initialize();
+    };
+
+    window.addEventListener('astro:page-load', onPageLoad);
+    window.addEventListener(
+      'astro:before-swap',
+      () => {
+        cleanup();
+        window.removeEventListener('astro:page-load', onPageLoad);
+      },
+      { once: true },
+    );
+  </script>
+</BaseLayout>

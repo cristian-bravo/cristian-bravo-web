@@ -1,0 +1,58 @@
+---
+import ProjectHero from './ProjectHero.astro';
+import ProjectScrollSection from './ProjectScrollSection.astro';
+import FinalCtaSection from './FinalCtaSection.astro';
+import type { ProjectsPortfolioContent } from '../../../data/projects';
+
+interface Props {
+  content: ProjectsPortfolioContent;
+}
+
+const { content } = Astro.props;
+
+const projectSteps = content.groups.flatMap((group, groupIndex) =>
+  group.references.map((project, projectIndex) => ({
+    project,
+    groupTitle: group.title,
+    groupDescription: projectIndex === 0 ? group.description : undefined,
+  })),
+);
+---
+<div
+  class="story-scene story-scene--hero"
+  data-story-scene
+  data-scene-kind="hero"
+  data-scene-index="0"
+  data-theme-tone="0"
+>
+  <ProjectHero intro={content.intro} avatar={content.heroAvatar} />
+</div>
+
+{projectSteps.map((step, index) => (
+  <div
+    class="story-scene story-scene--project"
+    data-story-scene
+    data-scene-kind="project"
+    data-scene-index={index + 1}
+    data-project-step-index={index}
+    data-theme-tone={index % 4}
+  >
+    <ProjectScrollSection
+      project={step.project}
+      groupTitle={step.groupTitle}
+      groupDescription={step.groupDescription}
+      stepIndex={index}
+      totalSteps={projectSteps.length}
+    />
+  </div>
+))}
+
+<div
+  class="story-scene story-scene--cta"
+  data-story-scene
+  data-scene-kind="cta"
+  data-scene-index={projectSteps.length + 1}
+  data-theme-tone="3"
+>
+  <FinalCtaSection content={content.finalCta} />
+</div>

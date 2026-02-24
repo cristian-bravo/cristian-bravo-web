@@ -1,0 +1,24 @@
+---
+import ServiceCard from '../../ServiceCard.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  modalId: string;
+  className?: string;
+  revealType?: string;
+}
+
+const { title, description, modalId, className = '', revealType } = Astro.props;
+const triggerClassName = ['services-modal-card-trigger', className].filter(Boolean).join(' ');
+---
+<button
+  type="button"
+  class={triggerClassName}
+  data-modal-open={modalId}
+  data-intro-reveal={revealType}
+  aria-haspopup="dialog"
+  aria-controls={modalId}
+>
+  <ServiceCard title={title} description={description} />
+</button>

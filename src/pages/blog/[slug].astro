@@ -1,6 +1,9 @@
-﻿---
-import CystemsLayout from '../../layouts/CystemsLayout.astro';
 ---
-<CystemsLayout title="Blog | CYSTEMS">
-  <!-- Blog deshabilitado temporalmente -->
+import CystemsLayout from '../../layouts/CystemsLayout.astro';
+import BlogPlaceholderSection from '../../components/blog/sections/BlogPlaceholderSection.astro';
+import { blogPlaceholderContent, blogSlugPageMeta } from '../../data/blog';
+import '../../styles/blog.css';
+---
+<CystemsLayout title={blogSlugPageMeta.title} description={blogSlugPageMeta.description}>
+  <BlogPlaceholderSection content={blogPlaceholderContent} />
 </CystemsLayout>

@@ -1,0 +1,162 @@
+<script is:inline>
+  (() => {
+    if (window.__servicesModalsBound) return;
+    window.__servicesModalsBound = true;
+
+    const root = document.documentElement;
+    const body = document.body;
+    const bodyLockClass = 'services-modal-body-lock';
+    let activeModal = null;
+    let activeTrigger = null;
+    let scrollLockY = 0;
+
+    const lockPageScroll = () => {
+      if (body.classList.contains(bodyLockClass)) return;
+
+      scrollLockY = window.scrollY || window.pageYOffset || 0;
+      const scrollbarGap = window.innerWidth - document.documentElement.clientWidth;
+      body.classList.add(bodyLockClass);
+      body.style.top = `-${scrollLockY}px`;
+      if (scrollbarGap > 0) {
+        body.style.paddingRight = `${scrollbarGap}px`;
+      }
+    };
+
+    const unlockPageScroll = () => {
+      if (!body.classList.contains(bodyLockClass)) return;
+
+      const savedScroll = Math.abs(parseInt(body.style.top || '0', 10)) || scrollLockY;
+      body.classList.remove(bodyLockClass);
+      body.style.top = '';
+      body.style.paddingRight = '';
+      window.scrollTo(0, savedScroll);
+    };
+
+    const getFocusableElements = (container) => {
+      const focusable = container.querySelectorAll(
+        'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+
+      return Array.from(focusable).filter((element) => {
+        const style = window.getComputedStyle(element);
+        return style.display !== 'none' && style.visibility !== 'hidden';
+      });
+    };
+
+    const closeModal = (modal = activeModal, restoreFocus = true, releaseScroll = true) => {
+      if (!modal) return;
+
+      modal.classList.add('is-closing');
+      modal.classList.remove('is-open');
+
+      let settled = false;
+      const finalize = () => {
+        if (settled) return;
+        settled = true;
+        modal.classList.remove('is-closing');
+        modal.hidden = true;
+
+        if (modal === activeModal) {
+          activeModal = null;
+          root.classList.remove('services-modal-open');
+          if (releaseScroll) {
+            unlockPageScroll();
+          }
+          if (restoreFocus && activeTrigger) {
+            activeTrigger.focus();
+          }
+          activeTrigger = null;
+          return;
+        }
+
+        if (releaseScroll && !activeModal) {
+          unlockPageScroll();
+        }
+      };
+
+      modal.addEventListener('animationend', finalize, { once: true });
+      const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+      window.setTimeout(finalize, reducedMotion ? 40 : 560);
+    };
+
+    const openModal = (modal, trigger) => {
+      if (!modal) return;
+      if (activeModal === modal) return;
+
+      if (activeModal && activeModal !== modal) {
+        closeModal(activeModal, false, false);
+      }
+
+      activeModal = modal;
+      activeTrigger = trigger || null;
+
+      modal.hidden = false;
+      modal.classList.remove('is-closing');
+      lockPageScroll();
+      root.classList.add('services-modal-open');
+      requestAnimationFrame(() => {
+        modal.classList.add('is-open');
+        const closeButton = modal.querySelector('.services-modal-close');
+        if (closeButton instanceof HTMLElement) {
+          closeButton.focus();
+          return;
+        }
+
+        const firstFocusable = getFocusableElements(modal)[0];
+        if (firstFocusable instanceof HTMLElement) {
+          firstFocusable.focus();
+        }
+      });
+    };
+
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const trigger = target.closest('[data-modal-open]');
+      if (trigger) {
+        const modalId = trigger.getAttribute('data-modal-open');
+        if (!modalId) return;
+        const modal = document.getElementById(modalId);
+        openModal(modal, trigger);
+        return;
+      }
+
+      const closeControl = target.closest('.services-modal [data-modal-close]');
+      if (closeControl) {
+        const modal = closeControl.closest('.services-modal');
+        closeModal(modal, true);
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (!activeModal) return;
+
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeModal(activeModal, true);
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const focusable = getFocusableElements(activeModal);
+      if (!focusable.length) {
+        event.preventDefault();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const current = document.activeElement;
+
+      if (event.shiftKey && current === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && current === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+  })();
+</script>

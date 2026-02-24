@@ -1,73 +1,21 @@
-﻿---
-import CystemsLayout from '../layouts/CystemsLayout.astro';
-import ServiceCard from '../components/ServiceCard.astro';
 ---
-<CystemsLayout title="Servicios | CYSTEMS">
-  <section class="py-16 sm:py-20 lg:py-24">
-    <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
-      <div class="mb-8 grid gap-3">
-        <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">Servicios</p>
-        <h1 class="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
-          Soluciones diseñadas para crecimiento sostenible
-        </h1>
-        <p class="max-w-2xl text-base text-slate-600 dark:text-brand-muted sm:text-lg">
-          Diseño y desarrollo de plataformas digitales con estándares corporativos, performance y seguridad.
-        </p>
-      </div>
-      <div class="grid gap-6 md:grid-cols-3">
-        <ServiceCard
-          title="Consultoría digital"
-          description="Evaluación de procesos, arquitectura y definición de roadmap tecnológico."
-        />
-        <ServiceCard
-          title="Plataformas empresariales"
-          description="ERP, CRM, portales B2B y suites internas con UX moderna y escalabilidad."
-        />
-        <ServiceCard
-          title="Operación y soporte"
-          description="Monitoreo, mejora continua y optimización sobre infraestructura dedicada."
-        />
-      </div>
-    </div>
-  </section>
-
-  <section class="border-y border-slate-200/70 bg-slate-50/70 py-16 dark:border-brand-purple/15 dark:bg-white/5 sm:py-20 lg:py-24">
-    <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
-      <div class="grid items-start gap-10 lg:grid-cols-2">
-        <div class="grid gap-4">
-          <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">Acompañamiento</p>
-          <h2 class="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
-            Estrategia tecnológica de principio a fin
-          </h2>
-          <p class="max-w-xl text-base text-slate-600 dark:text-brand-muted sm:text-lg">
-            Participamos en todo el ciclo: investigación, definición de producto, construcción y operación continua.
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <span class="rounded-full border border-slate-200/80 bg-white/70 px-4 py-1 text-xs font-semibold text-slate-600 shadow-sm backdrop-blur-sm dark:border-brand-purple/30 dark:bg-white/5 dark:text-brand-muted">
-              Roadmaps claros
-            </span>
-            <span class="rounded-full border border-slate-200/80 bg-white/70 px-4 py-1 text-xs font-semibold text-slate-600 shadow-sm backdrop-blur-sm dark:border-brand-purple/30 dark:bg-white/5 dark:text-brand-muted">
-              Equipos híbridos
-            </span>
-            <span class="rounded-full border border-slate-200/80 bg-white/70 px-4 py-1 text-xs font-semibold text-slate-600 shadow-sm backdrop-blur-sm dark:border-brand-purple/30 dark:bg-white/5 dark:text-brand-muted">
-              Entrega continua
-            </span>
-          </div>
-        </div>
-        <div class="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow">
-          <div class="pointer-events-none absolute inset-0 opacity-40">
-            <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/15 via-transparent to-brand-blue/10"></div>
-          </div>
-          <div class="relative z-10">
-            <h3 class="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">Qué puedes esperar</h3>
-            <ul class="mt-4 grid list-disc gap-3 pl-5 text-sm text-slate-600 marker:text-brand-purple/60 dark:text-brand-muted">
-              <li>Arquitectura modular y documentación clave para escalar.</li>
-              <li>Integraciones seguras con APIs, datos y automatizaciones.</li>
-              <li>KPIs, monitoreo y soporte enfocado en resultados.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+import CystemsLayout from '../layouts/CystemsLayout.astro';
+import ServicesIntroSection from '../components/services/sections/ServicesIntroSection.astro';
+import ServicesAccompanimentSection from '../components/services/sections/ServicesAccompanimentSection.astro';
+import ServicesModals from '../components/services/modals/ServicesModals.astro';
+import ServicesModalScript from '../components/services/modals/ServicesModalScript.astro';
+import {
+  serviceCards,
+  serviceModals,
+  servicesAccompaniment,
+  servicesIntro,
+  servicesPageMeta,
+} from '../data/services';
+import '../styles/servicios.css';
+---
+<CystemsLayout title={servicesPageMeta.title} description={servicesPageMeta.description}>
+  <ServicesIntroSection intro={servicesIntro} cards={serviceCards} />
+  <ServicesAccompanimentSection content={servicesAccompaniment} />
+  <ServicesModals modals={serviceModals} />
+  <ServicesModalScript />
 </CystemsLayout>

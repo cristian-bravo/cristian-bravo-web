@@ -1,0 +1,13 @@
+---
+import type { BlogPlaceholderContent } from '../../../data/blog';
+
+interface Props {
+  content: BlogPlaceholderContent;
+}
+
+const { content } = Astro.props;
+---
+<section class="sr-only">
+  <h1>{content.heading}</h1>
+  <p>{content.description}</p>
+</section>

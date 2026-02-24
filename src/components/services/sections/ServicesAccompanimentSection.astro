@@ -1,0 +1,53 @@
+---
+import type { ServicesAccompanimentContent } from '../../../data/services';
+
+interface Props {
+  content: ServicesAccompanimentContent;
+}
+
+const { content } = Astro.props;
+---
+<section class="mt-12 border-y border-slate-200/70 bg-slate-50/70 py-16 dark:border-brand-purple/15 dark:bg-white/5 sm:mt-14 sm:py-20 lg:mt-16 lg:py-24">
+  <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+    <div class="grid items-start gap-10 lg:grid-cols-2">
+      <div class="grid gap-4">
+        <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">{content.kicker}</p>
+        <h2 class="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
+          {content.title}
+        </h2>
+        <p class="max-w-xl text-base text-slate-600 dark:text-brand-muted sm:text-lg">
+          {content.description}
+        </p>
+        <div class="flex flex-wrap gap-2">
+          {content.badges.map((badge) => (
+            <span class="rounded-full border border-slate-200/80 bg-white/70 px-4 py-1 text-xs font-semibold text-slate-600 shadow-sm backdrop-blur-sm dark:border-brand-purple/30 dark:bg-white/5 dark:text-brand-muted">
+              {badge}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="services-modal-card-trigger services-modal-card-trigger--insight"
+        data-modal-open={content.insightModalId}
+        aria-haspopup="dialog"
+        aria-controls={content.insightModalId}
+      >
+        <div class="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow">
+          <div class="pointer-events-none absolute inset-0 opacity-40">
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/15 via-transparent to-brand-blue/10"></div>
+          </div>
+          <div class="relative z-10">
+            <h3 class="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">{content.insightTitle}</h3>
+            <ul class="mt-4 grid list-disc gap-3 pl-5 text-sm text-slate-600 marker:text-brand-purple/60 dark:text-brand-muted">
+              {content.insightPoints.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </button>
+    </div>
+  </div>
+</section>

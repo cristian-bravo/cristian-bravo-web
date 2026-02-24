@@ -1,0 +1,35 @@
+---
+import SectionHeader from '../../shared/SectionHeader.astro';
+import type { ProfileInterestsContent } from '../../../data/profile';
+
+interface Props {
+  content: ProfileInterestsContent;
+}
+
+const { content } = Astro.props;
+---
+<section class="profile-interests-section py-16 sm:py-20 lg:py-24">
+  <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+    <SectionHeader
+      content={content.header}
+      className="mb-6 grid gap-3"
+      headingTag="h2"
+      titleClassName="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text"
+      descriptionClassName="max-w-xl text-base text-slate-600 dark:text-brand-muted sm:text-lg"
+    />
+    <div class="flex flex-wrap gap-2">
+      {content.tags.map((tag, index) => (
+        <span
+          class:list={[
+            'rounded-full px-4 py-1 text-xs font-semibold shadow-sm backdrop-blur-sm',
+            index === 0
+              ? 'border border-brand-purple/40 bg-brand-purple/10 text-brand-purple dark:text-blue-200'
+              : 'border border-slate-200/80 bg-white/70 text-slate-600 dark:border-brand-purple/30 dark:bg-white/5 dark:text-brand-muted',
+          ]}
+        >
+          {tag}
+        </span>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,43 +1,50 @@
-﻿<form class="relative max-w-xl overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow">
+---
+import type { ContactFormContent } from '../types/forms';
+
+interface Props {
+  content: ContactFormContent;
+}
+
+const { content } = Astro.props;
+---
+<form class="relative max-w-xl overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow">
   <div class="pointer-events-none absolute inset-0 opacity-40">
     <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/10 via-transparent to-brand-blue/10"></div>
   </div>
   <div class="relative z-10 grid gap-4">
     <label class="grid gap-2 text-sm font-semibold text-slate-600 dark:text-brand-muted">
-      Nombre
+      {content.nameLabel}
       <input
         class="rounded-2xl border border-slate-200/80 bg-white/70 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-brand-purple/60 focus:outline-none focus:ring-2 focus:ring-brand-purple/30 dark:border-brand-purple/30 dark:bg-brand-surface/80 dark:text-brand-text dark:placeholder:text-brand-mutedStrong"
         type="text"
         name="name"
-        placeholder="Tu nombre"
+        placeholder={content.namePlaceholder}
       />
     </label>
     <label class="grid gap-2 text-sm font-semibold text-slate-600 dark:text-brand-muted">
-      Correo
+      {content.emailLabel}
       <input
         class="rounded-2xl border border-slate-200/80 bg-white/70 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-brand-purple/60 focus:outline-none focus:ring-2 focus:ring-brand-purple/30 dark:border-brand-purple/30 dark:bg-brand-surface/80 dark:text-brand-text dark:placeholder:text-brand-mutedStrong"
         type="email"
         name="email"
-        placeholder="correo@empresa.com"
+        placeholder={content.emailPlaceholder}
       />
     </label>
     <label class="grid gap-2 text-sm font-semibold text-slate-600 dark:text-brand-muted">
-      Mensaje
+      {content.messageLabel}
       <textarea
         class="min-h-[140px] rounded-2xl border border-slate-200/80 bg-white/70 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-brand-purple/60 focus:outline-none focus:ring-2 focus:ring-brand-purple/30 dark:border-brand-purple/30 dark:bg-brand-surface/80 dark:text-brand-text dark:placeholder:text-brand-mutedStrong"
         name="message"
         rows="4"
-        placeholder="Cuéntanos sobre tu proyecto"
+        placeholder={content.messagePlaceholder}
       ></textarea>
     </label>
-    <p class="text-sm text-slate-500 dark:text-brand-mutedStrong">
-      Te respondemos con una propuesta inicial en 24-48 horas hábiles.
-    </p>
+    <p class="text-sm text-slate-500 dark:text-brand-mutedStrong">{content.helperText}</p>
     <button
       class="inline-flex items-center justify-center rounded-full bg-brand-gradient px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:shadow-glow dark:focus-visible:ring-offset-brand-bg"
       type="submit"
     >
-      Enviar solicitud
+      {content.submitLabel}
     </button>
   </div>
 </form>

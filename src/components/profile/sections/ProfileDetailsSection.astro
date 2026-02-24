@@ -1,0 +1,43 @@
+---
+import type { ProfileDetailCardContent } from '../../../data/profile';
+
+interface Props {
+  cards: ProfileDetailCardContent[];
+}
+
+const { cards } = Astro.props;
+---
+<section class="profile-details-section border-y border-slate-200/70 bg-slate-50/70 py-16 dark:border-brand-purple/15 dark:bg-white/5 sm:py-20 lg:py-24">
+  <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+    <div class="grid gap-6 md:grid-cols-2">
+      {cards.map((card) => (
+        <article class="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow">
+          <div class="pointer-events-none absolute inset-0 opacity-40">
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/15 via-transparent to-brand-blue/10"></div>
+          </div>
+          <div class="relative z-10 grid gap-3">
+            <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+              {card.title}
+            </h2>
+            {card.description && <p class="text-sm text-slate-600 dark:text-brand-muted">{card.description}</p>}
+            {card.bullets && (
+              <ul class="grid list-disc gap-3 pl-5 text-sm text-slate-600 marker:text-brand-purple/60 dark:text-brand-muted">
+                {card.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+            )}
+            {card.action && (
+              <a
+                class="inline-flex items-center justify-center rounded-full bg-brand-gradient px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:shadow-glow dark:focus-visible:ring-offset-brand-bg"
+                href={card.action.href}
+              >
+                {card.action.label}
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,254 @@
+.services-intro-section {
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
+  --services-intro-neural-line-primary: rgba(59, 130, 246, 0.2);
+  --services-intro-neural-line-secondary: rgba(124, 58, 237, 0.18);
+  --services-intro-neural-node-primary: rgba(59, 130, 246, 0.52);
+  --services-intro-neural-node-secondary: rgba(124, 58, 237, 0.46);
+  --services-intro-card-border-hover: rgba(59, 130, 246, 0.44);
+  --services-intro-card-glow: rgba(59, 130, 246, 0.16);
+}
+
+.dark .services-intro-section {
+  --services-intro-neural-line-primary: rgba(56, 189, 248, 0.26);
+  --services-intro-neural-line-secondary: rgba(129, 140, 248, 0.24);
+  --services-intro-neural-node-primary: rgba(56, 189, 248, 0.58);
+  --services-intro-neural-node-secondary: rgba(129, 140, 248, 0.5);
+  --services-intro-card-border-hover: rgba(129, 140, 248, 0.52);
+  --services-intro-card-glow: rgba(56, 189, 248, 0.2);
+}
+
+.services-intro-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.services-intro-copy {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.services-intro-heading-group {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+}
+
+.services-intro-title {
+  max-inline-size: min(22ch, 100%);
+  text-wrap: balance;
+}
+
+.services-intro-subtitle {
+  max-inline-size: min(58ch, 100%);
+  text-wrap: pretty;
+}
+
+.services-intro-cards {
+  align-items: stretch;
+}
+
+.services-intro-neural {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.8;
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.94) 28%, rgba(0, 0, 0, 1) 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.94) 28%,
+    rgba(0, 0, 0, 1) 88%,
+    transparent 100%
+  );
+}
+
+.services-intro-neural-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: translateZ(0);
+}
+
+.services-intro-neural-lines path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.services-intro-neural-lines--primary path {
+  stroke: var(--services-intro-neural-line-primary);
+  stroke-width: 1.35;
+  opacity: 0.76;
+}
+
+.services-intro-neural-lines--secondary path {
+  stroke: var(--services-intro-neural-line-secondary);
+  stroke-width: 1.1;
+  opacity: 0.58;
+}
+
+.services-intro-neural-nodes circle {
+  transform-origin: center;
+}
+
+.services-intro-neural-nodes--primary circle {
+  fill: var(--services-intro-neural-node-primary);
+}
+
+.services-intro-neural-nodes--secondary circle {
+  fill: var(--services-intro-neural-node-secondary);
+}
+
+.services-intro-neural-lines--primary {
+  animation: services-intro-neural-shift-primary 20s linear infinite;
+}
+
+.services-intro-neural-lines--secondary {
+  animation: services-intro-neural-shift-secondary 24s linear infinite;
+}
+
+.services-intro-neural-nodes--primary {
+  animation: services-intro-neural-pulse-primary 6.8s ease-in-out infinite alternate;
+}
+
+.services-intro-neural-nodes--secondary {
+  animation: services-intro-neural-pulse-secondary 8.4s ease-in-out infinite alternate;
+}
+
+[data-intro-reveal] {
+  transform: translate3d(0, 0, 0);
+}
+
+.services-intro-section.services-intro--prepared [data-intro-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+}
+
+.services-intro-section .services-intro-card > article {
+  position: relative;
+  min-height: clamp(13rem, 18vw, 14.5rem);
+  padding: clamp(1.5rem, 1.25rem + 0.9vw, 1.95rem);
+  transform: translate3d(0, 0, 0) scale(1);
+  transition:
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 220ms ease,
+    filter 220ms ease,
+    opacity 220ms ease;
+}
+
+.services-intro-section .services-intro-card > article::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid var(--services-intro-card-border-hover);
+  background: radial-gradient(circle at 50% 0%, var(--services-intro-card-glow), transparent 72%);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.services-intro-section .services-intro-card:hover > article,
+.services-intro-section .services-intro-card:focus-visible > article {
+  transform: translate3d(0, -4px, 0) scale(1.01);
+  border-color: var(--services-intro-card-border-hover);
+  filter: saturate(1.03);
+}
+
+.services-intro-section .services-intro-card:hover > article::after,
+.services-intro-section .services-intro-card:focus-visible > article::after {
+  opacity: 1;
+}
+
+@keyframes services-intro-neural-shift-primary {
+  from {
+    transform: translate3d(-1.2%, 0.6%, 0);
+  }
+  to {
+    transform: translate3d(1.2%, -0.8%, 0);
+  }
+}
+
+@keyframes services-intro-neural-shift-secondary {
+  from {
+    transform: translate3d(0.8%, -0.5%, 0);
+  }
+  to {
+    transform: translate3d(-0.9%, 0.7%, 0);
+  }
+}
+
+@keyframes services-intro-neural-pulse-primary {
+  from {
+    opacity: 0.42;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 0.76;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes services-intro-neural-pulse-secondary {
+  from {
+    opacity: 0.36;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 0.64;
+    transform: scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-intro-neural-lines--primary,
+  .services-intro-neural-lines--secondary,
+  .services-intro-neural-nodes--primary,
+  .services-intro-neural-nodes--secondary {
+    animation: none;
+  }
+
+  .services-intro-section [data-intro-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .services-intro-section .services-intro-card > article,
+  .services-intro-section .services-intro-card > article::after {
+    transition: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .services-intro-copy {
+    gap: 0.85rem;
+  }
+
+  .services-intro-heading-group {
+    gap: 0.28rem;
+  }
+
+  .services-intro-title {
+    max-inline-size: min(16ch, 100%);
+  }
+
+  .services-intro-subtitle {
+    max-inline-size: min(44ch, 100%);
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-intro-title {
+    max-inline-size: min(24ch, 100%);
+  }
+
+  .services-intro-subtitle {
+    max-inline-size: min(60ch, 100%);
+  }
+}

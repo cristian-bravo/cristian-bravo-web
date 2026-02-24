@@ -1,6 +1,5 @@
 # build output
 dist/
-# generated types
 .astro/
 
 # dependencies
@@ -12,13 +11,24 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
 # environment variables
 .env
-.env.production
+.env.*
+!.env.example
 
-# macOS-specific files
+# OS
 .DS_Store
+Thumbs.db
 
-# jetbrains setting folder
+# IDEs / editors
 .idea/
+.vscode/
+
+# cache
+.cache/
+.temp/
+
+# lock opcional (solo si decides no versionarlo)
+# package-lock.json
+# pnpm-lock.yaml
+# yarn.lock

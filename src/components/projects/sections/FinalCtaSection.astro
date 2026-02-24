@@ -1,0 +1,35 @@
+---
+import type { ProjectsFinalCtaContent } from '../../../data/projects';
+
+interface Props {
+  content: ProjectsFinalCtaContent;
+}
+
+const { content } = Astro.props;
+---
+<section class="projects-final-cta" data-project-final-cta data-animation="portfolio-cta">
+  <div class="projects-final-cta__bg" aria-hidden="true">
+    <div class="projects-final-cta__radial" data-project-cta-light data-animation="cta-light"></div>
+    <div class="projects-final-cta__grid"></div>
+  </div>
+
+  <div class="projects-final-cta__inner mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+    <div class="projects-final-cta__panel" data-project-cta-panel>
+      <p class="projects-final-cta__kicker" data-project-cta-reveal="kicker" data-animation="cta-reveal">
+        {content.kicker}
+      </p>
+      <h2 class="projects-final-cta__title" data-project-cta-reveal="title" data-animation="cta-reveal">
+        {content.title}
+      </h2>
+      <a
+        class="projects-final-cta__button"
+        href={content.action.href}
+        data-project-cta-reveal="button"
+        data-animation="cta-reveal"
+        data-project-cta-button
+      >
+        {content.action.label}
+      </a>
+    </div>
+  </div>
+</section>

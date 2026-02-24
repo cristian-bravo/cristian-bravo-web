@@ -1,0 +1,61 @@
+---
+import type { ProjectsHeroAvatarContent } from '../../../data/projects';
+import type { SectionHeaderContent } from '../../../types/content';
+
+interface Props {
+  intro: SectionHeaderContent;
+  avatar: ProjectsHeroAvatarContent;
+}
+
+const { intro, avatar } = Astro.props;
+---
+<section class="projects-cover" data-project-hero data-animation="portfolio-hero">
+  <div class="projects-cover__bg" aria-hidden="true">
+    <div class="projects-cover__bg-grid"></div>
+    <div class="projects-cover__bg-glow projects-cover__bg-glow--a"></div>
+    <div class="projects-cover__bg-glow projects-cover__bg-glow--b"></div>
+  </div>
+
+  <div class="projects-cover__inner mx-auto w-full max-w-[1200px] px-4 sm:px-6">
+    <div class="projects-cover__layout">
+      <div class="projects-cover__copy" data-project-hero-copy>
+        <p class="projects-cover__kicker" data-project-hero-reveal="kicker" data-animation="hero-reveal">
+          {intro.kicker}
+        </p>
+        <h1 class="projects-cover__title" data-project-hero-reveal="title" data-animation="hero-reveal">
+          {intro.title}
+        </h1>
+        {intro.description && (
+          <p class="projects-cover__subtitle" data-project-hero-reveal="subtitle" data-animation="hero-reveal">
+            {intro.description}
+          </p>
+        )}
+      </div>
+
+      <div class="projects-cover__avatar-wrap" data-project-hero-reveal="avatar" data-animation="hero-reveal">
+        <div class="projects-cover__avatar" data-project-hero-avatar data-animation="hero-avatar">
+          <div class="projects-cover__avatar-ring" aria-hidden="true"></div>
+          <div class="projects-cover__avatar-ring projects-cover__avatar-ring--inner" aria-hidden="true"></div>
+          <div class="projects-cover__avatar-glow" aria-hidden="true"></div>
+          {avatar.imageSrc ? (
+            <img
+              src={avatar.imageSrc}
+              alt={avatar.imageAlt ?? ''}
+              class="projects-cover__avatar-image"
+              width="320"
+              height="320"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <span class="projects-cover__avatar-label">{avatar.label}</span>
+          )}
+          <div class="projects-cover__avatar-badge">
+            <span class="projects-cover__avatar-badge-label">{avatar.label}</span>
+            <span class="projects-cover__avatar-badge-caption">{avatar.caption}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

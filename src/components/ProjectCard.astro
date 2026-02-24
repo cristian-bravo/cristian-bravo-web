@@ -1,4 +1,10 @@
-﻿---
+---
+interface Props {
+  title: string;
+  description: string;
+  visibility?: string;
+}
+
 const { title, description, visibility = 'Público' } = Astro.props;
 ---
 <article class="group relative flex min-h-[200px] flex-col gap-3 overflow-hidden rounded-3xl border border-slate-200/70 bg-gradient-to-br from-brand-blue/10 via-white/80 to-white p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm transition hover:-translate-y-1 hover:border-brand-blue/40 hover:shadow-xl dark:border-brand-blue/30 dark:bg-gradient-to-br dark:from-brand-blue/15 dark:via-brand-surface/90 dark:to-brand-surface dark:shadow-glow dark:hover:border-brand-blue/60">

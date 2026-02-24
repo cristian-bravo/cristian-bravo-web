@@ -1,0 +1,25 @@
+---
+import ProjectCard from '../../ProjectCard.astro';
+import type { ProjectGroupContent } from '../../../data/projects';
+
+interface Props {
+  group: ProjectGroupContent;
+}
+
+const { group } = Astro.props;
+---
+<div class="grid gap-4">
+  <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+    {group.title}
+  </h2>
+  {group.description && <p class="text-sm text-slate-500 dark:text-brand-muted">{group.description}</p>}
+  <div class="grid gap-6 md:grid-cols-2">
+    {group.references.map((reference) => (
+      <ProjectCard
+        title={reference.title}
+        description={reference.description}
+        visibility={reference.visibility}
+      />
+    ))}
+  </div>
+</div>

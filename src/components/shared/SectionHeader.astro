@@ -1,0 +1,30 @@
+---
+import type { SectionHeaderContent } from '../../types/content';
+
+type HeadingTag = 'h1' | 'h2' | 'h3';
+
+interface Props {
+  content: SectionHeaderContent;
+  headingTag?: HeadingTag;
+  className?: string;
+  kickerClassName?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
+}
+
+const {
+  content,
+  headingTag = 'h2',
+  className = 'grid gap-3',
+  kickerClassName = 'text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong',
+  titleClassName = 'font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text',
+  descriptionClassName = 'max-w-2xl text-base text-slate-600 dark:text-brand-muted sm:text-lg',
+} = Astro.props;
+
+const Heading = headingTag;
+---
+<div class={className}>
+  <p class={kickerClassName}>{content.kicker}</p>
+  <Heading class={titleClassName}>{content.title}</Heading>
+  {content.description && <p class={descriptionClassName}>{content.description}</p>}
+</div>

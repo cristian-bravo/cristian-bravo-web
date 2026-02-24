@@ -1,0 +1,37 @@
+---
+import SectionHeader from '../../shared/SectionHeader.astro';
+import type { HomeNextStepContent } from '../../../data/home';
+
+interface Props {
+  content: HomeNextStepContent;
+}
+
+const { content } = Astro.props;
+---
+<section class="last-section next-step-refined pt-4 pb-10 sm:pt-6 sm:pb-12 lg:pt-0 lg:pb-14">
+  <div class="tech-bg" aria-hidden="true"></div>
+  <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+    <div class="next-step-refined-panel grid gap-6 rounded-[28px] border border-brand-purple/20 bg-gradient-to-br from-brand-purple/20 via-white/80 to-white p-8 shadow-lg shadow-slate-900/10 backdrop-blur-sm dark:border-brand-purple/40 dark:bg-gradient-to-br dark:from-brand-purple/30 dark:via-brand-surface/90 dark:to-brand-surface dark:shadow-glow md:grid-cols-[1.2fr,0.8fr] md:items-center">
+      <SectionHeader
+        content={content.header}
+        className="next-step-refined-copy grid gap-3"
+        headingTag="h2"
+        descriptionClassName="max-w-xl text-base text-slate-600 dark:text-brand-muted sm:text-lg"
+      />
+      <div class="next-step-refined-actions flex flex-wrap gap-3 md:justify-end md:pr-1">
+        <a
+          class="next-step-refined-primary inline-flex items-center justify-center rounded-full bg-brand-gradient px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:shadow-glow dark:focus-visible:ring-offset-brand-bg"
+          href={content.primaryAction.href}
+        >
+          {content.primaryAction.label}
+        </a>
+        <a
+          class="next-step-refined-secondary inline-flex items-center justify-center rounded-full border border-slate-200/70 bg-white/70 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-brand-purple/40 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-brand-purple/40 dark:bg-white/5 dark:text-brand-text dark:hover:border-brand-purple/60 dark:focus-visible:ring-offset-brand-bg"
+          href={content.secondaryAction.href}
+        >
+          {content.secondaryAction.label}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

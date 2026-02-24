@@ -1,0 +1,73 @@
+---
+import ServiceModalTriggerCard from '../cards/ServiceModalTriggerCard.astro';
+import ServicesIntroAnimator from './ServicesIntroAnimator';
+import type { ServiceCardContent, ServicesIntroContent } from '../../../data/services';
+import '../../../styles/services-intro-animations.css';
+
+interface Props {
+  intro: ServicesIntroContent;
+  cards: ServiceCardContent[];
+}
+
+const { intro, cards } = Astro.props;
+const introSectionId = 'services-intro';
+---
+<section id={introSectionId} class="services-intro-section py-20 sm:py-24 lg:py-28">
+  <div class="services-intro-neural" aria-hidden="true">
+    <svg class="services-intro-neural-svg" viewBox="0 0 1200 520" preserveAspectRatio="none">
+      <g class="services-intro-neural-lines services-intro-neural-lines--primary">
+        <path d="M-60 410 C 110 360, 260 380, 430 330 S 760 260, 980 300 S 1220 340, 1300 290" />
+        <path d="M-80 468 C 120 430, 280 452, 480 422 S 830 378, 1040 406 S 1220 432, 1330 404" />
+      </g>
+      <g class="services-intro-neural-lines services-intro-neural-lines--secondary">
+        <path d="M-120 268 C 80 240, 230 260, 390 226 S 690 162, 920 190 S 1170 230, 1320 196" />
+        <path d="M-140 336 C 60 310, 220 320, 410 294 S 760 244, 980 258 S 1200 284, 1335 266" />
+      </g>
+      <g class="services-intro-neural-nodes services-intro-neural-nodes--primary">
+        <circle cx="126" cy="378" r="3.2"></circle>
+        <circle cx="286" cy="352" r="2.4"></circle>
+        <circle cx="498" cy="314" r="2.8"></circle>
+        <circle cx="738" cy="276" r="2.4"></circle>
+        <circle cx="972" cy="296" r="3"></circle>
+      </g>
+      <g class="services-intro-neural-nodes services-intro-neural-nodes--secondary">
+        <circle cx="172" cy="252" r="2.2"></circle>
+        <circle cx="364" cy="232" r="1.9"></circle>
+        <circle cx="622" cy="184" r="2.3"></circle>
+        <circle cx="868" cy="194" r="2"></circle>
+        <circle cx="1082" cy="228" r="2.4"></circle>
+      </g>
+    </svg>
+  </div>
+
+  <div class="services-intro-inner mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+    <div class="services-intro-copy mb-14 sm:mb-16 lg:mb-20">
+      <div class="services-intro-heading-group">
+        <p data-intro-reveal="kicker" class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">
+          {intro.kicker}
+        </p>
+
+        <h1 data-intro-reveal="title" class="services-intro-title font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl lg:text-5xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
+          {intro.title}
+        </h1>
+      </div>
+
+      <p data-intro-reveal="description" class="services-intro-subtitle text-base text-slate-600 dark:text-brand-muted sm:text-lg">
+        {intro.subtitle}
+      </p>
+    </div>
+
+    <div class="services-page-grid services-intro-cards grid gap-7 sm:gap-8 md:grid-cols-3">
+      {cards.map((card) => (
+        <ServiceModalTriggerCard
+          title={card.title}
+          description={card.description}
+          modalId={card.modalId}
+          className="services-intro-card"
+          revealType="card"
+        />
+      ))}
+    </div>
+  </div>
+  <ServicesIntroAnimator client:visible targetId={introSectionId} />
+</section>
