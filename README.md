@@ -1,151 +1,106 @@
-# 🚀 Cristian Bravo — Developer Portfolio
+# Cristian Bravo — Developer Portfolio
 
-High-performance personal website built with **Astro** to showcase projects, technical expertise and professional experience as a **Fullstack Developer**.
+🌐 https://cystems.ec  
+💼 https://www.linkedin.com/in/cristian-bravodev/
 
-🌐 **Live Site:** https://cystems.ec  
-💼 **LinkedIn:** https://www.linkedin.com/in/cristian-bravodev/
-
----
-
-## ✨ About the Project
-
-This portfolio was designed as a modern, scalable and performance-focused platform to present:
-
-- Real-world projects
-- Technical case studies
-- Professional services
-- Contact and collaboration channels
-
-It represents my development philosophy:
-
-> Clean architecture, performance-first and user-centered design.
+Personal website built with **Astro** to showcase my projects, skills and services as a Fullstack Developer.  
+Focused on performance, modern UI and scalable frontend architecture.
 
 ---
 
-## 🧠 Available for Work
+## Available for Work
 
-I’m currently open to:
+Open to:
 
-- Fullstack Developer roles
-- Frontend Developer roles
-- Backend & API development
-- Freelance projects
-- Remote opportunities
+- Fullstack Developer roles  
+- Frontend Developer roles  
+- Freelance projects  
+- Remote opportunities  
 
-📩 Contact through the website or LinkedIn.
-
----
-
-## 🧱 Tech Stack
-
-### Core
-- **Astro**
-- **TypeScript**
-- **TailwindCSS**
-
-### UI / UX
-- Responsive design
-- Modern layout system
-- Smooth animations
-- Component-based architecture
-
-### Performance
-- Static Site Generation (SSG)
-- Optimized assets
-- Minimal JavaScript
-- SEO-friendly structure
+Feel free to connect via LinkedIn or through the website.
 
 ---
 
-## 📂 Project Structure
+## Tech Stack
 
+**Core**  
+Astro · TypeScript · TailwindCSS  
 
-/
-├── public/
-├── src/
-│ ├── components/
-│ ├── layouts/
-│ ├── pages/
-│ ├── styles/
-│ └── content/
-└── astro.config.mjs
+**Architecture & Performance**  
+Static generation · SEO-friendly structure · Optimized assets · Minimal JavaScript  
 
+**UI / UX**  
+Responsive design · Component-based structure · Smooth animations  
 
 ---
 
-## ⚙️ Getting Started
+## Features
 
-### Install dependencies
+- Interactive project showcase  
+- Modern and responsive layout  
+- Performance-first approach  
+- Professional personal branding  
+
+---
+
+## Getting Started
 
 ```bash
 npm install
-Run development server
 npm run dev
-Build for production
+
+Build for production:
+
 npm run build
-Preview build
 npm run preview
-🎯 Performance & Optimization
+Project Structure
+src/
+ ├─ components/
+ ├─ layouts/
+ ├─ pages/
+ ├─ styles/
+ └─ content/
+Deployment
 
-This project is built to achieve high scores in:
-
-Performance
-
-Accessibility
-
-Best Practices
-
-SEO
-
-With a performance-first architecture using Astro.
-
-🌍 Deployment
-
-Optimized for deployment on:
+Ready for:
 
 Vercel
 
 Netlify
 
-VPS with Nginx
+VPS (Nginx)
 
-Static hosting environments
+Static hosting
 
-🧩 Key Features
+About Me
 
-Interactive project showcase
+Fullstack Developer focused on building modern, scalable and high-performance web applications.
 
-Animated scroll experience
+If you’re looking for someone to bring your ideas into production-ready software — let’s talk.
 
-Professional services section
+License
 
-Personal branding integration
+Personal portfolio project.
 
-Fully responsive design
 
-👨‍💻 Author
+---
 
-Cristian Bravo
-Fullstack Developer
+# ✨ POR QUÉ ESTE SE VE BONITO
 
-🌐 https://cystems.ec
+- no tiene párrafos largos
+- usa espacios (respira visualmente)
+- listas cortas
+- tech stack en una sola línea
+- CTA claro (Available for work)
+- estructura tipo landing
 
-💼 https://www.linkedin.com/in/cristian-bravodev/
+---
 
-🐙 https://github.com/cristian-bravo
+# 🔥 SI QUIERES QUE SE VEA AÚN MÁS PRO
 
-⭐ Purpose
+Luego puedes agregar arriba del todo:
 
-This project reflects:
-
-My frontend architecture standards
-
-My UI/UX design approach
-
-My performance optimization practices
-
-My professional brand (CYSTEMS)
-
-📄 License
-
-This project is for personal portfolio and professional presentation purposes.
+```md
+<p align="center">
+  <img src="public/preview.png" width="100%" />
+</p>
