@@ -1,68 +1,58 @@
-# Cristian Bravo — Developer Portfolio
+<p align="center">
+  <h1 align="center">Cristian Bravo</h1>
+  <p align="center">
+    Fullstack Developer · Astro · Laravel · React  
+    <br/>
+    <a href="https://cystems.ec"><strong>🌐 cystems.ec</strong></a>
+    &nbsp;·&nbsp;
+    <a href="https://www.linkedin.com/in/cristian-bravodev/">LinkedIn</a>
+  </p>
+</p>
 
-🌐 https://cystems.ec  
-💼 https://www.linkedin.com/in/cristian-bravodev/
-
-Personal website built with **Astro** to showcase my projects, skills and services as a Fullstack Developer.  
-Focused on performance, modern UI and scalable frontend architecture.
-
----
-
-## Available for Work
-
-Open to:
-
-- Fullstack Developer roles  
-- Frontend Developer roles  
-- Freelance projects  
-- Remote opportunities  
-
-Feel free to connect via LinkedIn or through the website.
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Available%20for%20Work-00C853?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Astro-Build-FF5D01?style=for-the-badge&logo=astro"/>
+  <img src="https://img.shields.io/badge/TypeScript-Ready-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
+  <img src="https://img.shields.io/badge/TailwindCSS-UI-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white"/>
+</p>
 
 ---
 
-## Tech Stack
+## ✨ About the Project
 
-**Core**  
-Astro · TypeScript · TailwindCSS  
-
-**Architecture & Performance**  
-Static generation · SEO-friendly structure · Optimized assets · Minimal JavaScript  
-
-**UI / UX**  
-Responsive design · Component-based structure · Smooth animations  
+Personal portfolio built with **Astro** focused on performance, modern UI and scalable frontend architecture.  
+Designed as a professional platform to showcase projects, services and real-world solutions.
 
 ---
 
-## Features
+## 🧠 Tech Stack
 
-- Interactive project showcase  
-- Modern and responsive layout  
-- Performance-first approach  
-- Professional personal branding  
+- Astro  
+- TypeScript  
+- TailwindCSS  
+- Component-based architecture  
+- Static generation & SEO optimization  
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
 ```bash
 npm install
 npm run dev
-
-Build for production:
-
+Production build
 npm run build
 npm run preview
-Project Structure
+📁 Project Structure
 src/
  ├─ components/
  ├─ layouts/
  ├─ pages/
  ├─ styles/
  └─ content/
-Deployment
+🌍 Deployment
 
-Ready for:
+Optimized for:
 
 Vercel
 
@@ -72,35 +62,16 @@ VPS (Nginx)
 
 Static hosting
 
-About Me
+🤝 Work With Me
 
-Fullstack Developer focused on building modern, scalable and high-performance web applications.
+I’m currently open to:
 
-If you’re looking for someone to bring your ideas into production-ready software — let’s talk.
+Fullstack roles
 
-License
+Frontend roles
 
-Personal portfolio project.
+Freelance projects
 
+Remote opportunities
 
----
-
-# ✨ POR QUÉ ESTE SE VE BONITO
-
-- no tiene párrafos largos
-- usa espacios (respira visualmente)
-- listas cortas
-- tech stack en una sola línea
-- CTA claro (Available for work)
-- estructura tipo landing
-
----
-
-# 🔥 SI QUIERES QUE SE VEA AÚN MÁS PRO
-
-Luego puedes agregar arriba del todo:
-
-```md
-<p align="center">
-  <img src="public/preview.png" width="100%" />
-</p>
+Let’s build something great → https://cystems.ec
