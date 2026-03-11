@@ -1,23 +1,34 @@
 .hero-motion-root {
-  --hero-star-core: rgba(124, 58, 237, 0.95);
-  --hero-star-accent: rgba(59, 130, 246, 0.88);
-  --hero-star-halo-core: rgba(124, 58, 237, 0.34);
-  --hero-star-halo-accent: rgba(59, 130, 246, 0.28);
-  --hero-star-layer-filter:
-    drop-shadow(0 0 6px rgba(124, 58, 237, 0.1))
-    drop-shadow(0 0 10px rgba(59, 130, 246, 0.08));
+  /* Real Bubble variables - Perfect Circles */
+  --bubble-edge-purple: rgba(124, 58, 237, 0.2); /* Sutil circle border */
+  --bubble-glow-purple: rgba(124, 58, 237, 0.03); /* Faint volume */
+  --bubble-highlight-purple: rgba(255, 255, 255, 0.4); 
+  
+  --bubble-edge-blue: rgba(59, 130, 246, 0.2);
+  --bubble-glow-blue: rgba(59, 130, 246, 0.03);
+  --bubble-highlight-blue: rgba(255, 255, 255, 0.4);
+
+  /* Deep atmospheric orbs for background volume */
+  --hero-orb-1: rgba(124, 58, 237, 0.12); 
+  --hero-orb-2: rgba(59, 130, 246, 0.12);
+  --hero-particle: rgba(124, 58, 237, 0.3); 
+
   position: relative;
   isolation: isolate;
 }
 
 .dark .hero-motion-root {
-  --hero-star-core: rgba(255, 255, 255, 1);
-  --hero-star-accent: rgba(129, 140, 248, 0.88);
-  --hero-star-halo-core: rgba(255, 255, 255, 0.3);
-  --hero-star-halo-accent: rgba(129, 140, 248, 0.26);
-  --hero-star-layer-filter:
-    drop-shadow(0 0 8px rgba(255, 255, 255, 0.08))
-    drop-shadow(0 0 12px rgba(129, 140, 248, 0.12));
+  --bubble-edge-purple: rgba(167, 139, 250, 0.15); 
+  --bubble-glow-purple: rgba(139, 92, 246, 0.03);
+  --bubble-highlight-purple: rgba(255, 255, 255, 0.25);
+
+  --bubble-edge-blue: rgba(96, 165, 250, 0.15);
+  --bubble-glow-blue: rgba(59, 130, 246, 0.03);
+  --bubble-highlight-blue: rgba(255, 255, 255, 0.25);
+
+  --hero-orb-1: rgba(129, 140, 248, 0.12); 
+  --hero-orb-2: rgba(56, 189, 248, 0.12);
+  --hero-particle: rgba(165, 180, 252, 0.3);
 }
 
 .hero-motion-root::before,
@@ -27,49 +38,84 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  transform: translate3d(0, 0, 0);
-  filter: var(--hero-star-layer-filter);
-  will-change: transform, opacity;
+  will-change: background-position, opacity, transform;
 }
 
+/* Layer 1: Massive soft atmospheric orbs + Majestic circular bubbles */
 .hero-motion-root::before {
-  background:
-    radial-gradient(circle at 12% 18%, var(--hero-star-halo-core) 0, transparent 4.8px),
-    radial-gradient(circle at 28% 44%, var(--hero-star-halo-accent) 0, transparent 5.3px),
-    radial-gradient(circle at 41% 22%, var(--hero-star-halo-core) 0, transparent 4.4px),
-    radial-gradient(circle at 57% 61%, var(--hero-star-halo-core) 0, transparent 5.1px),
-    radial-gradient(circle at 73% 28%, var(--hero-star-halo-accent) 0, transparent 4.9px),
-    radial-gradient(circle at 84% 16%, var(--hero-star-halo-core) 0, transparent 4.6px),
-    radial-gradient(circle at 90% 48%, var(--hero-star-halo-core) 0, transparent 5px),
-    radial-gradient(circle at 12% 18%, var(--hero-star-core) 0, var(--hero-star-core) 1px, transparent 2.3px),
-    radial-gradient(circle at 28% 44%, var(--hero-star-accent) 0, var(--hero-star-accent) 1.1px, transparent 2.6px),
-    radial-gradient(circle at 41% 22%, var(--hero-star-core) 0, var(--hero-star-core) 0.95px, transparent 2.1px),
-    radial-gradient(circle at 57% 61%, var(--hero-star-core) 0, var(--hero-star-core) 1.15px, transparent 2.7px),
-    radial-gradient(circle at 73% 28%, var(--hero-star-accent) 0, var(--hero-star-accent) 1px, transparent 2.3px),
-    radial-gradient(circle at 84% 16%, var(--hero-star-core) 0, var(--hero-star-core) 0.9px, transparent 2px),
-    radial-gradient(circle at 90% 48%, var(--hero-star-core) 0, var(--hero-star-core) 1.05px, transparent 2.5px);
-  opacity: 0.16;
-  animation: heroStarTwinklePrimary 14s ease-in-out infinite;
+  background-image:
+    /* Atmospheric depth orbs (out of focus backdrop) */
+    radial-gradient(circle at 15% 20%, var(--hero-orb-1) 0%, transparent 180px),
+    radial-gradient(circle at 85% 60%, var(--hero-orb-2) 0%, transparent 240px),
+    radial-gradient(circle at 40% 85%, var(--hero-orb-1) 0%, transparent 160px),
+    radial-gradient(circle at 75% 15%, var(--hero-orb-2) 0%, transparent 200px),
+    
+    /* Bubble 1 Cluster (Purple - Large + Small companion) */
+    /* Main Large */
+    radial-gradient(circle at 23% 68%, var(--bubble-highlight-purple) 0%, transparent 8px), 
+    radial-gradient(circle at 25% 70%, transparent 45.5px, var(--bubble-edge-purple) 46.5px, transparent 47.5px),
+    radial-gradient(circle at 25% 70%, var(--bubble-glow-purple) 0%, transparent 46.5px),
+    /* Small Companion */
+    radial-gradient(circle at 29% 73%, var(--bubble-highlight-purple) 0%, transparent 3px), 
+    radial-gradient(circle at 30% 74%, transparent 13.5px, var(--bubble-edge-purple) 14.5px, transparent 15.5px),
+    radial-gradient(circle at 30% 74%, var(--bubble-glow-purple) 0%, transparent 14.5px),
+
+    /* Bubble 2 Cluster (Blue - Very Large) */
+    radial-gradient(circle at 62% 27%, var(--bubble-highlight-blue) 0%, transparent 12px), 
+    radial-gradient(circle at 68% 33%, rgba(255,255,255,0.06) 0%, transparent 40px),
+    radial-gradient(circle at 65% 30%, transparent 75.5px, var(--bubble-edge-blue) 76.5px, transparent 77.5px),
+    radial-gradient(circle at 65% 30%, var(--bubble-glow-blue) 0%, transparent 76.5px),
+
+    /* Bubble 3 (Purple - Small isolated) */
+    radial-gradient(circle at 8% 88%, var(--bubble-highlight-purple) 0%, transparent 4px), 
+    radial-gradient(circle at 10% 90%, transparent 21.5px, var(--bubble-edge-purple) 22.5px, transparent 23.5px),
+    radial-gradient(circle at 10% 90%, var(--bubble-glow-purple) 0%, transparent 22.5px),
+
+    /* Bokeh dust (Out of focus particles) */
+    radial-gradient(circle at 45% 40%, var(--hero-particle) 0%, transparent 5px),
+    radial-gradient(circle at 80% 90%, var(--hero-particle) 0%, transparent 4px);
+    
+  background-size: 100% 1600px;
+  animation: heroBubblesRisePrimary 200s linear infinite; /* Glacial pace */
+  opacity: 1;
 }
 
+/* Layer 2: Medium/Small refractions floating gracefully with lateral sway */
 .hero-motion-root::after {
-  background:
-    radial-gradient(circle at 8% 68%, var(--hero-star-halo-core) 0, transparent 4.8px),
-    radial-gradient(circle at 19% 32%, var(--hero-star-halo-accent) 0, transparent 4.6px),
-    radial-gradient(circle at 36% 74%, var(--hero-star-halo-core) 0, transparent 5.4px),
-    radial-gradient(circle at 49% 39%, var(--hero-star-halo-core) 0, transparent 4.9px),
-    radial-gradient(circle at 66% 18%, var(--hero-star-halo-accent) 0, transparent 5px),
-    radial-gradient(circle at 78% 56%, var(--hero-star-halo-core) 0, transparent 4.8px),
-    radial-gradient(circle at 92% 34%, var(--hero-star-halo-core) 0, transparent 4.4px),
-    radial-gradient(circle at 8% 68%, var(--hero-star-core) 0, var(--hero-star-core) 1px, transparent 2.3px),
-    radial-gradient(circle at 19% 32%, var(--hero-star-accent) 0, var(--hero-star-accent) 0.95px, transparent 2.1px),
-    radial-gradient(circle at 36% 74%, var(--hero-star-core) 0, var(--hero-star-core) 1.15px, transparent 2.8px),
-    radial-gradient(circle at 49% 39%, var(--hero-star-core) 0, var(--hero-star-core) 1px, transparent 2.4px),
-    radial-gradient(circle at 66% 18%, var(--hero-star-accent) 0, var(--hero-star-accent) 1.1px, transparent 2.6px),
-    radial-gradient(circle at 78% 56%, var(--hero-star-core) 0, var(--hero-star-core) 1px, transparent 2.3px),
-    radial-gradient(circle at 92% 34%, var(--hero-star-core) 0, var(--hero-star-core) 0.9px, transparent 2px);
-  opacity: 0.13;
-  animation: heroStarTwinkleSecondary 16s ease-in-out 0.9s infinite;
+  background-image:
+    /* Deep background orbs */
+    radial-gradient(circle at 80% 25%, var(--hero-orb-1) 0%, transparent 150px),
+    radial-gradient(circle at 20% 75%, var(--hero-orb-2) 0%, transparent 180px),
+    
+    /* Bubble 4 Cluster (Purple - Medium + Medium companion) */
+    /* Main */
+    radial-gradient(circle at 86% 43%, var(--bubble-highlight-purple) 0%, transparent 6px), 
+    radial-gradient(circle at 88% 45%, transparent 36.5px, var(--bubble-edge-purple) 37.5px, transparent 38.5px),
+    radial-gradient(circle at 88% 45%, var(--bubble-glow-purple) 0%, transparent 37.5px),
+    /* Companion */
+    radial-gradient(circle at 82% 48%, var(--bubble-highlight-purple) 0%, transparent 4px), 
+    radial-gradient(circle at 83% 49%, transparent 24.5px, var(--bubble-edge-purple) 25.5px, transparent 26.5px),
+    radial-gradient(circle at 83% 49%, var(--bubble-glow-purple) 0%, transparent 25.5px),
+
+    /* Bubble 5 (Blue - Large isolated) */
+    radial-gradient(circle at 10% 38%, var(--bubble-highlight-blue) 0%, transparent 8px), 
+    radial-gradient(circle at 12% 40%, transparent 58.5px, var(--bubble-edge-blue) 59.5px, transparent 60.5px),
+    radial-gradient(circle at 12% 40%, var(--bubble-glow-blue) 0%, transparent 59.5px),
+
+    /* Bubble 6 (Purple - Small isolated) */
+    radial-gradient(circle at 33% 13%, var(--bubble-highlight-purple) 0%, transparent 3px),
+    radial-gradient(circle at 35% 15%, transparent 17.5px, var(--bubble-edge-purple) 18.5px, transparent 19.5px),
+    radial-gradient(circle at 35% 15%, var(--bubble-glow-purple) 0%, transparent 18.5px),
+
+    /* Bokeh dust */
+    radial-gradient(circle at 60% 85%, var(--hero-particle) 0%, transparent 3px),
+    radial-gradient(circle at 25% 50%, var(--hero-particle) 0%, transparent 2.5px);
+    
+  background-size: 100% 1200px;
+  animation: 
+    heroBubblesRiseSecondary 140s linear infinite,
+    heroBubblesSway 50s ease-in-out infinite alternate; 
+  opacity: 0.85;
 }
 
 .hero-motion-shell {
@@ -207,61 +253,35 @@
   }
 }
 
-@keyframes heroStarTwinklePrimary {
-  0%,
-  14%,
+@keyframes heroBubblesRisePrimary {
+  0% {
+    background-position: 0px 0px;
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
   100% {
-    opacity: 0.15;
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  5% {
-    opacity: 0.24;
-  }
-  8% {
-    opacity: 0.16;
-  }
-  34% {
-    opacity: 0.31;
-    transform: translate3d(0.45%, -0.3%, 0) scale(1.03);
-  }
-  38% {
-    opacity: 0.17;
-  }
-  63% {
-    opacity: 0.27;
-  }
-  68% {
-    opacity: 0.16;
-    transform: translate3d(-0.2%, 0.2%, 0) scale(1);
+    background-position: 100px -1600px;
+    opacity: 0.85;
   }
 }
 
-@keyframes heroStarTwinkleSecondary {
-  0%,
-  20%,
+@keyframes heroBubblesRiseSecondary {
+  0% {
+    background-position: 0px 0px;
+  }
   100% {
-    opacity: 0.12;
-    transform: translate3d(0, 0, 0) scale(1);
+    background-position: 0px -1200px;
   }
-  9% {
-    opacity: 0.2;
+}
+
+@keyframes heroBubblesSway {
+  0% {
+    transform: translateX(-15px);
   }
-  12% {
-    opacity: 0.13;
-  }
-  46% {
-    opacity: 0.26;
-    transform: translate3d(-0.5%, 0.35%, 0) scale(1.03);
-  }
-  51% {
-    opacity: 0.13;
-  }
-  79% {
-    opacity: 0.22;
-    transform: translate3d(0.25%, -0.2%, 0) scale(1);
-  }
-  84% {
-    opacity: 0.12;
+  100% {
+    transform: translateX(15px);
   }
 }
 

@@ -3,6 +3,11 @@ import CystemsLayout from '../../layouts/CystemsLayout.astro';
 import BlogPlaceholderSection from '../../components/blog/sections/BlogPlaceholderSection.astro';
 import { blogPlaceholderContent, blogSlugPageMeta } from '../../data/blog';
 import '../../styles/blog.css';
+
+export function getStaticPaths() {
+  // The blog is disabled for now, so no detail pages are generated.
+  return [];
+}
 ---
 <CystemsLayout title={blogSlugPageMeta.title} description={blogSlugPageMeta.description}>
   <BlogPlaceholderSection content={blogPlaceholderContent} />

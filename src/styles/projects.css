@@ -185,6 +185,13 @@
   position: relative;
 }
 
+.story-scene--project,
+.story-scene--cta,
+.project-scroll-step,
+.projects-final-cta {
+  scroll-margin-top: 6.5rem;
+}
+
 .story-root--scroll-linked {
   position: relative;
   width: 100%;
@@ -713,6 +720,14 @@
   scroll-snap-stop: normal;
   contain-intrinsic-size: 1100px;
   --project-parallax-y: 0px;
+}
+
+/* Initial hidden state set by JS before IntersectionObserver starts watching.
+   Using a data attribute means non-JS visitors always see content. */
+.project-scroll-step[data-animate-ready] {
+  opacity: 0;
+  transform: translateY(40px);
+  will-change: opacity, transform;
 }
 
 .project-scroll-step::before {

@@ -1,90 +1,330 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import ProjectsStory from '../components/projects/sections/ProjectsPortfolioSection.astro';
 import { projectsPageMeta, projectsPortfolioContent } from '../data/projects';
-import '../styles/projects.css';
+import '../styles/proyectos-scene.css';
 
-const projectSteps = projectsPortfolioContent.groups.flatMap((group) => group.references);
+const allProjects = projectsPortfolioContent.groups.flatMap((group, gi) =>
+  group.references.map((project, pi) => ({
+    project,
+    groupTitle: group.title,
+    stepIndex: projectsPortfolioContent.groups
+      .slice(0, gi)
+      .reduce((acc, g) => acc + g.references.length, 0) + pi,
+  }))
+);
+
+const totalProjects = allProjects.length;
+// Scenes: 1 hero + N projects + 1 CTA
+const totalScenes = 1 + totalProjects + 1;
+
+const toneForStep = (i: number) => i % 6;
 ---
 <BaseLayout title={projectsPageMeta.title} description={projectsPageMeta.description}>
-  <Header />
-  <main class="story-root" data-story-root>
-    <div class="story-scroll" data-story-scroll>
-      <div class="story-stage" data-story-stage>
-        <section class="projects-story portfolio-story" data-projects-story-root data-active-tone="0">
-          <div class="projects-story__theme-layers" aria-hidden="true">
-            <span class="projects-story__theme-layer" data-tone="0"></span>
-            <span class="projects-story__theme-layer" data-tone="1"></span>
-            <span class="projects-story__theme-layer" data-tone="2"></span>
-            <span class="projects-story__theme-layer" data-tone="3"></span>
-          </div>
-          <div class="projects-story__grid-overlay" aria-hidden="true"></div>
+  <div class="ps-root">
+    <!-- Scroll spacer: height set by JS = totalScenes × 100vh -->
+    <div data-ps-spacer style="height: 100vh;"></div>
 
-          <aside class="projects-story-progress" aria-label="Progreso del portafolio" data-projects-progress>
-            <div class="projects-story-progress__track" aria-hidden="true">
-              <span class="projects-story-progress__fill" data-projects-progress-fill></span>
+    <!-- Fixed stage (the actual visual canvas) -->
+    <div class="ps-stage" data-ps-stage>
+
+      <!-- ── SCENE 0: HERO ── -->
+      <div
+        class="ps-scene ps-scene--hero"
+        data-ps-scene
+        data-scene-index="0"
+        aria-label="Portada del portafolio"
+      >
+        <div class="ps-scene__inner">
+          <div class="ps-hero">
+            <div class="ps-hero__copy">
+              <p class="ps-hero__kicker" data-reveal>
+                {projectsPortfolioContent.intro.kicker}
+              </p>
+              <h1 class="ps-hero__title" data-reveal>
+                {projectsPortfolioContent.intro.title}
+              </h1>
+              {projectsPortfolioContent.intro.description && (
+                <p class="ps-hero__desc" data-reveal>
+                  {projectsPortfolioContent.intro.description}
+                </p>
+              )}
+              <div class="ps-hero__scroll-hint" data-reveal>
+                <span class="ps-hero__scroll-icon" aria-hidden="true"></span>
+                Scrollea para explorar
+              </div>
             </div>
-            <ol class="projects-story-progress__dots">
-              {projectSteps.map((project, index) => (
-                <li>
-                  <button
-                    type="button"
-                    class="projects-story-progress__dot"
-                    data-project-progress-dot
-                    data-step-index={index}
-                    title={project.title}
-                    aria-label={`Ir al proyecto ${index + 1}: ${project.title}`}
-                  ></button>
-                </li>
-              ))}
-            </ol>
-          </aside>
 
-          <div class="story-track" data-story-track>
-            <ProjectsStory content={projectsPortfolioContent} />
+            <div class="ps-hero__avatar" data-reveal>
+              <div class="ps-hero__avatar-orb">
+                <div class="ps-hero__avatar-ring" aria-hidden="true"></div>
+                <div class="ps-hero__avatar-ring ps-hero__avatar-ring--inner" aria-hidden="true"></div>
+                {projectsPortfolioContent.heroAvatar.imageSrc ? (
+                  <img
+                    src={projectsPortfolioContent.heroAvatar.imageSrc}
+                    alt={projectsPortfolioContent.heroAvatar.imageAlt ?? ''}
+                    class="ps-hero__avatar-img"
+                    width="320"
+                    height="320"
+                    loading="eager"
+                    decoding="async"
+                  />
+                ) : (
+                  <span style="font-size:3rem;font-weight:700;color:#7c3aed;">
+                    {projectsPortfolioContent.heroAvatar.label}
+                  </span>
+                )}
+                <div class="ps-hero__avatar-badge">
+                  <span class="ps-hero__avatar-badge-label">
+                    {projectsPortfolioContent.heroAvatar.label}
+                  </span>
+                  <span class="ps-hero__avatar-badge-caption">
+                    {projectsPortfolioContent.heroAvatar.caption}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
-        </section>
+        </div>
       </div>
+
+      <!-- ── SCENES 1..N: PROJECTS ── -->
+      {allProjects.map(({ project, groupTitle, stepIndex }) => {
+        const tone = toneForStep(stepIndex);
+        const wideItem = project.gallery.find(g => g.variant === 'wide');
+        const squareItem = project.gallery.find(g => g.variant === 'square');
+        const tallItem = project.gallery.find(g => g.variant === 'tall');
+
+        return (
+          <div
+            class="ps-scene ps-scene--project"
+            data-ps-scene
+            data-scene-index={stepIndex + 1}
+            data-tone={String(tone)}
+            aria-label={`Proyecto: ${project.title}`}
+          >
+            <div class="ps-scene__inner">
+              <div class="ps-project">
+                <!-- Left: text content -->
+                <div class="ps-project__left">
+                  <div class="ps-project__meta" data-reveal>
+                    <span class="ps-project__step">
+                      {String(stepIndex + 1).padStart(2, '0')} / {String(totalProjects).padStart(2, '0')}
+                    </span>
+                    <span class="ps-project__separator" aria-hidden="true">·</span>
+                    <span class="ps-project__group">{groupTitle}</span>
+                    <span class:list={[
+                      'ps-project__visibility',
+                      project.isConfidential ? 'ps-project__visibility--private' : 'ps-project__visibility--public'
+                    ]}>
+                      {project.visibility}
+                    </span>
+                  </div>
+
+                  <h2 class="ps-project__title" data-reveal>
+                    {project.title}
+                  </h2>
+
+                  <p class="ps-project__desc" data-reveal>
+                    {project.description}
+                  </p>
+
+                  {project.isConfidential && (
+                    <p class="ps-project__confidential" data-reveal>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V8Z"/>
+                      </svg>
+                      {project.confidentialLabel ?? 'Proyecto confidencial'}
+                    </p>
+                  )}
+
+                  <ul class="ps-project__tags" data-reveal aria-label="Tecnologías y áreas">
+                    {project.tags.map(tag => (
+                      <li class="ps-project__tag">{tag}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <!-- Right: gallery -->
+                <div class="ps-project__right" data-reveal>
+                  <div class="ps-project__gallery">
+                    <!-- Wide item spans full width -->
+                    {wideItem && (
+                      <figure class="ps-project__gallery-item ps-project__gallery-item--wide">
+                        {wideItem.src ? (
+                          <img
+                            src={wideItem.src}
+                            alt={wideItem.alt}
+                            class="ps-project__gallery-img"
+                            loading="lazy"
+                            decoding="async"
+                            width="800"
+                            height="350"
+                          />
+                        ) : (
+                          <div class="ps-project__gallery-placeholder">{wideItem.caption}</div>
+                        )}
+                        {project.isConfidential && (
+                          <div class="ps-project__lock-overlay" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                              <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z"/>
+                            </svg>
+                          </div>
+                        )}
+                      </figure>
+                    )}
+
+                    <!-- Square -->
+                    {squareItem && (
+                      <figure class="ps-project__gallery-item">
+                        {squareItem.src ? (
+                          <img
+                            src={squareItem.src}
+                            alt={squareItem.alt}
+                            class="ps-project__gallery-img"
+                            loading="lazy"
+                            decoding="async"
+                            width="400"
+                            height="250"
+                          />
+                        ) : (
+                          <div class="ps-project__gallery-placeholder">{squareItem.caption}</div>
+                        )}
+                        {project.isConfidential && (
+                          <div class="ps-project__lock-overlay" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                              <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z"/>
+                            </svg>
+                          </div>
+                        )}
+                      </figure>
+                    )}
+
+                    <!-- Tall -->
+                    {tallItem && (
+                      <figure class="ps-project__gallery-item">
+                        {tallItem.src ? (
+                          <img
+                            src={tallItem.src}
+                            alt={tallItem.alt}
+                            class="ps-project__gallery-img"
+                            loading="lazy"
+                            decoding="async"
+                            width="400"
+                            height="250"
+                          />
+                        ) : (
+                          <div class="ps-project__gallery-placeholder">{tallItem.caption}</div>
+                        )}
+                        {project.isConfidential && (
+                          <div class="ps-project__lock-overlay" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                              <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z"/>
+                            </svg>
+                          </div>
+                        )}
+                      </figure>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
+      <!-- ── FINAL SCENE: CTA ── -->
+      <div
+        class="ps-scene ps-scene--cta"
+        data-ps-scene
+        data-scene-index={totalProjects + 1}
+        aria-label="Siguiente paso"
+      >
+        <div class="ps-scene__inner">
+          <div class="ps-cta">
+            <div class="ps-cta__panel">
+              <p class="ps-cta__kicker" data-reveal>
+                {projectsPortfolioContent.finalCta.kicker}
+              </p>
+              <h2 class="ps-cta__title" data-reveal>
+                {projectsPortfolioContent.finalCta.title}
+              </h2>
+              <a
+                class="ps-cta__button"
+                href={projectsPortfolioContent.finalCta.action.href}
+                data-reveal
+              >
+                {projectsPortfolioContent.finalCta.action.label}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /ps-stage -->
+
+    <!-- Header (above stage, z-index header > stage) -->
+    <header-wrapper style="position:fixed;top:0;left:0;right:0;z-index:200;">
+      <Header />
+    </header-wrapper>
+
+    <!-- Dot navigation -->
+    <nav class="ps-dots" aria-label="Navegar por proyectos">
+      {Array.from({ length: totalScenes }).map((_, i) => (
+        <button
+          type="button"
+          class="ps-dot"
+          data-ps-dot
+          data-dot-index={i}
+          title={
+            i === 0 ? 'Portada' :
+            i <= totalProjects ? `Proyecto ${i}` :
+            'Contacto'
+          }
+          aria-label={
+            i === 0 ? 'Ir a portada' :
+            i <= totalProjects ? `Ir al proyecto ${i}` :
+            'Ir a contacto'
+          }
+        ></button>
+      ))}
+    </nav>
+
+    <!-- Bottom progress bar -->
+    <div class="ps-progress" aria-hidden="true">
+      <div class="ps-progress__fill" data-ps-progress-fill></div>
     </div>
-  </main>
+
+    <!-- Scene counter -->
+    <div class="ps-counter" aria-live="polite" aria-label="Escena actual">
+      <span class="ps-counter__current" data-ps-counter-current>1</span>
+      <span>/</span>
+      <span data-ps-counter-total>{totalScenes}</span>
+    </div>
+
+  </div><!-- /ps-root -->
 
   <script>
-    import { initScrollPortfolioAnimations } from '../scripts/scrollPortfolioAnimations';
-
-    const resetStoryScroll = () => {
-      window.scrollTo(0, 0);
-    };
+    import { initProjectsScrollAnimation } from '../scripts/projectsScrollAnimation';
 
     let cleanup = () => {};
 
-    const initialize = () => {
-      const root = document.querySelector('[data-projects-story-root]');
-      if (!root) return;
-
-      resetStoryScroll();
+    const init = () => {
       cleanup();
-      cleanup = initScrollPortfolioAnimations(root);
+      cleanup = initProjectsScrollAnimation() ?? (() => {});
     };
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initialize, { once: true });
+      document.addEventListener('DOMContentLoaded', init, { once: true });
     } else {
-      initialize();
+      init();
     }
 
-    const onPageLoad = () => {
-      initialize();
-    };
-
-    window.addEventListener('astro:page-load', onPageLoad);
-    window.addEventListener(
-      'astro:before-swap',
-      () => {
-        cleanup();
-        window.removeEventListener('astro:page-load', onPageLoad);
-      },
-      { once: true },
-    );
+    window.addEventListener('astro:page-load', init);
+    window.addEventListener('astro:before-swap', () => {
+      cleanup();
+    }, { once: true });
   </script>
 </BaseLayout>
