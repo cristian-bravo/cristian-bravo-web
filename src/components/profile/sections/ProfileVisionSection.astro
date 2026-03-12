@@ -1,0 +1,92 @@
+---
+import SectionHeader from '../../shared/SectionHeader.astro';
+import type { ProfileVisionContent } from '../../../data/profile';
+
+interface Props {
+  content: ProfileVisionContent;
+}
+
+const { content } = Astro.props;
+const columns = [content.phraseColumn, content.dreamsColumn, content.goalsColumn];
+---
+<section class="profile-vision-section pb-20 pt-16 sm:pb-24 sm:pt-20 lg:pb-28 lg:pt-24">
+  <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
+    <SectionHeader
+      content={content.header}
+      className="mb-8 grid gap-3"
+      headingTag="h2"
+      titleClassName="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text"
+      descriptionClassName="max-w-3xl text-base text-slate-600 dark:text-brand-muted sm:text-lg"
+    />
+
+    <div class="profile-vision-motto">
+      <div class="grid gap-3">
+        <p class="profile-story-label">Manifiesto</p>
+        <h3 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+          {content.motto}
+        </h3>
+        <p class="text-sm leading-6 text-slate-600 dark:text-brand-muted">{content.mottoDetail}</p>
+      </div>
+
+      <div class="profile-vision-pet">
+        <img
+          src={content.pet.src}
+          alt={content.pet.alt}
+          width="320"
+          height="320"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+
+    <div class="profile-vision-grid">
+      {columns.map((column, index) => (
+        <article class="profile-vision-column">
+          <img
+            class="profile-card-sticker"
+            src={column.sticker}
+            alt=""
+            aria-hidden="true"
+            width="160"
+            height="160"
+            loading="lazy"
+            decoding="async"
+            style={`--profile-sticker-rotation: ${index % 2 === 0 ? '-6deg' : '6deg'}; --profile-sticker-delay: ${index * -0.7}s;`}
+          />
+          <p class="profile-story-label">{column.title}</p>
+          <ul>
+            {column.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+
+    <div class="profile-vision-cta">
+      <div class="grid gap-3">
+        <p class="profile-story-label">Siguiente paso</p>
+        <h3 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+          {content.ctaTitle}
+        </h3>
+        <p class="text-sm leading-6 text-slate-600 dark:text-brand-muted">{content.ctaDescription}</p>
+      </div>
+
+      <div class="flex flex-wrap gap-3">
+        <a
+          class="inline-flex items-center justify-center rounded-full bg-brand-gradient px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:shadow-glow dark:focus-visible:ring-offset-brand-bg"
+          href={content.primaryAction.href}
+        >
+          {content.primaryAction.label}
+        </a>
+        <a
+          class="inline-flex items-center justify-center rounded-full border border-slate-200/70 bg-white/70 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-brand-purple/40 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-brand-purple/40 dark:bg-white/5 dark:text-brand-text dark:hover:border-brand-purple/60 dark:focus-visible:ring-offset-brand-bg"
+          href={content.secondaryAction.href}
+        >
+          {content.secondaryAction.label}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

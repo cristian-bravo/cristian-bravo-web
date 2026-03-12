@@ -1,18 +1,29 @@
 ---
 import ProfileLayout from '../../layouts/ProfileLayout.astro';
 import ProfileHeroSection from '../../components/profile/sections/ProfileHeroSection.astro';
-import ProfileDetailsSection from '../../components/profile/sections/ProfileDetailsSection.astro';
+import ProfileAvatarSection from '../../components/profile/sections/ProfileAvatarSection.astro';
+import ProfileStorySection from '../../components/profile/sections/ProfileStorySection.astro';
+import ProfileExpertiseSection from '../../components/profile/sections/ProfileExpertiseSection.astro';
 import ProfileInterestsSection from '../../components/profile/sections/ProfileInterestsSection.astro';
+import ProfileVisionSection from '../../components/profile/sections/ProfileVisionSection.astro';
 import {
-  profileDetailCards,
+  profileAvatarContent,
+  profileExpertiseContent,
   profileHeroContent,
   profileInterestsContent,
   profilePageMeta,
+  profileStoryContent,
+  profileVisionContent,
 } from '../../data/profile';
 import '../../styles/profile.css';
 ---
 <ProfileLayout title={profilePageMeta.title} description={profilePageMeta.description}>
-  <ProfileHeroSection content={profileHeroContent} />
-  <ProfileDetailsSection cards={profileDetailCards} />
-  <ProfileInterestsSection content={profileInterestsContent} />
+  <div class="profile-page">
+    <ProfileHeroSection content={profileHeroContent} />
+    <ProfileAvatarSection content={profileAvatarContent} />
+    <ProfileExpertiseSection content={profileExpertiseContent} />
+    <ProfileStorySection content={profileStoryContent} />
+    <ProfileInterestsSection content={profileInterestsContent} />
+    <ProfileVisionSection content={profileVisionContent} />
+  </div>
 </ProfileLayout>

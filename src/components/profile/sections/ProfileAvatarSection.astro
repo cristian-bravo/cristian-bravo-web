@@ -1,0 +1,66 @@
+---
+import type { ProfileAvatarContent } from '../../../data/profile';
+
+interface Props {
+  content: ProfileAvatarContent;
+}
+
+const { content } = Astro.props;
+---
+<section class="profile-avatar-section pb-16 sm:pb-20">
+  <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
+    <div class="profile-avatar-stage">
+      <div class="profile-avatar-orb is-avatar-orb-1" aria-hidden="true"></div>
+      <div class="profile-avatar-orb is-avatar-orb-2" aria-hidden="true"></div>
+      <div class="profile-avatar-orb is-avatar-orb-3" aria-hidden="true"></div>
+
+      <div class="profile-avatar-grid">
+        <article class="profile-avatar-card">
+          <div class="profile-avatar-image-wrap">
+            <img
+              src={content.imageSrc}
+              alt={content.imageAlt}
+              width="720"
+              height="960"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+
+          <p class="profile-avatar-role">{content.role}</p>
+          <div class="flex flex-wrap gap-2">
+            {content.traits.map((trait) => (
+              <span class="profile-avatar-chip">{trait}</span>
+            ))}
+          </div>
+        </article>
+
+        <div class="profile-avatar-showcase">
+          <div class="grid gap-3">
+            <p class="profile-story-label">{content.kicker}</p>
+            <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text sm:text-3xl">
+              {content.title}
+            </h2>
+            <p class="profile-story-copy">{content.description}</p>
+          </div>
+
+          <div class="profile-avatar-collage">
+            {content.stickers.map((sticker, index) => (
+              <figure class="profile-avatar-sticker-tile" style={`--profile-sticker-delay: ${index * -0.55}s;`}>
+                <img
+                  src={sticker}
+                  alt=""
+                  aria-hidden="true"
+                  width="320"
+                  height="320"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

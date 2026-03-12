@@ -9,27 +9,65 @@ interface Props {
 const { content } = Astro.props;
 ---
 <section class="profile-interests-section py-16 sm:py-20 lg:py-24">
-  <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
-    <SectionHeader
-      content={content.header}
-      className="mb-6 grid gap-3"
-      headingTag="h2"
-      titleClassName="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text"
-      descriptionClassName="max-w-xl text-base text-slate-600 dark:text-brand-muted sm:text-lg"
-    />
-    <div class="flex flex-wrap gap-2">
-      {content.tags.map((tag, index) => (
-        <span
-          class:list={[
-            'rounded-full px-4 py-1 text-xs font-semibold shadow-sm backdrop-blur-sm',
-            index === 0
-              ? 'border border-brand-purple/40 bg-brand-purple/10 text-brand-purple dark:text-blue-200'
-              : 'border border-slate-200/80 bg-white/70 text-slate-600 dark:border-brand-purple/30 dark:bg-white/5 dark:text-brand-muted',
-          ]}
-        >
-          {tag}
-        </span>
-      ))}
+  <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
+    <div class="grid gap-10 xl:grid-cols-[0.92fr,1.08fr]">
+      <div class="grid gap-6">
+        <SectionHeader
+          content={content.header}
+          className="grid gap-3"
+          headingTag="h2"
+          titleClassName="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text"
+          descriptionClassName="max-w-2xl text-base text-slate-600 dark:text-brand-muted sm:text-lg"
+        />
+
+        <article class="profile-interests-note">
+          <p class="profile-story-label">Influencia creativa</p>
+          <h3 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+            {content.narrativeTitle}
+          </h3>
+          <div class="grid gap-3">
+            {content.narrativeParagraphs.map((paragraph) => (
+              <p class="profile-story-copy">{paragraph}</p>
+            ))}
+          </div>
+        </article>
+
+        <div class="flex flex-wrap gap-2">
+          {content.tags.map((tag) => (
+            <span class="profile-interest-tag">{tag}</span>
+          ))}
+        </div>
+      </div>
+
+      <div class="profile-sticker-board">
+        {content.clusters.map((cluster) => (
+          <article class="profile-sticker-cluster" style={`--profile-cluster-accent: ${cluster.accent};`}>
+            <div class="grid gap-2">
+              <span class="profile-sticker-cluster-label">{cluster.label}</span>
+              <h3 class="font-display text-xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+                {cluster.title}
+              </h3>
+              <p class="text-sm leading-6 text-slate-600 dark:text-brand-muted">{cluster.description}</p>
+            </div>
+
+            <div class="profile-sticker-grid">
+              {cluster.stickers.map((sticker) => (
+                <figure class="profile-sticker-tile">
+                  <img
+                    src={sticker}
+                    alt=""
+                    aria-hidden="true"
+                    width="320"
+                    height="320"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </figure>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   </div>
 </section>

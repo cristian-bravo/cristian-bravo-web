@@ -1,0 +1,80 @@
+---
+import SectionHeader from '../../shared/SectionHeader.astro';
+import type { ProfileExpertiseContent } from '../../../data/profile';
+
+interface Props {
+  content: ProfileExpertiseContent;
+}
+
+const { content } = Astro.props;
+---
+<section class="profile-expertise-section border-y border-slate-200/70 bg-slate-50/80 py-16 dark:border-brand-purple/15 dark:bg-white/5 sm:py-20 lg:py-24">
+  <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
+    <SectionHeader
+      content={content.header}
+      className="mb-8 grid gap-3"
+      headingTag="h2"
+      titleClassName="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text"
+      descriptionClassName="max-w-3xl text-base text-slate-600 dark:text-brand-muted sm:text-lg"
+    />
+
+    <div class="grid gap-6 xl:grid-cols-3">
+      {content.cards.map((card, index) => (
+        <article class="profile-expertise-card">
+          <img
+            class="profile-card-sticker"
+            src={card.sticker}
+            alt=""
+            aria-hidden="true"
+            width="160"
+            height="160"
+            loading="lazy"
+            decoding="async"
+            style={`--profile-sticker-rotation: ${index % 2 === 0 ? '6deg' : '-6deg'}; --profile-sticker-delay: ${index * -0.85}s;`}
+          />
+          <span class="profile-expertise-badge">{card.badge}</span>
+          <div class="grid gap-3">
+            <h3 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+              {card.title}
+            </h3>
+            <p class="text-sm leading-6 text-slate-600 dark:text-brand-muted">{card.description}</p>
+          </div>
+          <ul class="profile-expertise-list">
+            {card.bullets.map((bullet) => (
+              <li>{bullet}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+
+    <div class="profile-expertise-band">
+      <div class="profile-chip-section">
+        <p class="profile-story-label">Servicios base</p>
+        <div class="profile-chip-row">
+          {content.serviceLabels.map((label) => (
+            <span class="profile-signal-chip">{label}</span>
+          ))}
+        </div>
+      </div>
+
+      <div class="profile-chip-section">
+        <p class="profile-story-label">Referencias</p>
+        <div class="profile-chip-row">
+          {content.projectLabels.map((label) => (
+            <span class="profile-signal-chip">{label}</span>
+          ))}
+        </div>
+      </div>
+
+      <div class="profile-chip-section">
+        <p class="profile-story-label">Dominios y capacidades</p>
+        <div class="profile-chip-row">
+          {content.domainLabels.map((label) => (
+            <span class="profile-signal-chip">{label}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

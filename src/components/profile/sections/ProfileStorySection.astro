@@ -1,0 +1,99 @@
+---
+import SectionHeader from '../../shared/SectionHeader.astro';
+import type { ProfileStoryContent } from '../../../data/profile';
+
+interface Props {
+  content: ProfileStoryContent;
+}
+
+const { content } = Astro.props;
+---
+<section class="profile-story-section py-16 sm:py-20 lg:py-24">
+  <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
+    <SectionHeader
+      content={content.header}
+      className="mb-8 grid gap-3"
+      headingTag="h2"
+      titleClassName="font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text"
+      descriptionClassName="max-w-3xl text-base text-slate-600 dark:text-brand-muted sm:text-lg"
+    />
+
+    <div class="grid gap-6 xl:grid-cols-[1.08fr,0.92fr]">
+      <article class="profile-story-panel">
+        <div class="profile-story-columns">
+          <div class="grid gap-4">
+            <p class="profile-story-label">Quien soy</p>
+            <h3 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+              {content.introTitle}
+            </h3>
+            {content.introParagraphs.map((paragraph) => (
+              <p class="profile-story-copy">{paragraph}</p>
+            ))}
+          </div>
+
+          <div class="grid gap-4">
+            <p class="profile-story-label">Origen</p>
+            <h3 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+              {content.originTitle}
+            </h3>
+            {content.originParagraphs.map((paragraph) => (
+              <p class="profile-story-copy">{paragraph}</p>
+            ))}
+          </div>
+        </div>
+
+        <figure class="profile-story-quote">
+          <blockquote class="profile-story-quote-text">{content.quote}</blockquote>
+          <figcaption class="profile-story-quote-author">{content.quoteAuthor}</figcaption>
+        </figure>
+      </article>
+
+      <div class="profile-companion-grid">
+        {content.companions.map((companion, index) => (
+          <article class="profile-companion-card">
+            <div class="profile-companion-media">
+              <img
+                src={companion.src}
+                alt={companion.alt}
+                width="320"
+                height="320"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="grid gap-2">
+              <p class="profile-story-label">Companion {String(index + 1).padStart(2, '0')}</p>
+              <h3 class="font-display text-xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+                {companion.title}
+              </h3>
+              <p class="text-sm leading-6 text-slate-600 dark:text-brand-muted">{companion.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="profile-story-points">
+      {content.points.map((point, index) => (
+        <article class="profile-story-point">
+          <img
+            class="profile-card-sticker"
+            src={point.sticker}
+            alt=""
+            aria-hidden="true"
+            width="160"
+            height="160"
+            loading="lazy"
+            decoding="async"
+            style={`--profile-sticker-rotation: ${index % 2 === 0 ? '-7deg' : '7deg'}; --profile-sticker-delay: ${index * -0.8}s;`}
+          />
+          <p class="profile-story-label">{point.label}</p>
+          <h3 class="font-display text-xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+            {point.title}
+          </h3>
+          <p class="text-sm leading-6 text-slate-600 dark:text-brand-muted">{point.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
