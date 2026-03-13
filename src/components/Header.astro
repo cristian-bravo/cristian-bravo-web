@@ -1,6 +1,10 @@
 ---
 type NavLink = { href: string; label: string };
 
+interface Props {
+  transparent?: boolean;
+}
+
 const cleanPath = (value: string | null | undefined): string => {
   if (!value) return '/';
   const normalized = value.replace(/\/+$/, '');
@@ -8,6 +12,7 @@ const cleanPath = (value: string | null | undefined): string => {
 };
 
 const pathname = cleanPath(Astro.url.pathname);
+const { transparent = false } = Astro.props;
 const navLinks: NavLink[] = [
   { href: '/', label: 'Inicio' },
   { href: '/servicios', label: 'Servicios' },
@@ -23,7 +28,10 @@ const isActivePath = (href: string): boolean => {
 };
 ---
 
-<header class="header-shell sticky top-0 z-40">
+<header
+  class:list={['header-shell', 'sticky top-0 z-40', transparent && 'is-transparent']}
+  data-profile-navbar={transparent ? 'true' : undefined}
+>
   <div class="header-container mx-auto w-full max-w-[1120px] px-4 sm:px-6">
     <div class="header-frame">
       <a class="brand-logo-link group" href="/" aria-label="Inicio CYSTEMS">

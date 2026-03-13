@@ -82,6 +82,234 @@
     opacity: 0.84;
   }
 
+  .header-shell.is-transparent {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 120;
+    overflow: visible;
+    margin-bottom: 0;
+    border-bottom: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition:
+      background 240ms ease,
+      box-shadow 240ms ease,
+      backdrop-filter 240ms ease,
+      -webkit-backdrop-filter 240ms ease;
+  }
+
+  .header-shell.is-transparent::before,
+  .header-shell.is-transparent::after {
+    display: none;
+  }
+
+  .header-shell.is-transparent.is-scrolled {
+    border-bottom: 0;
+    background: linear-gradient(180deg, rgba(248, 250, 252, 0.92), rgba(241, 245, 249, 0.74));
+    box-shadow: none;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .header-shell.is-transparent.is-scrolled::before {
+    display: block;
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+    background-size: 36px 36px;
+    opacity: 0.32;
+    animation: header-grid-drift 24s linear infinite;
+  }
+
+  .header-shell.is-transparent.is-scrolled::after {
+    display: none;
+  }
+
+  .header-shell.is-transparent.is-scrolled .brand-logo-link::before {
+    border-color: rgba(148, 163, 184, 0.35);
+    background: linear-gradient(132deg, rgba(255, 255, 255, 0.7), rgba(241, 245, 249, 0.4));
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .header-shell.is-transparent.is-scrolled .header-nav {
+    border-color: rgba(148, 163, 184, 0.36);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.88), rgba(248, 250, 252, 0.64));
+    box-shadow:
+      0 12px 22px rgba(15, 23, 42, 0.08),
+      inset 0 1px 1px rgba(255, 255, 255, 0.78);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .header-shell.is-transparent.is-scrolled .header-nav-link {
+    color: #475569;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+
+  .header-shell.is-transparent.is-scrolled .header-nav-link:hover,
+  .header-shell.is-transparent.is-scrolled .header-nav-link.is-active {
+    color: #0f172a;
+  }
+
+  .header-shell.is-transparent.is-scrolled .header-nav-link::before {
+    background: linear-gradient(130deg, rgba(99, 102, 241, 0.12), rgba(59, 130, 246, 0.1));
+  }
+
+  .header-shell.is-transparent.is-scrolled .header-nav-link::after {
+    background: linear-gradient(90deg, rgba(124, 58, 237, 0.85), rgba(59, 130, 246, 0.85));
+  }
+
+  .header-shell.is-transparent.is-scrolled .header-cta {
+    box-shadow:
+      0 12px 22px rgba(59, 130, 246, 0.22),
+      0 8px 16px rgba(124, 58, 237, 0.2);
+  }
+
+  .header-shell.is-transparent.is-scrolled .theme-toggle-btn {
+    border-color: rgba(148, 163, 184, 0.42);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(241, 245, 249, 0.72));
+    box-shadow:
+      0 10px 24px rgba(15, 23, 42, 0.14),
+      inset 0 1px 1px rgba(255, 255, 255, 0.75);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .header-shell.is-transparent .brand-logo-link::before {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .header-shell.is-transparent .header-nav {
+    border-color: rgba(191, 219, 254, 0.2);
+    background: linear-gradient(160deg, rgba(2, 6, 23, 0.34), rgba(15, 23, 42, 0.2));
+    box-shadow:
+      0 14px 26px rgba(2, 6, 23, 0.14),
+      inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .header-shell.is-transparent .header-nav-link {
+    color: rgba(248, 250, 252, 0.92);
+    text-shadow: 0 1px 2px rgba(2, 6, 23, 0.26);
+  }
+
+  .header-shell.is-transparent .header-nav-link:hover,
+  .header-shell.is-transparent .header-nav-link.is-active {
+    color: #ffffff;
+  }
+
+  .header-shell.is-transparent .header-nav-link::before {
+    background: linear-gradient(130deg, rgba(255, 255, 255, 0.16), rgba(191, 219, 254, 0.12));
+  }
+
+  .header-shell.is-transparent .header-nav-link::after {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(191, 219, 254, 0.82));
+  }
+
+  .header-shell.is-transparent .header-cta {
+    box-shadow:
+      0 12px 22px rgba(59, 130, 246, 0.16),
+      0 6px 14px rgba(124, 58, 237, 0.12);
+  }
+
+  .header-shell.is-transparent .theme-toggle-btn {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .dark .header-shell.is-transparent .brand-logo-link::before {
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .dark .header-shell.is-transparent {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .dark .header-shell.is-transparent.is-scrolled {
+    border-color: rgba(129, 140, 248, 0.22);
+    background: linear-gradient(180deg, rgba(7, 11, 28, 0.92), rgba(7, 11, 28, 0.76));
+    box-shadow: none;
+  }
+
+  .dark .header-shell.is-transparent.is-scrolled::before {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    opacity: 0.36;
+  }
+
+  .dark .header-shell.is-transparent.is-scrolled::after {
+    display: none;
+  }
+
+  .dark .header-shell.is-transparent.is-scrolled .brand-logo-link::before {
+    border-color: rgba(129, 140, 248, 0.3);
+    background: linear-gradient(132deg, rgba(19, 23, 46, 0.65), rgba(12, 17, 34, 0.35));
+  }
+
+  .dark .header-shell.is-transparent.is-scrolled .header-nav {
+    border-color: rgba(129, 140, 248, 0.36);
+    background: linear-gradient(160deg, rgba(17, 24, 39, 0.72), rgba(30, 27, 75, 0.44));
+    box-shadow:
+      0 14px 24px rgba(2, 6, 23, 0.46),
+      inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .dark .header-shell.is-transparent.is-scrolled .header-nav-link {
+    color: #cbd5e1;
+  }
+
+  .dark .header-shell.is-transparent.is-scrolled .header-nav-link:hover,
+  .dark .header-shell.is-transparent.is-scrolled .header-nav-link.is-active {
+    color: #ffffff;
+  }
+
+  .dark .header-shell.is-transparent.is-scrolled .header-nav-link.is-active::before {
+    background: linear-gradient(130deg, rgba(124, 58, 237, 0.35), rgba(56, 189, 248, 0.2));
+  }
+
+  .dark .header-shell.is-transparent .header-nav {
+    border-color: rgba(129, 140, 248, 0.22);
+    background: linear-gradient(160deg, rgba(2, 6, 23, 0.42), rgba(15, 23, 42, 0.24));
+    box-shadow:
+      0 16px 28px rgba(2, 6, 23, 0.22),
+      inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .dark .header-shell.is-transparent.is-scrolled .theme-toggle-btn {
+    border-color: rgba(167, 139, 250, 0.45);
+    background: linear-gradient(145deg, rgba(19, 23, 46, 0.98), rgba(9, 13, 31, 0.82));
+    box-shadow:
+      0 12px 28px rgba(4, 6, 20, 0.6),
+      0 0 18px rgba(96, 165, 250, 0.14),
+      inset 0 1px 1px rgba(148, 163, 184, 0.2);
+  }
+
+  .dark .header-shell.is-transparent .theme-toggle-btn {
+    border-color: transparent;
+    background: transparent;
+  }
+
   .header-container {
     position: relative;
     z-index: 1;

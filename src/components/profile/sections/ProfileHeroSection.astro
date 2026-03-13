@@ -6,114 +6,50 @@ interface Props {
 }
 
 const { content } = Astro.props;
+const mediaType = content.videoSrc.endsWith('.html')
+  ? 'html'
+  : /\.(mp4|webm|ogg)$/i.test(content.videoSrc)
+    ? 'video'
+    : 'image';
 ---
-<section class="profile-hero-section">
+<section class="profile-hero-section" data-profile-hero>
   <div class="profile-hero-layout">
-    <video
-      class="profile-hero-video"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="metadata"
-      poster={content.videoPoster}
-      aria-hidden="true"
-    >
-      <source src={content.videoSrc} type="video/mp4" />
-    </video>
-
-    <div class="profile-hero-layout-overlay" aria-hidden="true"></div>
-
-    {content.floatingStickers.slice(0, 5).map((sticker, index) => (
-      <img
-        class:list={['profile-hero-sticker', `is-sticker-${index + 1}`]}
-        src={sticker}
-        alt=""
+    {mediaType === 'html' ? (
+      <iframe
+        class:list={['profile-hero-video', 'is-embed']}
+        src={content.videoSrc}
+        title={content.videoTitle}
+        loading="eager"
+        tabindex="-1"
         aria-hidden="true"
-        width="320"
-        height="320"
-        loading={index < 2 ? 'eager' : 'lazy'}
+      ></iframe>
+    ) : mediaType === 'image' ? (
+      <img
+        class:list={['profile-hero-video', 'is-image']}
+        src={content.videoSrc}
+        alt=""
+        loading="eager"
         decoding="async"
+        fetchpriority="high"
+        aria-hidden="true"
       />
-    ))}
-
-    {content.floatingNotes.slice(0, 4).map((note, index) => (
-      <span class:list={['profile-hero-floating-note', `is-note-${index + 1}`]}>{note}</span>
-    ))}
-
-    <div class="mx-auto flex min-h-[100svh] w-full max-w-[1280px] items-end px-4 pb-16 pt-28 sm:px-6 sm:pb-20 lg:pb-24">
-      <div class="profile-hero-grid w-full">
-        <div class="profile-hero-copy profile-hero-copy--on-media">
-          <div class="grid gap-4">
-            <p class="profile-hero-kicker">{content.kicker}</p>
-            <h1 class="profile-hero-title">{content.title}</h1>
-            <p class="profile-hero-lead profile-hero-lead--on-media">{content.lead}</p>
-            <p class="profile-hero-summary profile-hero-summary--on-media">{content.description}</p>
-          </div>
-
-          <div class="profile-hero-badge-row">
-            {content.badges.map((badge) => (
-              <span class="profile-hero-badge profile-hero-badge--on-media">{badge}</span>
-            ))}
-          </div>
-
-          <div class="flex flex-wrap gap-3">
-            <a
-              class="inline-flex items-center justify-center rounded-full bg-brand-gradient px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/30 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-              href={content.primaryAction.href}
-            >
-              {content.primaryAction.label}
-            </a>
-            <a
-              class="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-              href={content.secondaryAction.href}
-            >
-              {content.secondaryAction.label}
-            </a>
-          </div>
-        </div>
-
-        <div class="profile-hero-panel-wrap">
-          <article class="profile-hero-panel profile-hero-panel--on-media">
-            <div class="profile-hero-video-top">
-              <span class="profile-hero-panel-badge">CYSTEMS</span>
-              <span class="profile-hero-video-rule" aria-hidden="true"></span>
-              <span class="profile-hero-video-meta">{content.videoKicker}</span>
-            </div>
-
-            <div class="profile-hero-panel-signal">
-              <span class="profile-hero-panel-dot" aria-hidden="true"></span>
-              Perfil en evolucion constante
-            </div>
-
-            <div class="grid gap-3">
-              <h2 class="profile-hero-video-title">{content.videoTitle}</h2>
-              <p class="profile-hero-video-description">{content.videoDescription}</p>
-            </div>
-
-            <div class="grid gap-3">
-              <h3 class="profile-note-title">{content.noteTitle}</h3>
-              <p class="profile-note-copy">{content.noteBody}</p>
-            </div>
-
-            <div class="profile-hero-panel-stats">
-              {content.stats.map((stat) => (
-                <article class="profile-hero-panel-stat">
-                  <p class="profile-story-label">{stat.label}</p>
-                  <h3 class="profile-hero-stat-value">{stat.value}</h3>
-                  <p class="profile-hero-stat-detail">{stat.detail}</p>
-                </article>
-              ))}
-            </div>
-
-            <div class="profile-hero-video-tags">
-              {content.videoTags.map((tag) => (
-                <span class="profile-hero-video-tag">{tag}</span>
-              ))}
-            </div>
-          </article>
-        </div>
-      </div>
-    </div>
+    ) : (
+      <video
+        class:list={['profile-hero-video', 'is-video']}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster={content.videoPoster}
+        aria-hidden="true"
+      >
+        <source src={content.videoSrc} type="video/mp4" />
+      </video>
+    )}
+    <div class="profile-hero-layout-overlay" aria-hidden="true"></div>
+  </div>
+  <div class="profile-hero-avatar-layer">
+    <slot />
   </div>
 </section>

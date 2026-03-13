@@ -1,0 +1,24 @@
+{
+	"contentrating" : "Everyone",
+	"description" : "Sakura with CSS | JAVASCRIPT",
+	"file" : "saved_resource.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0 0 0"
+			}
+		}
+	},
+	"preview" : "preview.jpg",
+	"tags" : [ "Nature" ],
+	"title" : "Sakura",
+	"type" : "web",
+	"version" : 0,
+	"visibility" : "public"
+}

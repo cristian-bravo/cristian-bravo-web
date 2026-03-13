@@ -2,6 +2,7 @@
 import ProfileLayout from '../../layouts/ProfileLayout.astro';
 import ProfileHeroSection from '../../components/profile/sections/ProfileHeroSection.astro';
 import ProfileAvatarSection from '../../components/profile/sections/ProfileAvatarSection.astro';
+import ProfileProfessionalLeadSection from '../../components/profile/sections/ProfileProfessionalLeadSection.astro';
 import ProfileStorySection from '../../components/profile/sections/ProfileStorySection.astro';
 import ProfileExpertiseSection from '../../components/profile/sections/ProfileExpertiseSection.astro';
 import ProfileInterestsSection from '../../components/profile/sections/ProfileInterestsSection.astro';
@@ -19,8 +20,12 @@ import '../../styles/profile.css';
 ---
 <ProfileLayout title={profilePageMeta.title} description={profilePageMeta.description}>
   <div class="profile-page">
-    <ProfileHeroSection content={profileHeroContent} />
-    <ProfileAvatarSection content={profileAvatarContent} />
+    <div class="profile-hero-stack">
+      <ProfileHeroSection content={profileHeroContent}>
+        <ProfileAvatarSection content={profileAvatarContent} />
+      </ProfileHeroSection>
+    </div>
+    <ProfileProfessionalLeadSection content={profileHeroContent} />
     <ProfileExpertiseSection content={profileExpertiseContent} />
     <ProfileStorySection content={profileStoryContent} />
     <ProfileInterestsSection content={profileInterestsContent} />

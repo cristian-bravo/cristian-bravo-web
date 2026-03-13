@@ -199,8 +199,8 @@ export const profileHeroContent: ProfileHeroContent = {
   videoDescription:
     'El wallpaper marca el tono de esta pagina: tecnologia que comunica, frontend que se siente vivo y una estetica que no depende de plantillas genericas.',
   videoTags: ['Loop visual', 'Motion', 'UI expresiva', 'Frontend craft'],
-  videoSrc: '/wallpaper/KleeWP.mp4',
-  videoPoster: '/wallpaper/preview.gif',
+  videoSrc: '/wallpapers/sakura/saved_resource.html',
+  videoPoster: '/wallpapers/sakura/preview.jpg',
 };
 
 export const profileAvatarContent: ProfileAvatarContent = {
@@ -224,8 +224,8 @@ export const profileAvatarContent: ProfileAvatarContent = {
     allStickers[21],
     allStickers[23],
   ],
-  videoSrc: '/wallpaper/KleeWP.mp4',
-  videoPoster: '/wallpaper/preview.gif',
+  videoSrc: '/wallpapers/klee/KleeWP.mp4',
+  videoPoster: '/wallpapers/klee/preview.gif',
 };
 
 export const profileStoryContent: ProfileStoryContent = {

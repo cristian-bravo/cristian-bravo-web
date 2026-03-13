@@ -9,9 +9,65 @@ const {
 } = Astro.props;
 ---
 <BaseLayout title={title} description={description}>
-  <Header />
+  <Header transparent />
   <main class="min-h-[60vh]">
     <slot />
   </main>
+  <script is:inline>
+    (() => {
+      const setupProfileNavbar = () => {
+        window.__profileNavbarCleanup?.();
+
+        const header = document.querySelector('[data-profile-navbar]');
+        const hero = document.querySelector('[data-profile-hero]');
+        if (!header || !hero) return;
+
+        let rafId = 0;
+
+        const updateNavbarState = () => {
+          rafId = 0;
+          const threshold = header.getBoundingClientRect().height + 16;
+          const isScrolled = hero.getBoundingClientRect().bottom <= threshold;
+          header.classList.toggle('is-scrolled', isScrolled);
+        };
+
+        const requestUpdate = () => {
+          if (rafId) return;
+          rafId = window.requestAnimationFrame(updateNavbarState);
+        };
+
+        const onScroll = () => requestUpdate();
+        const onResize = () => requestUpdate();
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onResize);
+        requestUpdate();
+
+        window.__profileNavbarCleanup = () => {
+          if (rafId) {
+            window.cancelAnimationFrame(rafId);
+            rafId = 0;
+          }
+          header.classList.remove('is-scrolled');
+          window.removeEventListener('scroll', onScroll);
+          window.removeEventListener('resize', onResize);
+        };
+      };
+
+      if (!window.__profileNavbarBound) {
+        window.__profileNavbarBound = true;
+        window.addEventListener('astro:page-load', setupProfileNavbar);
+        window.addEventListener('astro:before-swap', () => {
+          window.__profileNavbarCleanup?.();
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupProfileNavbar, { once: true });
+      } else {
+        setupProfileNavbar();
+      }
+    })();
+  </script>
   <Footer />
 </BaseLayout>

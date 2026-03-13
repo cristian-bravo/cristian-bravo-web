@@ -1,0 +1,92 @@
+---
+import type { ProfileHeroContent } from '../../../data/profile';
+
+interface Props {
+  content: ProfileHeroContent;
+}
+
+const { content } = Astro.props;
+---
+<section class="profile-professional-lead-section py-14 sm:py-20 lg:py-24">
+  <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
+    <div class="profile-hero-grid">
+      <div class="profile-hero-copy">
+        <div class="grid gap-4">
+          <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">
+            {content.kicker}
+          </p>
+          <h2 class="font-display text-4xl font-semibold leading-tight tracking-tight text-transparent sm:text-5xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text">
+            {content.title}
+          </h2>
+          <p class="profile-hero-lead">{content.lead}</p>
+          <p class="profile-hero-summary">{content.description}</p>
+        </div>
+
+        <div class="profile-hero-badge-row">
+          {content.badges.map((badge) => (
+            <span class="profile-hero-badge">{badge}</span>
+          ))}
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <a
+            class="inline-flex items-center justify-center rounded-full bg-brand-gradient px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:shadow-glow dark:focus-visible:ring-offset-brand-bg"
+            href={content.primaryAction.href}
+          >
+            {content.primaryAction.label}
+          </a>
+          <a
+            class="inline-flex items-center justify-center rounded-full border border-slate-200/70 bg-white/70 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-brand-purple/40 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:border-brand-purple/40 dark:bg-white/5 dark:text-brand-text dark:hover:border-brand-purple/60 dark:focus-visible:ring-offset-brand-bg"
+            href={content.secondaryAction.href}
+          >
+            {content.secondaryAction.label}
+          </a>
+        </div>
+      </div>
+
+      <div class="profile-hero-panel-wrap">
+        {content.floatingStickers.slice(0, 3).map((sticker, index) => (
+          <img
+            class:list={['profile-hero-panel-sticker', `is-hero-panel-sticker-${index + 1}`]}
+            src={sticker}
+            alt=""
+            aria-hidden="true"
+            width="320"
+            height="320"
+            loading={index < 2 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        ))}
+
+        <article class="profile-hero-panel">
+          <span class="profile-hero-panel-badge">CYSTEMS</span>
+          <div class="profile-hero-panel-signal">
+            <span class="profile-hero-panel-dot" aria-hidden="true"></span>
+            Perfil en evolucion constante
+          </div>
+
+          <div class="grid gap-3">
+            <h3 class="profile-note-title">{content.noteTitle}</h3>
+            <p class="profile-note-copy">{content.noteBody}</p>
+          </div>
+
+          <div class="profile-hero-panel-stats">
+            {content.stats.map((stat) => (
+              <article class="profile-hero-panel-stat">
+                <p class="profile-story-label">{stat.label}</p>
+                <h3 class="profile-hero-stat-value">{stat.value}</h3>
+                <p class="profile-hero-stat-detail">{stat.detail}</p>
+              </article>
+            ))}
+          </div>
+
+          <div class="profile-hero-panel-notes">
+            {content.floatingNotes.map((note) => (
+              <span class="profile-hero-panel-note">{note}</span>
+            ))}
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
