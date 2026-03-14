@@ -1,11 +1,12 @@
 ---
-import type { ProfileHeroContent } from '../../../data/profile';
+import type { ProfileCompanionContent, ProfileHeroContent } from '../../../data/profile';
 
 interface Props {
   content: ProfileHeroContent;
+  pet: ProfileCompanionContent;
 }
 
-const { content } = Astro.props;
+const { content, pet } = Astro.props;
 ---
 <section class="profile-professional-lead-section py-14 sm:py-20 lg:py-24">
   <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
@@ -41,6 +42,17 @@ const { content } = Astro.props;
           >
             {content.secondaryAction.label}
           </a>
+        </div>
+
+        <div class="profile-professional-lead-pet">
+          <img
+            src={pet.src}
+            alt={pet.alt}
+            width="320"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       </div>
 

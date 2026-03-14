@@ -165,7 +165,7 @@ export const profileHeroContent: ProfileHeroContent = {
     'Trabajo uniendo producto, UI, arquitectura y acompanamiento continuo para que cada proyecto tenga claridad de negocio, buena experiencia y una identidad propia.',
   primaryAction: {
     label: 'Hablemos de tu proyecto',
-    href: '/contacto',
+    href: '/solicitar-desarrollo',
   },
   secondaryAction: {
     label: 'Ver proyectos',
@@ -439,8 +439,8 @@ export const profileVisionContent: ProfileVisionContent = {
   ctaDescription:
     'Me interesa trabajar en productos donde frontend, operacion y estrategia tengan el mismo peso y donde cada decision empuje resultados reales.',
   primaryAction: {
-    label: 'Contactar',
-    href: '/contacto',
+    label: 'Solicitar desarrollo',
+    href: '/solicitar-desarrollo',
   },
   secondaryAction: {
     label: 'Solicitar desarrollo',

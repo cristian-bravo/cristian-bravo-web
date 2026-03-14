@@ -137,7 +137,7 @@ export const homeNextStepContent: HomeNextStepContent = {
     href: '/solicitar-desarrollo',
   },
   secondaryAction: {
-    label: 'Contacto',
-    href: '/contacto',
+    label: 'Cuentanos tu proyecto',
+    href: '/solicitar-desarrollo',
   },
 };

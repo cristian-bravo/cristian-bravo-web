@@ -93,7 +93,7 @@ export const serviceModals: ServicesModalContent[] = [
       'Roadmap por fases para avanzar sin frenar la operación.',
     ],
     actionLabel: 'Hablar con un especialista',
-    actionHref: '/contacto',
+    actionHref: '/solicitar-desarrollo',
   },
 
   {
@@ -123,7 +123,7 @@ export const serviceModals: ServicesModalContent[] = [
       'Soporte evolutivo para agregar nuevas funcionalidades.',
     ],
     actionLabel: 'Solicitar acompañamiento',
-    actionHref: '/contacto',
+    actionHref: '/solicitar-desarrollo',
   },
 
 {

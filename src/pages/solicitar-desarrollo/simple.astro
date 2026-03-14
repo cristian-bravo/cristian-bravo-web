@@ -1,0 +1,9 @@
+---
+import CystemsLayout from '../../layouts/CystemsLayout.astro';
+import DevelopmentRequestSimpleSection from '../../components/development-request/sections/DevelopmentRequestSimpleSection.astro';
+import { developmentRequestSimpleContent, developmentRequestSimplePageMeta } from '../../data/development-request';
+import '../../styles/development-request.css';
+---
+<CystemsLayout title={developmentRequestSimplePageMeta.title} description={developmentRequestSimplePageMeta.description}>
+  <DevelopmentRequestSimpleSection content={developmentRequestSimpleContent} />
+</CystemsLayout>

@@ -18,7 +18,6 @@ const navLinks: NavLink[] = [
   { href: '/servicios', label: 'Servicios' },
   { href: '/proyectos', label: 'Proyectos' },
   { href: '/perfil/cristian-bravo', label: 'Perfil' },
-  { href: '/contacto', label: 'Contacto' },
 ];
 
 const isActivePath = (href: string): boolean => {
@@ -26,89 +25,855 @@ const isActivePath = (href: string): boolean => {
   if (target === '/') return pathname === '/';
   return pathname === target || pathname.startsWith(`${target}/`);
 };
+
+const navItems = navLinks.map((item) => ({
+  ...item,
+  isActive: isActivePath(item.href),
+}));
+
+const isDevelopmentActive = isActivePath('/solicitar-desarrollo');
+const mobilePanelId = 'site-mobile-menu';
 ---
 
 <header
   class:list={['header-shell', 'sticky top-0 z-40', transparent && 'is-transparent']}
+  data-site-header
   data-profile-navbar={transparent ? 'true' : undefined}
 >
   <div class="header-container mx-auto w-full max-w-[1120px] px-4 sm:px-6">
     <div class="header-frame">
-      <a class="brand-logo-link group" href="/" aria-label="Inicio CYSTEMS">
-        <span class="brand-logo-aura" aria-hidden="true"></span>
-        <img
-          src="/logos/logo-header-black.webp"
-          alt="CYSTEMS"
-          class="brand-logo-img brand-logo-light"
-          width="220"
-          height="44"
-          decoding="async"
-          fetchpriority="high"
-        />
-        <img
-          src="/logos/logo-header-ligth.webp"
-          alt=""
-          aria-hidden="true"
-          class="brand-logo-img brand-logo-dark"
-          width="220"
-          height="44"
-          decoding="async"
-        />
-      </a>
-
-      <div class="header-center">
-        <nav class="header-nav" aria-label="Principal">
-          {navLinks.map((item) => {
-            const isActive = isActivePath(item.href);
-            return (
-              <a
-                class:list={['header-nav-link', isActive && 'is-active']}
-                href={item.href}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                <span>{item.label}</span>
-              </a>
-            );
-          })}
-        </nav>
-
-        <a
-          class:list={['header-cta', isActivePath('/solicitar-desarrollo') && 'is-active']}
-          href="/solicitar-desarrollo"
-          aria-current={isActivePath('/solicitar-desarrollo') ? 'page' : undefined}
-        >
-          <span>Solicitar desarrollo</span>
+      <div class="header-brand">
+        <a class="brand-logo-link group" href="/" aria-label="Inicio CYSTEMS">
+          <span class="brand-logo-aura" aria-hidden="true"></span>
+          <img
+            src="/logos/logo-header-black.webp"
+            alt="CYSTEMS"
+            class="brand-logo-img brand-logo-light"
+            width="220"
+            height="44"
+            decoding="async"
+            fetchpriority="high"
+          />
+          <img
+            src="/logos/logo-header-ligth.webp"
+            alt=""
+            aria-hidden="true"
+            class="brand-logo-img brand-logo-dark"
+            width="220"
+            height="44"
+            decoding="async"
+          />
         </a>
       </div>
 
-      <button
-        id="theme-toggle"
-        data-theme-toggle
-        type="button"
-        class="theme-toggle-btn header-theme-toggle"
-        aria-label="Activar modo oscuro"
-        aria-pressed="false"
-        title="Cambiar tema"
-      >
-        <span class="sr-only">Cambiar tema</span>
-        <span class="theme-toggle-orbit" aria-hidden="true"></span>
-        <span class="theme-toggle-icon theme-toggle-sun" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="12" r="4.1" />
-            <path
-              stroke-linecap="round"
-              d="M12 1.8v2.3M12 19.9v2.3M4.3 4.3 5.9 5.9M18.1 18.1l1.6 1.6M1.8 12h2.3M19.9 12h2.3M4.3 19.7l1.6-1.6M18.1 5.9l1.6-1.6"
-            />
-          </svg>
-        </span>
-        <span class="theme-toggle-icon theme-toggle-moon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M20.8 14.1a8.9 8.9 0 1 1-10.9-10.9 7.2 7.2 0 0 0 10.9 10.9Z" />
-          </svg>
-        </span>
-        <span class="theme-toggle-star theme-toggle-star-a" aria-hidden="true"></span>
-        <span class="theme-toggle-star theme-toggle-star-b" aria-hidden="true"></span>
-      </button>
+      <div class="header-center">
+        <nav class="header-nav" aria-label="Principal" data-header-nav>
+          <span class="header-nav-indicator" data-header-nav-indicator aria-hidden="true"></span>
+          {navItems.map((item) => (
+            <a
+              class:list={['header-nav-link', item.isActive && 'is-active']}
+              href={item.href}
+              aria-current={item.isActive ? 'page' : undefined}
+              data-header-nav-link
+            >
+              <span>{item.label}</span>
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <div class="header-actions">
+        <a
+          class:list={['header-cta', 'header-primary-cta', isDevelopmentActive && 'is-active']}
+          href="/solicitar-desarrollo"
+          aria-current={isDevelopmentActive ? 'page' : undefined}
+          aria-label="Solicitar desarrollo"
+        >
+          <span class="header-cta-label">Solicitar desarrollo</span>
+          <span class="header-cta-label-short">Solicitar</span>
+        </a>
+
+        <button
+          type="button"
+          class="header-menu-toggle"
+          data-header-menu-toggle
+          aria-expanded="false"
+          aria-controls={mobilePanelId}
+          aria-label="Abrir menu principal"
+        >
+          <span class="header-menu-toggle-line" aria-hidden="true"></span>
+          <span class="header-menu-toggle-line" aria-hidden="true"></span>
+          <span class="header-menu-toggle-line" aria-hidden="true"></span>
+        </button>
+
+        <button
+          id="theme-toggle"
+          data-theme-toggle
+          type="button"
+          class="theme-toggle-btn header-theme-toggle"
+          aria-label="Activar modo oscuro"
+          aria-pressed="false"
+          title="Cambiar tema"
+        >
+          <span class="sr-only">Cambiar tema</span>
+          <span class="theme-toggle-orbit" aria-hidden="true"></span>
+          <span class="theme-toggle-icon theme-toggle-sun" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="4.1" />
+              <path
+                stroke-linecap="round"
+                d="M12 1.8v2.3M12 19.9v2.3M4.3 4.3 5.9 5.9M18.1 18.1l1.6 1.6M1.8 12h2.3M19.9 12h2.3M4.3 19.7l1.6-1.6M18.1 5.9l1.6-1.6"
+              />
+            </svg>
+          </span>
+          <span class="theme-toggle-icon theme-toggle-moon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20.8 14.1a8.9 8.9 0 1 1-10.9-10.9 7.2 7.2 0 0 0 10.9 10.9Z" />
+            </svg>
+          </span>
+          <span class="theme-toggle-star theme-toggle-star-a" aria-hidden="true"></span>
+          <span class="theme-toggle-star theme-toggle-star-b" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="header-mobile-panel" id={mobilePanelId} data-header-mobile-panel aria-hidden="true">
+      <nav class="header-mobile-nav" aria-label="Navegacion movil">
+        {navItems.map((item) => (
+          <a
+            class:list={['header-mobile-link', item.isActive && 'is-active']}
+            href={item.href}
+            aria-current={item.isActive ? 'page' : undefined}
+            data-header-mobile-link
+          >
+            <span>{item.label}</span>
+          </a>
+        ))}
+      </nav>
     </div>
   </div>
 </header>
+
+<script>
+  let cleanupHeader = () => {};
+
+  const initHeader = () => {
+    cleanupHeader();
+
+    const header = document.querySelector('[data-site-header]');
+    if (!header) return;
+
+    const nav = header.querySelector('[data-header-nav]');
+    const indicator = header.querySelector('[data-header-nav-indicator]');
+    const navLinks = Array.from(header.querySelectorAll('[data-header-nav-link]'));
+    const menuToggle = header.querySelector('[data-header-menu-toggle]');
+    const mobilePanel = header.querySelector('[data-header-mobile-panel]');
+    const mobileLinks = Array.from(header.querySelectorAll('[data-header-mobile-link]'));
+    const desktopQuery = window.matchMedia('(min-width: 768px)');
+
+    const activeLink =
+      navLinks.find((link) => link.getAttribute('aria-current') === 'page') ?? navLinks[0] ?? null;
+
+    const positionIndicator = (link) => {
+      if (!nav || !indicator || !link) return;
+
+      const navRect = nav.getBoundingClientRect();
+      const linkRect = link.getBoundingClientRect();
+
+      indicator.style.width = `${linkRect.width}px`;
+      indicator.style.height = `${linkRect.height}px`;
+      indicator.style.transform = `translate(${linkRect.left - navRect.left}px, ${linkRect.top - navRect.top}px)`;
+      indicator.dataset.ready = 'true';
+    };
+
+    const syncIndicator = () => {
+      if (!desktopQuery.matches) return;
+      positionIndicator(activeLink);
+    };
+
+    const updateScrolledState = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 16);
+      syncIndicator();
+    };
+
+    const closeMenu = () => {
+      header.classList.remove('is-menu-open');
+      if (menuToggle instanceof HTMLButtonElement) {
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Abrir menu principal');
+      }
+      if (mobilePanel instanceof HTMLElement) {
+        mobilePanel.setAttribute('aria-hidden', 'true');
+      }
+    };
+
+    const toggleMenu = () => {
+      const nextIsOpen = !header.classList.contains('is-menu-open');
+      header.classList.toggle('is-menu-open', nextIsOpen);
+
+      if (menuToggle instanceof HTMLButtonElement) {
+        menuToggle.setAttribute('aria-expanded', String(nextIsOpen));
+        menuToggle.setAttribute('aria-label', nextIsOpen ? 'Cerrar menu principal' : 'Abrir menu principal');
+      }
+
+      if (mobilePanel instanceof HTMLElement) {
+        mobilePanel.setAttribute('aria-hidden', String(!nextIsOpen));
+      }
+    };
+
+    const handleDocumentClick = (event) => {
+      if (!header.classList.contains('is-menu-open')) return;
+      const target = event.target;
+      if (target instanceof Node && !header.contains(target)) {
+        closeMenu();
+      }
+    };
+
+    const handleKeydown = (event) => {
+      if (event.key === 'Escape') {
+        closeMenu();
+      }
+    };
+
+    const handleDesktopChange = (event) => {
+      if (event.matches) {
+        closeMenu();
+        syncIndicator();
+      }
+    };
+
+    navLinks.forEach((link) => {
+      const activate = () => positionIndicator(link);
+      link.addEventListener('mouseenter', activate);
+      link.addEventListener('focus', activate);
+    });
+
+    nav?.addEventListener('mouseleave', syncIndicator);
+    nav?.addEventListener('focusout', (event) => {
+      const nextTarget = event.relatedTarget;
+      if (!(nextTarget instanceof Node) || !nav.contains(nextTarget)) {
+        syncIndicator();
+      }
+    });
+
+    menuToggle?.addEventListener('click', toggleMenu);
+    mobileLinks.forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    window.addEventListener('scroll', updateScrolledState, { passive: true });
+    window.addEventListener('resize', syncIndicator);
+    window.addEventListener('keydown', handleKeydown);
+    document.addEventListener('pointerdown', handleDocumentClick);
+    desktopQuery.addEventListener('change', handleDesktopChange);
+
+    updateScrolledState();
+    syncIndicator();
+
+    cleanupHeader = () => {
+      window.removeEventListener('scroll', updateScrolledState);
+      window.removeEventListener('resize', syncIndicator);
+      window.removeEventListener('keydown', handleKeydown);
+      document.removeEventListener('pointerdown', handleDocumentClick);
+      desktopQuery.removeEventListener('change', handleDesktopChange);
+      menuToggle?.removeEventListener('click', toggleMenu);
+      nav?.removeEventListener('mouseleave', syncIndicator);
+      closeMenu();
+    };
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeader, { once: true });
+  } else {
+    initHeader();
+  }
+
+  window.addEventListener('astro:page-load', initHeader);
+  window.addEventListener(
+    'astro:before-swap',
+    () => {
+      cleanupHeader();
+    },
+    { once: true }
+  );
+</script>
+
+<style is:global>
+  [data-site-header].header-shell {
+    --header-bar-height: 80px;
+    --header-bar-bg: rgba(255, 255, 255, 0.66);
+    --header-bar-border: rgba(148, 163, 184, 0.18);
+    --header-bar-shadow: 0 18px 44px rgba(15, 23, 42, 0.14);
+    --header-nav-pill: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(59, 130, 246, 0.16));
+    --header-nav-pill-border: rgba(255, 255, 255, 0.52);
+    --header-nav-text: #475569;
+    --header-nav-text-active: #0f172a;
+    --header-mobile-panel-bg: rgba(255, 255, 255, 0.74);
+    padding-top: 0.8rem;
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    transition:
+      padding-top 280ms ease,
+      transform 280ms ease;
+  }
+
+  [data-site-header].header-shell::before,
+  [data-site-header].header-shell::after {
+    display: none;
+  }
+
+  .dark [data-site-header].header-shell {
+    --header-bar-bg: rgba(10, 15, 30, 0.68);
+    --header-bar-border: rgba(255, 255, 255, 0.08);
+    --header-bar-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    --header-nav-pill: linear-gradient(135deg, rgba(124, 58, 237, 0.34), rgba(59, 130, 246, 0.22));
+    --header-nav-pill-border: rgba(191, 219, 254, 0.16);
+    --header-nav-text: rgba(226, 232, 240, 0.78);
+    --header-nav-text-active: #ffffff;
+    --header-mobile-panel-bg: rgba(7, 11, 24, 0.8);
+  }
+
+  [data-site-header].header-shell.is-scrolled {
+    --header-bar-height: 64px;
+    --header-bar-bg: rgba(255, 255, 255, 0.76);
+    padding-top: 0.48rem;
+  }
+
+  .dark [data-site-header].header-shell.is-scrolled {
+    --header-bar-bg: rgba(8, 12, 26, 0.76);
+  }
+
+  [data-site-header] .header-container {
+    position: relative;
+  }
+
+  [data-site-header] .header-frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    min-height: var(--header-bar-height);
+    padding: 0.72rem 1.1rem;
+    gap: 1.25rem;
+    border-radius: 28px;
+    border: 1px solid var(--header-bar-border);
+    background: var(--header-bar-bg);
+    box-shadow: var(--header-bar-shadow);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    transition:
+      min-height 300ms ease,
+      padding 300ms ease,
+      background 300ms ease,
+      border-color 300ms ease,
+      box-shadow 300ms ease,
+      backdrop-filter 300ms ease;
+  }
+
+  [data-site-header].header-shell.is-transparent .header-frame,
+  [data-site-header].header-shell.is-transparent.is-scrolled .header-frame,
+  .dark [data-site-header].header-shell.is-transparent .header-frame,
+  .dark [data-site-header].header-shell.is-transparent.is-scrolled .header-frame {
+    background: var(--header-bar-bg);
+    border-color: var(--header-bar-border);
+    box-shadow: var(--header-bar-shadow);
+  }
+
+  [data-site-header].header-shell.is-scrolled .header-frame {
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
+  }
+
+  .dark [data-site-header].header-shell.is-scrolled .header-frame {
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3);
+  }
+
+  [data-site-header] .header-brand {
+    min-width: 0;
+    justify-self: start;
+  }
+
+  [data-site-header] .header-center {
+    min-width: 0;
+    justify-self: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  [data-site-header] .header-actions {
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.95rem;
+  }
+
+  [data-site-header] .header-shell .brand-logo-link,
+  [data-site-header] .brand-logo-link {
+    margin-right: 0;
+    transform-origin: center left;
+    transition:
+      transform 240ms ease,
+      filter 240ms ease;
+  }
+
+  [data-site-header] .brand-logo-link::before {
+    inset: -0.35rem;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  [data-site-header].header-shell.is-transparent .brand-logo-link::before,
+  [data-site-header].header-shell.is-transparent.is-scrolled .brand-logo-link::before,
+  .dark [data-site-header].header-shell.is-transparent .brand-logo-link::before,
+  .dark [data-site-header].header-shell.is-transparent.is-scrolled .brand-logo-link::before {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  [data-site-header] .brand-logo-link:hover {
+    transform: scale(1.025);
+    filter: drop-shadow(0 0 14px rgba(124, 58, 237, 0.16));
+  }
+
+  .dark [data-site-header] .brand-logo-link:hover {
+    filter: drop-shadow(0 0 18px rgba(96, 165, 250, 0.2));
+  }
+
+  [data-site-header] .brand-logo-aura {
+    opacity: 0.42;
+    transition: opacity 240ms ease, transform 240ms ease;
+  }
+
+  [data-site-header] .brand-logo-link:hover .brand-logo-aura {
+    opacity: 0.78;
+    transform: scale(1.08);
+  }
+
+  [data-site-header] .header-nav {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    padding: 0.38rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    isolation: isolate;
+  }
+
+  [data-site-header].header-shell.is-transparent .header-nav,
+  [data-site-header].header-shell.is-transparent.is-scrolled .header-nav,
+  .dark [data-site-header].header-shell.is-transparent .header-nav,
+  .dark [data-site-header].header-shell.is-transparent.is-scrolled .header-nav {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .dark [data-site-header].header-shell.is-transparent .header-nav,
+  .dark [data-site-header].header-shell.is-transparent.is-scrolled .header-nav {
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .dark [data-site-header] .header-nav {
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  [data-site-header] .header-nav-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    border-radius: 999px;
+    background: var(--header-nav-pill);
+    border: 1px solid var(--header-nav-pill-border);
+    box-shadow:
+      0 10px 24px rgba(124, 58, 237, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    opacity: 0;
+    transition:
+      width 300ms cubic-bezier(0.22, 1, 0.36, 1),
+      height 300ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 180ms ease;
+    will-change: transform, width, height;
+  }
+
+  [data-site-header] .header-nav-indicator[data-ready='true'] {
+    opacity: 1;
+  }
+
+  [data-site-header] .header-nav-link {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    border-radius: 999px;
+    color: var(--header-nav-text);
+    font-size: 0.92rem;
+    font-weight: 650;
+    letter-spacing: 0.015em;
+    text-decoration: none;
+    transition:
+      color 200ms ease,
+      transform 200ms ease,
+      filter 200ms ease;
+  }
+
+  [data-site-header].header-shell.is-transparent .header-nav-link,
+  [data-site-header].header-shell.is-transparent.is-scrolled .header-nav-link,
+  .dark [data-site-header].header-shell.is-transparent .header-nav-link,
+  .dark [data-site-header].header-shell.is-transparent.is-scrolled .header-nav-link {
+    color: var(--header-nav-text);
+    text-shadow: none;
+  }
+
+  [data-site-header] .header-nav-link::before,
+  [data-site-header] .header-nav-link::after {
+    content: none;
+  }
+
+  [data-site-header] .header-nav-link:hover,
+  [data-site-header] .header-nav-link:focus-visible {
+    color: var(--header-nav-text-active);
+    transform: scale(1.05);
+    filter: brightness(1.05);
+    outline: none;
+    box-shadow: none;
+  }
+
+  [data-site-header] .header-nav-link.is-active {
+    color: var(--header-nav-text-active);
+    text-shadow: none;
+  }
+
+  [data-site-header] .header-cta {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0 1.28rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 45%),
+      linear-gradient(125deg, #7c3aed, #3b82f6);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.015em;
+    box-shadow:
+      0 14px 30px rgba(124, 58, 237, 0.24),
+      0 8px 20px rgba(59, 130, 246, 0.2);
+    overflow: hidden;
+    transition:
+      transform 220ms ease,
+      box-shadow 220ms ease,
+      filter 220ms ease;
+  }
+
+  [data-site-header] .header-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0.26) 50%, rgba(255, 255, 255, 0) 80%);
+    transform: translateX(-120%);
+    transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  [data-site-header] .header-cta:hover,
+  [data-site-header] .header-cta:focus-visible {
+    transform: translateY(-1px) scale(1.05);
+    box-shadow:
+      0 18px 36px rgba(124, 58, 237, 0.3),
+      0 12px 26px rgba(59, 130, 246, 0.24);
+    filter: saturate(1.05);
+    outline: none;
+  }
+
+  [data-site-header] .header-cta:hover::before,
+  [data-site-header] .header-cta:focus-visible::before {
+    transform: translateX(120%);
+  }
+
+  [data-site-header] .header-cta.is-active {
+    box-shadow:
+      0 16px 34px rgba(124, 58, 237, 0.28),
+      0 10px 22px rgba(59, 130, 246, 0.22),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+
+  [data-site-header].header-shell.is-transparent .header-cta,
+  [data-site-header].header-shell.is-transparent.is-scrolled .header-cta,
+  .dark [data-site-header].header-shell.is-transparent .header-cta,
+  .dark [data-site-header].header-shell.is-transparent.is-scrolled .header-cta {
+    box-shadow:
+      0 14px 30px rgba(124, 58, 237, 0.24),
+      0 8px 20px rgba(59, 130, 246, 0.2);
+  }
+
+  [data-site-header] .header-cta-label-short {
+    display: none;
+  }
+
+  [data-site-header] .header-theme-toggle,
+  [data-site-header].header-shell.is-transparent .header-theme-toggle,
+  [data-site-header].header-shell.is-transparent.is-scrolled .header-theme-toggle {
+    border-color: rgba(148, 163, 184, 0.22);
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow:
+      0 10px 24px rgba(15, 23, 42, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .dark [data-site-header] .header-theme-toggle,
+  .dark [data-site-header].header-shell.is-transparent .header-theme-toggle,
+  .dark [data-site-header].header-shell.is-transparent.is-scrolled .header-theme-toggle {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  [data-site-header] .header-menu-toggle {
+    display: none;
+    position: relative;
+    width: 2.9rem;
+    height: 2.9rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    color: #0f172a;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    transition:
+      transform 220ms ease,
+      background 220ms ease,
+      border-color 220ms ease;
+  }
+
+  .dark [data-site-header] .header-menu-toggle {
+    color: #f8fafc;
+  }
+
+  [data-site-header] .header-menu-toggle:hover,
+  [data-site-header] .header-menu-toggle:focus-visible {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(124, 58, 237, 0.22);
+    outline: none;
+  }
+
+  [data-site-header] .header-menu-toggle-line {
+    position: absolute;
+    width: 1.1rem;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    color: #0f172a;
+    transition:
+      transform 220ms ease,
+      opacity 180ms ease;
+  }
+
+  .dark [data-site-header] .header-menu-toggle-line {
+    color: #f8fafc;
+  }
+
+  [data-site-header] .header-menu-toggle-line:nth-child(1) {
+    transform: translateY(-0.28rem);
+  }
+
+  [data-site-header] .header-menu-toggle-line:nth-child(3) {
+    transform: translateY(0.28rem);
+  }
+
+  [data-site-header].is-menu-open .header-menu-toggle-line:nth-child(1) {
+    transform: rotate(45deg);
+  }
+
+  [data-site-header].is-menu-open .header-menu-toggle-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  [data-site-header].is-menu-open .header-menu-toggle-line:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+
+  [data-site-header] .header-mobile-panel {
+    display: none;
+  }
+
+  [data-site-header] .header-mobile-nav {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  [data-site-header] .header-mobile-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3rem;
+    padding: 0.9rem 1rem;
+    border-radius: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--header-nav-text-active);
+    font-size: 0.94rem;
+    font-weight: 650;
+    text-decoration: none;
+    transition:
+      transform 220ms ease,
+      border-color 220ms ease,
+      background 220ms ease;
+  }
+
+  [data-site-header] .header-mobile-link:hover,
+  [data-site-header] .header-mobile-link:focus-visible,
+  [data-site-header] .header-mobile-link.is-active {
+    transform: translateX(4px);
+    border-color: rgba(124, 58, 237, 0.22);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(59, 130, 246, 0.08));
+    outline: none;
+  }
+
+  @media (max-width: 767px) {
+    [data-site-header].header-shell {
+      padding-top: 0.6rem;
+    }
+
+    [data-site-header] .header-frame {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: 'brand actions';
+      gap: 0.9rem;
+      padding: 0.7rem 0.85rem;
+      border-radius: 24px;
+    }
+
+    [data-site-header] .header-brand {
+      grid-area: brand;
+    }
+
+    [data-site-header] .header-center {
+      display: none;
+    }
+
+    [data-site-header] .header-actions {
+      grid-area: actions;
+      gap: 0.58rem;
+    }
+
+    [data-site-header] .brand-logo-link {
+      max-width: 8.4rem;
+    }
+
+    [data-site-header] .brand-logo-img {
+      width: 100%;
+      height: auto;
+    }
+
+    [data-site-header] .header-cta {
+      min-height: 2.8rem;
+      padding: 0 0.95rem;
+      font-size: 0.76rem;
+      box-shadow:
+        0 10px 22px rgba(124, 58, 237, 0.22),
+        0 6px 16px rgba(59, 130, 246, 0.18);
+    }
+
+    [data-site-header] .header-cta-label {
+      display: none;
+    }
+
+    [data-site-header] .header-cta-label-short {
+      display: inline;
+    }
+
+    [data-site-header] .header-menu-toggle {
+      display: inline-flex;
+    }
+
+    [data-site-header] .header-theme-toggle,
+    [data-site-header] .header-menu-toggle {
+      width: 2.8rem;
+      height: 2.8rem;
+    }
+
+    [data-site-header] .header-mobile-panel {
+      display: block;
+      overflow: hidden;
+      max-height: 0;
+      margin-top: 0.7rem;
+      padding: 0 0.18rem;
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition:
+        max-height 320ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 240ms ease,
+        transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    [data-site-header].is-menu-open .header-mobile-panel {
+      max-height: 22rem;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    [data-site-header] .header-mobile-nav {
+      padding: 0.88rem;
+      border-radius: 24px;
+      border: 1px solid var(--header-bar-border);
+      background: var(--header-mobile-panel-bg);
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.16);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+  }
+
+  @media (min-width: 768px) {
+    [data-site-header] .header-mobile-panel {
+      display: none !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-site-header].header-shell,
+    [data-site-header] .header-frame,
+    [data-site-header] .brand-logo-link,
+    [data-site-header] .brand-logo-aura,
+    [data-site-header] .header-nav-indicator,
+    [data-site-header] .header-nav-link,
+    [data-site-header] .header-cta,
+    [data-site-header] .header-cta::before,
+    [data-site-header] .header-menu-toggle,
+    [data-site-header] .header-menu-toggle-line,
+    [data-site-header] .header-mobile-panel,
+    [data-site-header] .header-mobile-link {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>

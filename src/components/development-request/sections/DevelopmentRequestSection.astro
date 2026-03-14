@@ -1,41 +1,71 @@
 ---
-import ContactForm from '../../ContactForm.astro';
 import SectionHeader from '../../shared/SectionHeader.astro';
-import type { DevelopmentRequestContent } from '../../../data/development-request';
+import type { DevelopmentRequestLandingContent } from '../../../data/development-request';
 
 interface Props {
-  content: DevelopmentRequestContent;
+  content: DevelopmentRequestLandingContent;
 }
 
 const { content } = Astro.props;
 ---
-<section class="development-request-section py-16 sm:py-20 lg:py-24">
-  <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
-    <div class="grid items-start gap-10 lg:grid-cols-[1.1fr,0.9fr]">
-      <div class="grid gap-4">
-        <SectionHeader
-          content={content.header}
-          headingTag="h1"
-          className="grid gap-4"
-          descriptionClassName="max-w-xl text-base text-slate-600 dark:text-brand-muted sm:text-lg"
-        />
-        <div class="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-lg shadow-slate-900/10 backdrop-blur-sm dark:border-brand-purple/20 dark:bg-white/5 dark:shadow-glow">
-          <div class="pointer-events-none absolute inset-0 opacity-40">
-            <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/15 via-transparent to-brand-blue/10"></div>
-          </div>
-          <div class="relative z-10">
-            <h3 class="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">
-              {content.recommendationsTitle}
-            </h3>
-            <ul class="mt-4 grid list-disc gap-3 pl-5 text-sm text-slate-600 marker:text-brand-purple/60 dark:text-brand-muted">
-              {content.recommendations.map((recommendation) => (
-                <li>{recommendation}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
+<section class="development-request-landing-section pt-16 sm:pt-20 lg:pt-24">
+  <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
+    <div class="development-request-shell">
+      <SectionHeader
+        content={content.header}
+        headingTag="h1"
+        className="grid gap-4"
+        titleClassName="font-display text-4xl font-semibold tracking-tight text-transparent sm:text-5xl lg:text-6xl bg-gradient-to-r from-brand-purple via-brand-blue to-brand-purple bg-clip-text"
+        descriptionClassName="max-w-3xl text-base text-slate-600 dark:text-brand-muted sm:text-lg"
+      />
+
+      <div class="development-paper-grid">
+        {content.cards.map((card, index) => (
+          <a
+            class="development-paper-card development-paper-card-link"
+            href={card.action.href}
+            style={`--paper-rotation: ${card.rotation}; --paper-delay: ${index * 140}ms;`}
+          >
+            <div class="development-paper-card-body">
+              <div class="grid gap-3">
+                <p class="development-paper-kicker">{card.kicker}</p>
+                <h2 class="font-display text-3xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+                  {card.title}
+                </h2>
+                <p class="text-base font-semibold text-slate-700 dark:text-slate-100">{card.description}</p>
+                <p class="text-sm leading-7 text-slate-600 dark:text-brand-muted">{card.detail}</p>
+              </div>
+
+              <ul class="development-paper-bullets">
+                {card.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+
+              <span class="development-primary-link development-paper-cta" aria-hidden="true">
+                <span>{card.action.label}</span>
+                <span aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
+        ))}
       </div>
-      <ContactForm content={content.form} />
+
+      <article class="development-support-band">
+        <div class="grid gap-3">
+          <p class="development-paper-kicker">Disenado para convertir mejor</p>
+          <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text sm:text-3xl">
+            {content.supportTitle}
+          </h2>
+          <p class="max-w-2xl text-sm leading-7 text-slate-600 dark:text-brand-muted">{content.supportDescription}</p>
+        </div>
+
+        <div class="development-support-chip-row">
+          {content.supportChips.map((chip) => (
+            <span class="development-support-chip">{chip}</span>
+          ))}
+        </div>
+      </article>
     </div>
   </div>
 </section>

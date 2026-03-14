@@ -1,0 +1,61 @@
+---
+import SectionHeader from '../../shared/SectionHeader.astro';
+import SimpleRequestForm from '../forms/SimpleRequestForm';
+import type { DevelopmentSimpleContent } from '../../../data/development-request';
+
+interface Props {
+  content: DevelopmentSimpleContent;
+}
+
+const { content } = Astro.props;
+const emailHref = `mailto:${content.emailValue}`;
+---
+<section class="development-simple-section pt-16 sm:pt-20 lg:pt-24">
+  <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
+    <div class="development-simple-layout">
+      <div class="development-simple-copy">
+        <a class="development-back-link" href={content.returnAction.href}>
+          <span aria-hidden="true">←</span>
+          <span>{content.returnAction.label}</span>
+        </a>
+
+        <SectionHeader
+          content={content.header}
+          headingTag="h1"
+          className="grid gap-4"
+          titleClassName="font-display text-4xl font-semibold tracking-tight text-slate-900 dark:text-brand-text sm:text-5xl"
+          descriptionClassName="max-w-2xl text-base text-slate-600 dark:text-brand-muted sm:text-lg"
+        />
+
+        <article class="development-side-panel">
+          <div class="grid gap-3">
+            <p class="development-paper-kicker">Flujo rapido</p>
+            <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+              {content.supportTitle}
+            </h2>
+            <p class="text-sm leading-7 text-slate-600 dark:text-brand-muted">{content.supportDescription}</p>
+          </div>
+
+          <ul class="development-side-list">
+            {content.supportItems.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+
+          <div class="development-contact-pill">
+            <span>{content.emailLabel}</span>
+            <a href={emailHref}>{content.emailValue}</a>
+          </div>
+        </article>
+      </div>
+
+      <SimpleRequestForm
+        client:load
+        consultationOptions={content.consultationOptions}
+        submitLabel={content.submitLabel}
+        footerNote={content.footerNote}
+        contactEmail={content.emailValue}
+      />
+    </div>
+  </div>
+</section>
