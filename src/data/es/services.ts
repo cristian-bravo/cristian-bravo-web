@@ -1,4 +1,4 @@
-import type { PageMetadata } from '../types/content';
+import type { PageMetadata } from '../../types/content';
 
 export interface ServicesIntroContent {
   kicker: string;
@@ -93,7 +93,7 @@ export const serviceModals: ServicesModalContent[] = [
       'Roadmap por fases para avanzar sin frenar la operación.',
     ],
     actionLabel: 'Hablar con un especialista',
-    actionHref: '/solicitar-desarrollo',
+    actionHref: '/empezar-proyecto',
   },
 
   {
@@ -123,7 +123,7 @@ export const serviceModals: ServicesModalContent[] = [
       'Soporte evolutivo para agregar nuevas funcionalidades.',
     ],
     actionLabel: 'Solicitar acompañamiento',
-    actionHref: '/solicitar-desarrollo',
+    actionHref: '/empezar-proyecto',
   },
 
 {
@@ -138,6 +138,6 @@ export const serviceModals: ServicesModalContent[] = [
     'Mejora continua para acompañar la evolución de tu empresa.',
   ],
   actionLabel: 'Iniciar proyecto',
-  actionHref: '/solicitar-desarrollo',
+  actionHref: '/empezar-proyecto',
 }
 ];

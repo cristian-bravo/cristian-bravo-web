@@ -1,4 +1,4 @@
-import type { LinkActionContent, PageMetadata, SectionHeaderContent } from '../types/content';
+import type { LinkActionContent, PageMetadata, SectionHeaderContent } from '../../types/content';
 
 export interface HomeHeroContent {
   kicker: string;
@@ -57,8 +57,8 @@ export const homeHeroContent: HomeHeroContent = {
   subtitle:
     'Diseñamos y desarrollamos plataformas que optimizan procesos, centralizan información y escalan con tu empresa.',
   primaryAction: {
-    label: 'Solicitar desarrollo',
-    href: '/solicitar-desarrollo',
+    label: 'Empezar proyecto',
+    href: '/empezar-proyecto',
   },
   secondaryAction: {
     label: 'Ver casos de éxito',
@@ -133,11 +133,11 @@ export const homeNextStepContent: HomeNextStepContent = {
     description: 'Agenda una cita y construyamos tu roadmap tecnológico.',
   },
   primaryAction: {
-    label: 'Solicitar desarrollo',
-    href: '/solicitar-desarrollo',
+    label: 'Empezar proyecto',
+    href: '/empezar-proyecto',
   },
   secondaryAction: {
     label: 'Cuentanos tu proyecto',
-    href: '/solicitar-desarrollo',
+    href: '/empezar-proyecto',
   },
 };

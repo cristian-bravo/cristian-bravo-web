@@ -1,7 +1,7 @@
 ---
 import ServiceCard from '../../ServiceCard.astro';
 import SectionHeader from '../../shared/SectionHeader.astro';
-import type { HomeServicesPreviewContent } from '../../../data/home';
+import type { HomeServicesPreviewContent } from '../../../data';
 
 interface Props {
   content: HomeServicesPreviewContent;
@@ -25,3 +25,4 @@ const { content } = Astro.props;
     </div>
   </div>
 </section>
+

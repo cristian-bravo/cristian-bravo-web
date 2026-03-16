@@ -1,6 +1,6 @@
 ---
 import SectionHeader from '../../shared/SectionHeader.astro';
-import type { ContactOverviewContent } from '../../../data/contact';
+import type { ContactOverviewContent } from '../../../data';
 
 interface Props {
   content: ContactOverviewContent;
@@ -63,3 +63,4 @@ const emailHref = `mailto:${content.emailValue}`;
     </div>
   </div>
 </section>
+

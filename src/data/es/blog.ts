@@ -1,4 +1,4 @@
-import type { PageMetadata } from '../types/content';
+import type { PageMetadata } from '../../types/content';
 
 export interface BlogPlaceholderContent {
   heading: string;

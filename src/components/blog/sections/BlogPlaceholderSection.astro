@@ -1,5 +1,5 @@
 ---
-import type { BlogPlaceholderContent } from '../../../data/blog';
+import type { BlogPlaceholderContent } from '../../../data';
 
 interface Props {
   content: BlogPlaceholderContent;
@@ -11,3 +11,4 @@ const { content } = Astro.props;
   <h1>{content.heading}</h1>
   <p>{content.description}</p>
 </section>
+

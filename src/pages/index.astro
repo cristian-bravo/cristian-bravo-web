@@ -4,14 +4,17 @@ import HomeHeroSection from '../components/home/sections/HomeHeroSection.astro';
 import HomeServicesPreviewSection from '../components/home/sections/HomeServicesPreviewSection.astro';
 import HomeMethodSection from '../components/home/sections/HomeMethodSection.astro';
 import HomeNextStepSection from '../components/home/sections/HomeNextStepSection.astro';
-import {
+import { getData } from '../data';
+import '../styles/home.css';
+
+const { home } = getData('es');
+const {
   homeHeroContent,
   homeMethodContent,
   homeNextStepContent,
   homePageMeta,
   homeServicesPreviewContent,
-} from '../data/home';
-import '../styles/home.css';
+} = home;
 ---
 <CystemsLayout title={homePageMeta.title} description={homePageMeta.description}>
   <HomeHeroSection content={homeHeroContent} />
@@ -19,3 +22,4 @@ import '../styles/home.css';
   <HomeMethodSection content={homeMethodContent} />
   <HomeNextStepSection content={homeNextStepContent} />
 </CystemsLayout>
+

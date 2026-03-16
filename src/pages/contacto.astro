@@ -1,9 +1,13 @@
 ---
 import CystemsLayout from '../layouts/CystemsLayout.astro';
 import ContactOverviewSection from '../components/contact/sections/ContactOverviewSection.astro';
-import { contactOverviewContent, contactPageMeta } from '../data/contact';
+import { getData } from '../data';
 import '../styles/contact.css';
+
+const { contact } = getData('es');
+const { contactOverviewContent, contactPageMeta } = contact;
 ---
 <CystemsLayout title={contactPageMeta.title} description={contactPageMeta.description}>
   <ContactOverviewSection content={contactOverviewContent} />
 </CystemsLayout>
+

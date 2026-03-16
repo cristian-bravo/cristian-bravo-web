@@ -1,4 +1,4 @@
-import type { LinkActionContent, PageMetadata, SectionHeaderContent } from '../types/content';
+import type { LinkActionContent, PageMetadata, SectionHeaderContent } from '../../types/content';
 import { projectsPortfolioContent } from './projects';
 import { serviceCards } from './services';
 
@@ -165,7 +165,7 @@ export const profileHeroContent: ProfileHeroContent = {
     'Trabajo uniendo producto, UI, arquitectura y acompanamiento continuo para que cada proyecto tenga claridad de negocio, buena experiencia y una identidad propia.',
   primaryAction: {
     label: 'Hablemos de tu proyecto',
-    href: '/solicitar-desarrollo',
+    href: '/empezar-proyecto',
   },
   secondaryAction: {
     label: 'Ver proyectos',
@@ -439,12 +439,12 @@ export const profileVisionContent: ProfileVisionContent = {
   ctaDescription:
     'Me interesa trabajar en productos donde frontend, operacion y estrategia tengan el mismo peso y donde cada decision empuje resultados reales.',
   primaryAction: {
-    label: 'Solicitar desarrollo',
-    href: '/solicitar-desarrollo',
+    label: 'Empezar proyecto',
+    href: '/empezar-proyecto',
   },
   secondaryAction: {
-    label: 'Solicitar desarrollo',
-    href: '/solicitar-desarrollo',
+    label: 'Empezar proyecto',
+    href: '/empezar-proyecto',
   },
   pet: {
     src: companionPets[3],

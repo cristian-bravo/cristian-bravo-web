@@ -4,14 +4,17 @@ import ServicesIntroSection from '../components/services/sections/ServicesIntroS
 import ServicesAccompanimentSection from '../components/services/sections/ServicesAccompanimentSection.astro';
 import ServicesModals from '../components/services/modals/ServicesModals.astro';
 import ServicesModalScript from '../components/services/modals/ServicesModalScript.astro';
-import {
+import { getData } from '../data';
+import '../styles/servicios.css';
+
+const { services } = getData('es');
+const {
   serviceCards,
   serviceModals,
   servicesAccompaniment,
   servicesIntro,
   servicesPageMeta,
-} from '../data/services';
-import '../styles/servicios.css';
+} = services;
 ---
 <CystemsLayout title={servicesPageMeta.title} description={servicesPageMeta.description}>
   <ServicesIntroSection intro={servicesIntro} cards={serviceCards} />
@@ -19,3 +22,4 @@ import '../styles/servicios.css';
   <ServicesModals modals={serviceModals} />
   <ServicesModalScript />
 </CystemsLayout>
+

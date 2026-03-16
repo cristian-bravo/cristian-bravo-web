@@ -1,4 +1,4 @@
-import type { LinkActionContent, PageMetadata, SectionHeaderContent } from '../types/content';
+import type { LinkActionContent, PageMetadata, SectionHeaderContent } from '../../types/content';
 
 export interface ContactOverviewContent {
   header: SectionHeaderContent;
@@ -27,8 +27,8 @@ export const contactOverviewContent: ContactOverviewContent = {
   emailValue: 'cristianhbravo@outlook.es',
   panelDescription: 'Agenda reuniones ejecutivas y sesiones de discovery con el equipo CYSTEMS.',
   primaryAction: {
-    label: 'Solicitar desarrollo',
-    href: '/solicitar-desarrollo',
+    label: 'Empezar proyecto',
+    href: '/empezar-proyecto',
   },
   secondaryAction: {
     label: 'Ver perfil',

@@ -1,5 +1,5 @@
 ---
-import type { HomeHeroContent } from '../../../data/home';
+import type { HomeHeroContent } from '../../../data';
 
 interface Props {
   content: HomeHeroContent;
@@ -7,9 +7,12 @@ interface Props {
 
 const { content } = Astro.props;
 ---
-<section id="home-hero" class="hero-motion-root relative overflow-hidden py-14 sm:py-16 lg:py-20">
+<section
+  id="home-hero"
+  class="hero-motion-root relative -mt-32 overflow-hidden pb-14 pt-[15rem] sm:pb-16 sm:pt-[16rem] lg:pb-20 lg:pt-[17rem]"
+>
   <div class="hero-bg-breathing pointer-events-none absolute inset-0 bg-hero-glow"></div>
-  <div class="hero-motion-shell mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+  <div class="hero-motion-shell mx-auto w-full max-w-[1360px] px-4 sm:px-6">
     <div class="grid items-center gap-10 lg:grid-cols-[1.1fr,0.9fr]">
       <div class="hero-motion-content grid gap-5">
         <p class="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-brand-mutedStrong">
@@ -84,3 +87,4 @@ const { content } = Astro.props;
     </div>
   </div>
 </section>
+

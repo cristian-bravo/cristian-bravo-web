@@ -1,7 +1,7 @@
 ---
 import ServiceModalTriggerCard from '../cards/ServiceModalTriggerCard.astro';
-import ServicesIntroAnimator from './ServicesIntroAnimator';
-import type { ServiceCardContent, ServicesIntroContent } from '../../../data/services';
+import ServicesIntroAnimator from './ServicesIntroAnimator.astro';
+import type { ServiceCardContent, ServicesIntroContent } from '../../../data';
 import '../../../styles/services-intro-animations.css';
 
 interface Props {
@@ -69,5 +69,6 @@ const introSectionId = 'services-intro';
       ))}
     </div>
   </div>
-  <ServicesIntroAnimator client:visible targetId={introSectionId} />
+  <ServicesIntroAnimator targetId={introSectionId} />
 </section>
+

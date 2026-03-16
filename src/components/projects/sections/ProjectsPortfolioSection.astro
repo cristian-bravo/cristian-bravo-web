@@ -2,7 +2,7 @@
 import ProjectHero from './ProjectHero.astro';
 import ProjectScrollSection from './ProjectScrollSection.astro';
 import FinalCtaSection from './FinalCtaSection.astro';
-import type { ProjectsPortfolioContent } from '../../../data/projects';
+import type { ProjectsPortfolioContent } from '../../../data';
 
 interface Props {
   content: ProjectsPortfolioContent;
@@ -56,3 +56,4 @@ const projectSteps = content.groups.flatMap((group, groupIndex) =>
 >
   <FinalCtaSection content={content.finalCta} />
 </div>
+

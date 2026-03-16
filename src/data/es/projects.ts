@@ -1,4 +1,4 @@
-import type { LinkActionContent, PageMetadata, SectionHeaderContent } from '../types/content';
+import type { LinkActionContent, PageMetadata, SectionHeaderContent } from '../../types/content';
 
 export type ProjectGalleryItemVariant = 'wide' | 'square' | 'tall';
 
@@ -176,8 +176,8 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
     kicker: 'Siguiente paso',
     title: 'Listo para transformar tu idea en una plataforma real?',
     action: {
-      label: 'Solicitar desarrollo',
-      href: '/solicitar-desarrollo',
+      label: 'Empezar proyecto',
+      href: '/empezar-proyecto',
     },
   },
 };

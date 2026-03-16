@@ -1,6 +1,6 @@
 ---
 import ProjectCard from '../../ProjectCard.astro';
-import type { ProjectGroupContent } from '../../../data/projects';
+import type { ProjectGroupContent } from '../../../data';
 
 interface Props {
   group: ProjectGroupContent;
@@ -23,3 +23,4 @@ const { group } = Astro.props;
     ))}
   </div>
 </div>
+

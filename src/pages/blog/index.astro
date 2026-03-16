@@ -1,9 +1,13 @@
 ---
 import CystemsLayout from '../../layouts/CystemsLayout.astro';
 import BlogPlaceholderSection from '../../components/blog/sections/BlogPlaceholderSection.astro';
-import { blogIndexPageMeta, blogPlaceholderContent } from '../../data/blog';
+import { getData } from '../../data';
 import '../../styles/blog.css';
+
+const { blog } = getData('es');
+const { blogIndexPageMeta, blogPlaceholderContent } = blog;
 ---
 <CystemsLayout title={blogIndexPageMeta.title} description={blogIndexPageMeta.description}>
   <BlogPlaceholderSection content={blogPlaceholderContent} />
 </CystemsLayout>
+

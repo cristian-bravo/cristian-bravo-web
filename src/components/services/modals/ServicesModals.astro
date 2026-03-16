@@ -1,6 +1,6 @@
 ---
 import ServiceModal from './ServiceModal.astro';
-import type { ServicesModalContent } from '../../../data/services';
+import type { ServicesModalContent } from '../../../data';
 
 interface Props {
   modals: ServicesModalContent[];
@@ -11,3 +11,4 @@ const { modals } = Astro.props;
 {modals.map((modal) => (
   <ServiceModal {...modal} />
 ))}
+

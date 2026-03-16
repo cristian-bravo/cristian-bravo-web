@@ -1,8 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import { projectsPageMeta, projectsPortfolioContent } from '../data/projects';
+import { getData } from '../data';
 import '../styles/proyectos-scene.css';
+
+const { projects } = getData('es');
+const { projectsPageMeta, projectsPortfolioContent } = projects;
 
 const allProjects = projectsPortfolioContent.groups.flatMap((group, gi) =>
   group.references.map((project, pi) => ({
@@ -281,12 +284,12 @@ const toneForStep = (i: number) => i % 6;
           title={
             i === 0 ? 'Portada' :
             i <= totalProjects ? `Proyecto ${i}` :
-            'Solicitar desarrollo'
+            'Empezar proyecto'
           }
           aria-label={
             i === 0 ? 'Ir a portada' :
             i <= totalProjects ? `Ir al proyecto ${i}` :
-            'Ir a solicitar desarrollo'
+            'Ir a empezar proyecto'
           }
         ></button>
       ))}
@@ -328,3 +331,4 @@ const toneForStep = (i: number) => i % 6;
     }, { once: true });
   </script>
 </BaseLayout>
+
