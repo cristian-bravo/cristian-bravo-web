@@ -941,10 +941,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: flex-start;
-    min-height: 3.1rem;
-    width: min(15rem, 62vw);
+    min-height: 2.9rem;
+    width: min(14.2rem, 60vw);
     border-radius: 1rem;
-    padding: 0.44rem 0.74rem;
+    padding: 0.38rem 0.68rem;
     overflow: hidden;
     isolation: isolate;
     transform: translateZ(0);
@@ -1014,7 +1014,7 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 13.2rem;
+    max-width: 12.4rem;
     height: auto;
     user-select: none;
     pointer-events: none;
@@ -1039,7 +1039,7 @@
 
   .brand-logo-dark {
     position: absolute;
-    left: 0.74rem;
+    left: 0.68rem;
     top: 50%;
     transform: translate3d(10px, -50%, 0) scale(0.98);
     opacity: 0;
@@ -1061,17 +1061,17 @@
 
   @media (max-width: 767px) {
     .brand-logo-link {
-      min-height: 2.95rem;
-      width: min(13.8rem, 74vw);
-      padding: 0.42rem 0.62rem;
+      min-height: 2.78rem;
+      width: min(13.1rem, 72vw);
+      padding: 0.38rem 0.56rem;
     }
 
     .brand-logo-img {
-      max-width: 12.2rem;
+      max-width: 11.5rem;
     }
 
     .brand-logo-dark {
-      left: 0.62rem;
+      left: 0.56rem;
     }
   }
 
@@ -1099,8 +1099,8 @@
   .theme-toggle-btn {
     position: relative;
     display: inline-flex;
-    height: 2.75rem;
-    width: 2.75rem;
+    height: 2.65rem;
+    width: 2.65rem;
     align-items: center;
     justify-content: center;
     overflow: hidden;
@@ -1196,8 +1196,8 @@
     position: relative;
     z-index: 2;
     display: grid;
-    height: 1.35rem;
-    width: 1.35rem;
+    height: 1.28rem;
+    width: 1.28rem;
     place-items: center;
     transition:
       opacity 440ms cubic-bezier(0.22, 1, 0.36, 1),
