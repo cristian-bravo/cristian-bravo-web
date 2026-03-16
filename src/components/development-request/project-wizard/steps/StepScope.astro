@@ -1,0 +1,63 @@
+---
+import type { DevelopmentProjectScopeStepContent } from '../../../../data';
+
+interface Props {
+  panelId: string;
+  copy: DevelopmentProjectScopeStepContent;
+  projectTypeOptions: string[];
+  projectLevelOptions: string[];
+  pageOptions: string[];
+  designOptions: string[];
+}
+
+const { panelId, copy, projectTypeOptions, projectLevelOptions, pageOptions, designOptions } = Astro.props;
+---
+<section id={panelId} class="development-step-panel" data-step-panel="2" hidden>
+  <div class="development-step-stack">
+    <div class="development-step-grid development-step-grid--two">
+      <label class="development-field">
+        <span>{copy.fields.projectType.label}</span>
+        <select class="development-input" name="projectType" data-field="projectType">
+          <option value="">{copy.fields.projectType.placeholder}</option>
+          {projectTypeOptions.map((option) => (
+            <option value={option}>{option}</option>
+          ))}
+        </select>
+        <span class="development-field-error" data-error-for="projectType" hidden></span>
+      </label>
+
+      <label class="development-field">
+        <span>{copy.fields.projectLevel.label}</span>
+        <select class="development-input" name="projectLevel" data-field="projectLevel">
+          <option value="">{copy.fields.projectLevel.placeholder}</option>
+          {projectLevelOptions.map((option) => (
+            <option value={option}>{option}</option>
+          ))}
+        </select>
+        <span class="development-field-error" data-error-for="projectLevel" hidden></span>
+      </label>
+
+      <label class="development-field">
+        <span>{copy.fields.pageRange.label}</span>
+        <select class="development-input" name="pageRange" data-field="pageRange">
+          <option value="">{copy.fields.pageRange.placeholder}</option>
+          {pageOptions.map((option) => (
+            <option value={option}>{option}</option>
+          ))}
+        </select>
+        <span class="development-field-error" data-error-for="pageRange" hidden></span>
+      </label>
+
+      <label class="development-field">
+        <span>{copy.fields.designLevel.label}</span>
+        <select class="development-input" name="designLevel" data-field="designLevel">
+          <option value="">{copy.fields.designLevel.placeholder}</option>
+          {designOptions.map((option) => (
+            <option value={option}>{option}</option>
+          ))}
+        </select>
+        <span class="development-field-error" data-error-for="designLevel" hidden></span>
+      </label>
+    </div>
+  </div>
+</section>

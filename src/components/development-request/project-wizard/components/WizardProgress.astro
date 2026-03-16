@@ -1,0 +1,35 @@
+---
+interface Props {
+  stepTitles: string[];
+  stepDescriptions: string[];
+  counterTemplate: string;
+  restoredStatus: string;
+}
+
+const { stepTitles, stepDescriptions, counterTemplate, restoredStatus } = Astro.props;
+const counterLabel = counterTemplate
+  .replace('{current}', '1')
+  .replace('{total}', String(stepTitles.length));
+---
+<div class="development-wizard-topbar">
+  <div>
+    <p class="development-paper-kicker" data-step-counter>{counterLabel}</p>
+    <h2 class="development-form-title" data-step-title>{stepTitles[0]}</h2>
+    <p class="development-form-copy" data-step-description>{stepDescriptions[0]}</p>
+  </div>
+  <div class="development-wizard-meta">
+    <span class="development-save-pill" data-saved-pill hidden></span>
+  </div>
+</div>
+
+<div class="development-progress-track" aria-hidden="true">
+  <span class="development-progress-fill" data-progress-fill style="width: 33%;"></span>
+</div>
+
+<p class="development-inline-status" data-restored-status hidden>
+  {restoredStatus}
+</p>
+
+<div class="development-submit-alert" data-submit-error hidden>
+  <p class="development-inline-status development-inline-status--error" data-submit-error-text></p>
+</div>

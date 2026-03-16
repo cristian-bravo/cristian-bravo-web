@@ -1,0 +1,298 @@
+---
+import type { DevelopmentSimpleContent } from '../../../data';
+
+interface Props {
+  content: DevelopmentSimpleContent;
+}
+
+const { content } = Astro.props;
+
+const applyTemplate = (template: string) => template.replace('{email}', content.emailValue);
+const formConfig = {
+  consultationOptions: content.consultationOptions,
+  submitLabel: content.submitLabel,
+  footerNote: content.footerNote,
+  contactEmail: content.emailValue,
+  form: content.form,
+};
+const cardDescription = applyTemplate(content.form.cardDescription);
+const successDescription = applyTemplate(content.form.successDescription);
+const directEmailLabel = applyTemplate(content.form.directEmailLabel);
+
+const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
+---
+<div
+  class="development-form-card development-form-card--simple"
+  data-simple-request-root
+  data-form-id={formId}
+>
+  <script type="application/json" data-simple-request-config set:html={JSON.stringify(formConfig)}></script>
+
+  <form data-simple-request-form noValidate>
+    <div class="development-form-card-head">
+      <div>
+        <p class="development-paper-kicker">{content.form.cardKicker}</p>
+        <h2 class="development-form-title">{content.form.cardTitle}</h2>
+      </div>
+      <p class="development-form-copy">{cardDescription}</p>
+    </div>
+
+    <div class="development-submit-alert" data-submit-error hidden>
+      <p class="development-inline-status development-inline-status--error" data-submit-error-text></p>
+    </div>
+
+    <p class="development-inline-status" data-submit-pending hidden>{content.form.pendingStatus}</p>
+
+    <div class="development-form-grid">
+      <label class="development-field">
+        <span>{content.form.fields.name}</span>
+        <input class="development-input" type="text" name="name" autoComplete="name" data-field="name" />
+        <span class="development-field-error" data-error-for="name" hidden></span>
+      </label>
+
+      <label class="development-field">
+        <span>{content.form.fields.email}</span>
+        <input class="development-input" type="email" name="email" autoComplete="email" data-field="email" />
+        <span class="development-field-error" data-error-for="email" hidden></span>
+      </label>
+
+      <label class="development-field">
+        <span>{content.form.fields.company}</span>
+        <input
+          class="development-input"
+          type="text"
+          name="company"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          autoComplete="tel-national"
+          data-field="company"
+        />
+        <span class="development-field-error" data-error-for="company" hidden></span>
+      </label>
+
+      <label class="development-field">
+        <span>{content.form.fields.consultationType}</span>
+        <select class="development-input" name="consultationType" data-field="consultationType">
+          {content.consultationOptions.map((option) => (
+            <option value={option}>{option}</option>
+          ))}
+        </select>
+        <span class="development-field-error" data-error-for="consultationType" hidden></span>
+      </label>
+
+      <label class="development-field development-field--full">
+        <span>{content.form.fields.message}</span>
+        <textarea class="development-textarea" name="message" rows={6} data-field="message"></textarea>
+        <span class="development-field-error" data-error-for="message" hidden></span>
+      </label>
+    </div>
+
+    <div class="development-form-footer">
+      <button class="development-primary-link development-primary-link--button" type="submit" data-submit-button>
+        <span data-submit-label>{content.submitLabel}</span>
+        <span aria-hidden="true" data-submit-icon>-&gt;</span>
+      </button>
+
+      <p class="development-footer-note">{content.footerNote}</p>
+    </div>
+  </form>
+
+  <div class="development-success-card" data-submit-success hidden>
+    <p class="development-paper-kicker">{content.form.successKicker}</p>
+    <h2 class="font-display text-3xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+      {content.form.successTitle}
+    </h2>
+    <p class="text-sm leading-7 text-slate-600 dark:text-brand-muted">{successDescription}</p>
+    <div class="development-success-actions">
+      <button class="development-secondary-link development-secondary-link--button" type="button" data-reset-button>
+        {content.form.resetLabel}
+      </button>
+      <a class="development-primary-link" href={`mailto:${content.emailValue}`}>
+        <span>{directEmailLabel}</span>
+        <span aria-hidden="true">-&gt;</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const DIGITS_PATTERN = /^[0-9]+$/;
+  const EMPTY_COPY = '';
+
+  const initSimpleRequestForm = (root) => {
+    if (!(root instanceof HTMLElement) || root.dataset.initialized === 'true') return;
+    root.dataset.initialized = 'true';
+
+    const configNode = root.querySelector('[data-simple-request-config]');
+    const form = root.querySelector('[data-simple-request-form]');
+    const successCard = root.querySelector('[data-submit-success]');
+    const pendingStatus = root.querySelector('[data-submit-pending]');
+    const errorBlock = root.querySelector('[data-submit-error]');
+    const errorText = root.querySelector('[data-submit-error-text]');
+    const submitButton = root.querySelector('[data-submit-button]');
+    const submitLabel = root.querySelector('[data-submit-label]');
+    const submitIcon = root.querySelector('[data-submit-icon]');
+    const resetButton = root.querySelector('[data-reset-button]');
+
+    if (
+      !(form instanceof HTMLFormElement) ||
+      !(successCard instanceof HTMLElement) ||
+      !(pendingStatus instanceof HTMLElement) ||
+      !(errorBlock instanceof HTMLElement) ||
+      !(errorText instanceof HTMLElement) ||
+      !(submitButton instanceof HTMLButtonElement) ||
+      !(submitLabel instanceof HTMLElement) ||
+      !(submitIcon instanceof HTMLElement) ||
+      !(resetButton instanceof HTMLButtonElement)
+    ) {
+      return;
+    }
+
+    const config = configNode instanceof HTMLScriptElement ? JSON.parse(configNode.textContent || '{}') : {};
+    const validationCopy = config.form?.validation ?? {};
+    const defaultSubmitLabel = submitLabel.textContent ?? EMPTY_COPY;
+    const sendingLabel = config.form?.sendingLabel ?? defaultSubmitLabel;
+
+    const getFormData = () => ({
+      name: (form.elements.namedItem('name') instanceof HTMLInputElement ? form.elements.namedItem('name').value : '').trim(),
+      email: (form.elements.namedItem('email') instanceof HTMLInputElement ? form.elements.namedItem('email').value : '').trim(),
+      company: (form.elements.namedItem('company') instanceof HTMLInputElement ? form.elements.namedItem('company').value : '').trim(),
+      consultationType:
+        form.elements.namedItem('consultationType') instanceof HTMLSelectElement
+          ? form.elements.namedItem('consultationType').value.trim()
+          : '',
+      message:
+        form.elements.namedItem('message') instanceof HTMLTextAreaElement
+          ? form.elements.namedItem('message').value.trim()
+          : '',
+    });
+
+    const setFieldError = (fieldName, message = '') => {
+      const field = form.querySelector(`[data-field="${fieldName}"]`);
+      const error = form.querySelector(`[data-error-for="${fieldName}"]`);
+
+      if (field instanceof HTMLElement) {
+        field.classList.toggle('is-invalid', Boolean(message));
+      }
+
+      if (error instanceof HTMLElement) {
+        error.textContent = message;
+        error.hidden = !message;
+      }
+    };
+
+    const clearFeedback = () => {
+      pendingStatus.hidden = true;
+      errorBlock.hidden = true;
+      errorText.textContent = '';
+    };
+
+    const setSubmitting = (value) => {
+      submitButton.disabled = value;
+      submitLabel.textContent = value ? sendingLabel : defaultSubmitLabel;
+      submitIcon.hidden = value;
+      pendingStatus.hidden = !value;
+    };
+
+    const validate = (formData) => {
+      const nextErrors = {};
+
+      if (!formData.name) nextErrors.name = validationCopy.nameRequired ?? EMPTY_COPY;
+      if (!formData.email) {
+        nextErrors.email = validationCopy.emailRequired ?? EMPTY_COPY;
+      } else if (!EMAIL_PATTERN.test(formData.email)) {
+        nextErrors.email = validationCopy.emailInvalid ?? EMPTY_COPY;
+      }
+      if (formData.company && !DIGITS_PATTERN.test(formData.company)) {
+        nextErrors.company = validationCopy.companyInvalid ?? EMPTY_COPY;
+      }
+      if (!formData.consultationType) nextErrors.consultationType = validationCopy.consultationTypeRequired ?? EMPTY_COPY;
+      if (!formData.message) nextErrors.message = validationCopy.messageRequired ?? EMPTY_COPY;
+
+      ['name', 'email', 'company', 'consultationType', 'message'].forEach((fieldName) => {
+        setFieldError(fieldName, nextErrors[fieldName] ?? '');
+      });
+
+      return nextErrors;
+    };
+
+    form.addEventListener('input', (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+
+      const fieldName = target.getAttribute('data-field');
+      if (fieldName === 'company' && target instanceof HTMLInputElement) {
+        target.value = target.value.replace(/\D+/g, '');
+      }
+      if (fieldName) {
+        setFieldError(fieldName, '');
+      }
+
+      clearFeedback();
+    });
+
+    form.addEventListener('change', clearFeedback);
+
+    resetButton.addEventListener('click', () => {
+      form.reset();
+      clearFeedback();
+      setSubmitting(false);
+      ['name', 'email', 'company', 'consultationType', 'message'].forEach((fieldName) => setFieldError(fieldName, ''));
+      successCard.hidden = true;
+      form.hidden = false;
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = getFormData();
+
+      const nextErrors = validate(formData);
+      if (Object.keys(nextErrors).length) {
+        return;
+      }
+
+      clearFeedback();
+      setSubmitting(true);
+
+      try {
+        const response = await fetch('/api/send-contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json().catch(() => null);
+
+        if (!response.ok || !result?.success) {
+          throw new Error(result?.message || validationCopy.submitError || EMPTY_COPY);
+        }
+
+        form.hidden = true;
+        successCard.hidden = false;
+        form.reset();
+      } catch (error) {
+        console.error('Simple request send failed', error);
+        errorText.textContent = error instanceof Error ? error.message : validationCopy.submitError || EMPTY_COPY;
+        errorBlock.hidden = false;
+      } finally {
+        setSubmitting(false);
+      }
+    });
+  };
+
+  const initAllSimpleRequestForms = () => {
+    document.querySelectorAll('[data-simple-request-root]').forEach((root) => initSimpleRequestForm(root));
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllSimpleRequestForms, { once: true });
+  } else {
+    initAllSimpleRequestForms();
+  }
+
+  window.addEventListener('astro:page-load', initAllSimpleRequestForms);
+</script>

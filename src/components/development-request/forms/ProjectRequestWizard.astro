@@ -1,0 +1,12 @@
+---
+import type { DevelopmentProjectContent } from '../../../data';
+import ProjectRequestWizard from '../project-wizard/ProjectRequestWizard.astro';
+
+interface Props {
+  content: DevelopmentProjectContent;
+}
+
+const { content } = Astro.props;
+---
+<ProjectRequestWizard content={content} />
+

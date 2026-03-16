@@ -1,7 +1,7 @@
 ---
 import SectionHeader from '../../shared/SectionHeader.astro';
-import SimpleRequestForm from '../forms/SimpleRequestForm';
-import type { DevelopmentSimpleContent } from '../../../data/development-request';
+import SimpleRequestForm from '../forms/SimpleRequestForm.astro';
+import type { DevelopmentSimpleContent } from '../../../data';
 
 interface Props {
   content: DevelopmentSimpleContent;
@@ -10,7 +10,7 @@ interface Props {
 const { content } = Astro.props;
 const emailHref = `mailto:${content.emailValue}`;
 ---
-<section class="development-simple-section pt-16 sm:pt-20 lg:pt-24">
+<section class="development-simple-section pt-6 sm:pt-8 lg:pt-10">
   <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
     <div class="development-simple-layout">
       <div class="development-simple-copy">
@@ -29,7 +29,7 @@ const emailHref = `mailto:${content.emailValue}`;
 
         <article class="development-side-panel">
           <div class="grid gap-3">
-            <p class="development-paper-kicker">Flujo rapido</p>
+            <p class="development-paper-kicker">{content.supportKicker}</p>
             <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
               {content.supportTitle}
             </h2>
@@ -49,13 +49,8 @@ const emailHref = `mailto:${content.emailValue}`;
         </article>
       </div>
 
-      <SimpleRequestForm
-        client:load
-        consultationOptions={content.consultationOptions}
-        submitLabel={content.submitLabel}
-        footerNote={content.footerNote}
-        contactEmail={content.emailValue}
-      />
+      <SimpleRequestForm content={content} />
     </div>
   </div>
 </section>
+

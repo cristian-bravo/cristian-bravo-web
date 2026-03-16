@@ -1,6 +1,6 @@
 ---
 import SectionHeader from '../../shared/SectionHeader.astro';
-import type { DevelopmentRequestLandingContent } from '../../../data/development-request';
+import type { DevelopmentRequestLandingContent } from '../../../data';
 
 interface Props {
   content: DevelopmentRequestLandingContent;
@@ -8,7 +8,7 @@ interface Props {
 
 const { content } = Astro.props;
 ---
-<section class="development-request-landing-section pt-16 sm:pt-20 lg:pt-24">
+<section class="development-request-landing-section pt-6 sm:pt-8 lg:pt-10">
   <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
     <div class="development-request-shell">
       <SectionHeader
@@ -53,7 +53,7 @@ const { content } = Astro.props;
 
       <article class="development-support-band">
         <div class="grid gap-3">
-          <p class="development-paper-kicker">Disenado para convertir mejor</p>
+          <p class="development-paper-kicker">{content.supportKicker}</p>
           <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text sm:text-3xl">
             {content.supportTitle}
           </h2>
@@ -69,3 +69,4 @@ const { content } = Astro.props;
     </div>
   </div>
 </section>
+

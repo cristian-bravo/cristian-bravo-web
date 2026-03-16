@@ -112,7 +112,6 @@ html.services-modal-open,
 html.services-modal-open body {
   overflow: hidden;
   overscroll-behavior: none;
-  height: 100%;
 }
 
 body.services-modal-body-lock {

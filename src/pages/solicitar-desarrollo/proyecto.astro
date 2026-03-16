@@ -1,9 +1,3 @@
 ---
-import CystemsLayout from '../../layouts/CystemsLayout.astro';
-import DevelopmentRequestProjectSection from '../../components/development-request/sections/DevelopmentRequestProjectSection.astro';
-import { developmentRequestProjectContent, developmentRequestProjectPageMeta } from '../../data/development-request';
-import '../../styles/development-request.css';
+return Astro.redirect('/empezar-proyecto/proyecto');
 ---
-<CystemsLayout title={developmentRequestProjectPageMeta.title} description={developmentRequestProjectPageMeta.description}>
-  <DevelopmentRequestProjectSection content={developmentRequestProjectContent} />
-</CystemsLayout>

@@ -1,0 +1,31 @@
+---
+interface Props {
+  uploadHints: string[];
+  fieldName: string;
+  accept: string;
+  label: string;
+  placeholder: string;
+}
+
+const { uploadHints, fieldName, accept, label, placeholder } = Astro.props;
+---
+<div class="development-field development-field--full">
+  <span>{label}</span>
+  <div class="development-upload-hints">
+    {uploadHints.map((item) => (
+      <span class="development-support-chip">{item}</span>
+    ))}
+  </div>
+  <input
+    class="development-input development-input--file"
+    type="file"
+    name={fieldName}
+    accept={accept}
+    data-field="uploadedFiles"
+    data-file-input
+  />
+  <span class="development-field-error" data-error-for="uploadedFiles" hidden></span>
+  <div class="development-upload-list" data-upload-list>
+    <p class="development-footer-note" data-upload-placeholder>{placeholder}</p>
+  </div>
+</div>

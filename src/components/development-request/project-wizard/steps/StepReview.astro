@@ -1,0 +1,150 @@
+---
+import FileUploadField from '../components/FileUploadField.astro';
+import type { DevelopmentProjectReviewStepContent } from '../../../../data';
+
+interface Props {
+  panelId: string;
+  copy: DevelopmentProjectReviewStepContent;
+  featureOptions: string[];
+  integrationOptions: string[];
+  hostingOptions: string[];
+  brandingOptions: string[];
+  contentOptions: string[];
+  timelineOptions: string[];
+  uploadHints: string[];
+  attachmentField: string;
+  attachmentAccept: string;
+}
+
+const {
+  panelId,
+  copy,
+  featureOptions,
+  integrationOptions,
+  hostingOptions,
+  brandingOptions,
+  contentOptions,
+  timelineOptions,
+  uploadHints,
+  attachmentField,
+  attachmentAccept,
+} = Astro.props;
+---
+<section id={panelId} class="development-step-panel" data-step-panel="3" hidden>
+  <div class="development-step-stack">
+    <section class="development-step-group">
+      <div class="development-step-group-head">
+        <h3 class="development-step-group-title">{copy.featureTitle}</h3>
+        <p class="development-form-copy">{copy.featureDescription}</p>
+      </div>
+      <div class="development-checkbox-grid">
+        {featureOptions.map((option) => (
+          <label class="development-checkbox-card">
+            <input type="checkbox" name="features" value={option} data-field="features" />
+            <span>{option}</span>
+          </label>
+        ))}
+      </div>
+    </section>
+
+    <section class="development-step-group">
+      <div class="development-step-group-head">
+        <h3 class="development-step-group-title">{copy.integrationTitle}</h3>
+        <p class="development-form-copy">{copy.integrationDescription}</p>
+      </div>
+      <div class="development-checkbox-grid">
+        {integrationOptions.map((option) => (
+          <label class="development-checkbox-card">
+            <input type="checkbox" name="integrations" value={option} data-field="integrations" />
+            <span>{option}</span>
+          </label>
+        ))}
+      </div>
+    </section>
+
+    <section class="development-step-group">
+      <div class="development-step-group-head">
+        <h3 class="development-step-group-title">{copy.logisticsTitle}</h3>
+        <p class="development-form-copy">{copy.logisticsDescription}</p>
+      </div>
+
+      <div class="development-step-grid development-step-grid--two">
+        <label class="development-field">
+          <span>{copy.fields.hosting.label}</span>
+          <select class="development-input" name="hosting" data-field="hosting">
+            <option value="">{copy.fields.hosting.placeholder}</option>
+            {hostingOptions.map((option) => (
+              <option value={option}>{option}</option>
+            ))}
+          </select>
+          <span class="development-field-error" data-error-for="hosting" hidden></span>
+        </label>
+
+        <label class="development-field">
+          <span>{copy.fields.branding.label}</span>
+          <select class="development-input" name="branding" data-field="branding">
+            <option value="">{copy.fields.branding.placeholder}</option>
+            {brandingOptions.map((option) => (
+              <option value={option}>{option}</option>
+            ))}
+          </select>
+          <span class="development-field-error" data-error-for="branding" hidden></span>
+        </label>
+
+        <label class="development-field">
+          <span>{copy.fields.contentPlan.label}</span>
+          <select class="development-input" name="contentPlan" data-field="contentPlan">
+            <option value="">{copy.fields.contentPlan.placeholder}</option>
+            {contentOptions.map((option) => (
+              <option value={option}>{option}</option>
+            ))}
+          </select>
+          <span class="development-field-error" data-error-for="contentPlan" hidden></span>
+        </label>
+
+        <label class="development-field">
+          <span>{copy.fields.timeline.label}</span>
+          <select class="development-input" name="timeline" data-field="timeline">
+            <option value="">{copy.fields.timeline.placeholder}</option>
+            {timelineOptions.map((option) => (
+              <option value={option}>{option}</option>
+            ))}
+          </select>
+          <span class="development-field-error" data-error-for="timeline" hidden></span>
+        </label>
+
+        <label class="development-field">
+          <span>{copy.fields.references.label}</span>
+          <input
+            class="development-input"
+            type="text"
+            name="references"
+            data-field="references"
+            placeholder={copy.fields.references.placeholder}
+          />
+          <span class="development-field-error" data-error-for="references" hidden></span>
+        </label>
+
+        <FileUploadField
+          uploadHints={uploadHints}
+          fieldName={attachmentField}
+          accept={attachmentAccept}
+          label={copy.fields.attachment.label}
+          placeholder={copy.fields.attachment.placeholder}
+        />
+
+        <label class="development-field development-field--full">
+          <span>{copy.fields.specialRequirements.label}</span>
+          <textarea
+            class="development-textarea"
+            name="specialRequirements"
+            rows={6}
+            data-field="specialRequirements"
+            placeholder={copy.fields.specialRequirements.placeholder}
+          ></textarea>
+          <span class="development-field-error" data-error-for="specialRequirements" hidden></span>
+        </label>
+      </div>
+    </section>
+  </div>
+</section>

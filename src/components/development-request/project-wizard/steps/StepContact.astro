@@ -1,0 +1,71 @@
+---
+import type { DevelopmentProjectContactStepContent } from '../../../../data';
+
+interface Props {
+  panelId: string;
+  copy: DevelopmentProjectContactStepContent;
+}
+
+const { panelId, copy } = Astro.props;
+---
+<section id={panelId} class="development-step-panel is-forward" data-step-panel="1">
+  <div class="development-step-stack">
+    <div class="development-step-grid development-step-grid--two">
+      <label class="development-field">
+        <span>
+          {copy.fields.fullName.label}
+          {copy.fields.fullName.required && <span class="development-required-mark" aria-hidden="true">*</span>}
+        </span>
+        <input class="development-input" type="text" name="fullName" autoComplete="name" data-field="fullName" />
+        <span class="development-field-error" data-error-for="fullName" hidden></span>
+      </label>
+
+      <label class="development-field">
+        <span>
+          {copy.fields.email.label}
+          {copy.fields.email.required && <span class="development-required-mark" aria-hidden="true">*</span>}
+        </span>
+        <input class="development-input" type="email" name="email" autoComplete="email" data-field="email" />
+        <span class="development-field-error" data-error-for="email" hidden></span>
+      </label>
+
+      <label class="development-field">
+        <span>{copy.fields.company.label}</span>
+        <input class="development-input" type="text" name="company" autoComplete="organization" data-field="company" />
+        <span class="development-field-error" data-error-for="company" hidden></span>
+      </label>
+
+      <label class="development-field">
+        <span>
+          {copy.fields.phone.label}
+          {copy.fields.phone.required && <span class="development-required-mark" aria-hidden="true">*</span>}
+        </span>
+        <input class="development-input" type="text" name="phone" autoComplete="tel" data-field="phone" />
+        <span class="development-field-error" data-error-for="phone" hidden></span>
+      </label>
+
+      <label class="development-field development-field--full">
+        <span>{copy.fields.country.label}</span>
+        <input class="development-input" type="text" name="country" autoComplete="country-name" data-field="country" />
+        <span class="development-field-error" data-error-for="country" hidden></span>
+      </label>
+
+      <label class="development-field development-field--full">
+        <span>
+          {copy.fields.projectDescription.label}
+          {copy.fields.projectDescription.required && (
+            <span class="development-required-mark" aria-hidden="true">*</span>
+          )}
+        </span>
+        <textarea
+          class="development-textarea"
+          name="projectDescription"
+          rows={8}
+          data-field="projectDescription"
+          placeholder={copy.fields.projectDescription.placeholder}
+        ></textarea>
+        <span class="development-field-error" data-error-for="projectDescription" hidden></span>
+      </label>
+    </div>
+  </div>
+</section>

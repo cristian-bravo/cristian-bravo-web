@@ -1,7 +1,7 @@
 ---
 import SectionHeader from '../../shared/SectionHeader.astro';
-import ProjectRequestWizard from '../forms/ProjectRequestWizard';
-import type { DevelopmentProjectContent } from '../../../data/development-request';
+import ProjectRequestWizard from '../project-wizard/ProjectRequestWizard.astro';
+import type { DevelopmentProjectContent } from '../../../data';
 
 interface Props {
   content: DevelopmentProjectContent;
@@ -10,8 +10,8 @@ interface Props {
 const { content } = Astro.props;
 const emailHref = `mailto:${content.contactEmail}`;
 ---
-<section class="development-project-section pt-16 sm:pt-20 lg:pt-24">
-  <div class="mx-auto w-full max-w-[1220px] px-4 sm:px-6">
+<section class="development-project-section pt-6 sm:pt-8 lg:pt-10">
+  <div class="mx-auto w-full max-w-[1380px] px-4 sm:px-6">
     <div class="development-project-layout">
       <aside class="development-project-sidebar">
         <a class="development-back-link" href={content.returnAction.href}>
@@ -29,7 +29,7 @@ const emailHref = `mailto:${content.contactEmail}`;
 
         <article class="development-side-panel">
           <div class="grid gap-3">
-            <p class="development-paper-kicker">Brief guiado</p>
+            <p class="development-paper-kicker">{content.ui.sidebarKicker}</p>
             <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
               {content.sidebarTitle}
             </h2>
@@ -51,7 +51,8 @@ const emailHref = `mailto:${content.contactEmail}`;
         </article>
       </aside>
 
-      <ProjectRequestWizard client:load content={content} />
+      <ProjectRequestWizard content={content} />
     </div>
   </div>
 </section>
+

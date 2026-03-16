@@ -18,7 +18,7 @@
   <img src="https://img.shields.io/badge/Preact-Islands-673AB8?style=flat-square&logo=preact&logoColor=white" alt="Preact" />
   <img src="https://img.shields.io/badge/TailwindCSS-3.x-38BDF8?style=flat-square&logo=tailwindcss&logoColor=0B1120" alt="TailwindCSS" />
   <img src="https://img.shields.io/badge/Anime.js-Motion-111827?style=flat-square&logo=javascript&logoColor=F7DF1E" alt="Anime.js" />
-  <img src="https://img.shields.io/badge/Mode-Static%20Build-111827?style=flat-square&logo=vercel&logoColor=white" alt="Static build" />
+  <img src="https://img.shields.io/badge/Mode-Node%20SSR-111827?style=flat-square&logo=node.js&logoColor=white" alt="Node SSR" />
 </p>
 
 ## Vision General
@@ -44,11 +44,12 @@ El proyecto esta construido para comunicar tres ideas con claridad:
 
 ### Conversion y contacto
 
-- Nueva landing de `/solicitar-desarrollo` con dos rutas de entrada.
-- Flujo rapido en `/solicitar-desarrollo/simple`.
-- Wizard profesional en `/solicitar-desarrollo/proyecto`.
+- Nueva landing de `/empezar-proyecto` con dos rutas de entrada.
+- Flujo rapido en `/empezar-proyecto/simple`.
+- Wizard profesional en `/empezar-proyecto/proyecto`.
 - Validaciones, progreso, persistencia temporal y estimado automatico en el brief largo.
 - La navegacion del sitio ya usa este flujo como punto principal de contacto.
+- Envio server-side con Nodemailer y Outlook SMTP.
 
 ### Sistema visual
 
@@ -76,6 +77,7 @@ Preact       -> formularios y UI interactiva
 Tailwind CSS -> utilidades y layout rapido
 Anime.js     -> motion y microinteracciones
 PostCSS      -> pipeline de estilos
+Nodemailer   -> envio server-side de formularios
 ```
 
 ## Flujo de Producto
@@ -84,7 +86,7 @@ PostCSS      -> pipeline de estilos
 flowchart LR
   A[Descubrimiento] --> B[Servicios y Proyectos]
   B --> C[Perfil profesional]
-  C --> D[Solicitar desarrollo]
+  C --> D[Empezar proyecto]
   D --> E[Formulario simple]
   D --> F[Wizard de proyecto]
   E --> G[Respuesta comercial]
@@ -100,9 +102,9 @@ flowchart LR
 /perfil/cristian-bravo
 /blog
 /blog/[slug]
-/solicitar-desarrollo
-/solicitar-desarrollo/simple
-/solicitar-desarrollo/proyecto
+/empezar-proyecto
+/empezar-proyecto/simple
+/empezar-proyecto/proyecto
 /contacto
 ```
 
@@ -128,6 +130,12 @@ Build de produccion:
 ```bash
 npm run build
 npm run preview
+```
+
+Produccion en Contabo:
+
+```bash
+node ./dist/server/entry.mjs
 ```
 
 ## Estructura Base

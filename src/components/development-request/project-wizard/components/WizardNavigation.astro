@@ -1,0 +1,77 @@
+---
+interface Props {
+  stepTitles?: string[];
+  wizardId?: string;
+  finalSubmitLabel?: string;
+  stepNavigationLabel?: string;
+  backLabel?: string;
+  nextLabel?: string;
+  mode: 'steps' | 'actions';
+}
+
+const {
+  stepTitles = [],
+  wizardId = '',
+  finalSubmitLabel = '',
+  stepNavigationLabel = '',
+  backLabel = '',
+  nextLabel = '',
+  mode,
+} = Astro.props;
+---
+{mode === 'steps' ? (
+  <div
+    class="development-step-nav"
+    role="tablist"
+    aria-label={stepNavigationLabel}
+    style={`grid-template-columns: repeat(${stepTitles.length}, minmax(0, 1fr))`}
+  >
+    {stepTitles.map((stepTitle, index) => {
+      const stepNumber = index + 1;
+
+      return (
+        <button
+          type="button"
+          role="tab"
+          aria-selected={stepNumber === 1 ? 'true' : 'false'}
+          aria-controls={`${wizardId}-step-panel-${stepNumber}`}
+          class={`development-step-chip${stepNumber === 1 ? ' is-active' : ''}`}
+          data-step-chip={stepNumber}
+        >
+          <span>{stepNumber}</span>
+          <small>{stepTitle}</small>
+        </button>
+      );
+    })}
+  </div>
+) : (
+  <div class="development-wizard-actions">
+    <button
+      class="development-secondary-link development-secondary-link--button"
+      type="button"
+      data-back-button
+      disabled
+    >
+      {backLabel}
+    </button>
+
+    <button
+      class="development-primary-link development-primary-link--button"
+      type="button"
+      data-next-button
+    >
+      <span>{nextLabel}</span>
+      <span aria-hidden="true">-&gt;</span>
+    </button>
+
+    <button
+      class="development-primary-link development-primary-link--button"
+      type="submit"
+      data-submit-button
+      hidden
+    >
+      <span>{finalSubmitLabel}</span>
+      <span aria-hidden="true">-&gt;</span>
+    </button>
+  </div>
+)}

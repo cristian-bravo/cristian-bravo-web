@@ -1,0 +1,187 @@
+---
+import type { DevelopmentProjectContent } from '../../../data';
+import WizardNavigation from './components/WizardNavigation.astro';
+import WizardProgress from './components/WizardProgress.astro';
+import StepContact from './steps/StepContact.astro';
+import StepReview from './steps/StepReview.astro';
+import StepScope from './steps/StepScope.astro';
+import {
+  PROJECT_ATTACHMENT_ACCEPT,
+  PROJECT_ATTACHMENT_FIELD,
+  PROJECT_ATTACHMENT_MAX_BYTES,
+} from './utils/fileValidation';
+
+interface Props {
+  content: DevelopmentProjectContent;
+}
+
+const { content } = Astro.props;
+const replaceEmailToken = (template: string) => template.replace('{email}', content.contactEmail);
+const wizardId = `project-request-${Math.random().toString(36).slice(2, 10)}`;
+const wizardConfig = {
+  stepTitles: content.stepTitles,
+  stepDescriptions: content.stepDescriptions,
+  contactEmail: content.contactEmail,
+  finalSubmitLabel: content.finalSubmitLabel,
+  confirmModalTitle: content.confirmModalTitle,
+  confirmModalDescription: content.confirmModalDescription,
+  confirmModalCancelLabel: content.confirmModalCancelLabel,
+  confirmModalConfirmLabel: content.confirmModalConfirmLabel,
+  successTitle: content.successTitle,
+  successDescription: content.successDescription,
+  storageKey: 'cystems-project-request-v2',
+  legacyStorageKey: 'cystems-project-request-v1',
+  attachmentField: PROJECT_ATTACHMENT_FIELD,
+  attachmentMaxBytes: PROJECT_ATTACHMENT_MAX_BYTES,
+  attachmentAccept: PROJECT_ATTACHMENT_ACCEPT,
+  ui: content.ui,
+};
+const successEmailLabel = replaceEmailToken(content.ui.successEmailLabel);
+const confirmDestinationLabel = replaceEmailToken(content.ui.confirmDestinationLabel);
+---
+<div class="development-wizard-shell" data-project-wizard-root data-wizard-id={wizardId}>
+  <script type="application/json" data-project-wizard-config set:html={JSON.stringify(wizardConfig)}></script>
+
+  <form data-project-wizard-form noValidate>
+    <WizardProgress
+      stepTitles={content.stepTitles}
+      stepDescriptions={content.stepDescriptions}
+      counterTemplate={content.ui.stepCounterTemplate}
+      restoredStatus={content.ui.restoredStatus}
+    />
+
+    <WizardNavigation
+      mode="steps"
+      stepTitles={content.stepTitles}
+      wizardId={wizardId}
+      stepNavigationLabel={content.ui.stepNavigationLabel}
+    />
+
+    <StepContact panelId={`${wizardId}-step-panel-1`} copy={content.ui.contactStep} />
+    <StepScope
+      panelId={`${wizardId}-step-panel-2`}
+      copy={content.ui.scopeStep}
+      projectTypeOptions={content.projectTypeOptions}
+      projectLevelOptions={content.projectLevelOptions}
+      pageOptions={content.pageOptions}
+      designOptions={content.designOptions}
+    />
+    <StepReview
+      panelId={`${wizardId}-step-panel-3`}
+      copy={content.ui.reviewStep}
+      featureOptions={content.featureOptions}
+      integrationOptions={content.integrationOptions}
+      hostingOptions={content.hostingOptions}
+      brandingOptions={content.brandingOptions}
+      contentOptions={content.contentOptions}
+      timelineOptions={content.timelineOptions}
+      uploadHints={content.uploadHints}
+      attachmentField={PROJECT_ATTACHMENT_FIELD}
+      attachmentAccept={PROJECT_ATTACHMENT_ACCEPT}
+    />
+
+    <WizardNavigation
+      mode="actions"
+      finalSubmitLabel={content.finalSubmitLabel}
+      backLabel={content.ui.backLabel}
+      nextLabel={content.ui.nextLabel}
+    />
+  </form>
+
+  <div class="development-success-card" data-submit-success hidden>
+    <p class="development-paper-kicker">{content.ui.successKicker}</p>
+    <h2 class="font-display text-3xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
+      {content.successTitle}
+    </h2>
+    <p class="text-sm leading-7 text-slate-600 dark:text-brand-muted">{content.successDescription}</p>
+    <div class="development-success-actions">
+      <button class="development-secondary-link development-secondary-link--button" type="button" data-reset-button>
+        {content.ui.successResetLabel}
+      </button>
+      <a class="development-primary-link" href={`mailto:${content.contactEmail}`}>
+        <span>{successEmailLabel}</span>
+        <span aria-hidden="true">-&gt;</span>
+      </a>
+    </div>
+  </div>
+
+  <div
+    class="services-modal development-confirm-layer"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby={`${wizardId}-confirm-title`}
+    aria-describedby={`${wizardId}-confirm-description`}
+    data-confirm-modal
+    hidden
+  >
+    <button
+      class="services-modal-backdrop"
+      type="button"
+      aria-label={content.ui.confirmCloseLabel}
+      data-confirm-backdrop
+    ></button>
+
+    <div class="services-modal-panel development-confirm-panel" role="document" data-confirm-panel tabindex="-1">
+      <div class="development-confirm-header">
+        <p class="development-paper-kicker">{content.ui.confirmKicker}</p>
+        <span class="development-confirm-destination">{confirmDestinationLabel}</span>
+      </div>
+
+      <h3 id={`${wizardId}-confirm-title`} class="development-confirm-title">{content.confirmModalTitle}</h3>
+      <p id={`${wizardId}-confirm-description`} class="development-form-copy">{content.confirmModalDescription}</p>
+
+      <div class="development-confirm-summary">
+        <article class="development-confirm-summary-item">
+          <span>{content.ui.summaryLabels.contact}</span>
+          <strong data-summary-contact-name>{content.ui.summaryFallbacks.contactName}</strong>
+          <p data-summary-contact-email>{content.ui.summaryFallbacks.contactEmail}</p>
+          <small data-summary-contact-meta></small>
+        </article>
+
+        <article class="development-confirm-summary-item">
+          <span>{content.ui.summaryLabels.scope}</span>
+          <strong data-summary-scope-title>{content.ui.summaryFallbacks.scopeTitle}</strong>
+          <p data-summary-scope-detail>{content.ui.summaryFallbacks.scopeDescription}</p>
+        </article>
+
+        <article class="development-confirm-summary-item">
+          <span>{content.ui.summaryLabels.stack}</span>
+          <strong data-summary-stack-features>{content.ui.summaryFallbacks.features}</strong>
+          <p data-summary-stack-integrations>{content.ui.summaryFallbacks.integrations}</p>
+          <small data-summary-stack-meta></small>
+        </article>
+
+        <article class="development-confirm-summary-item">
+          <span>{content.ui.summaryLabels.brief}</span>
+          <strong data-summary-brief>{content.ui.summaryFallbacks.brief}</strong>
+          <p data-summary-notes>{content.ui.summaryFallbacks.notes}</p>
+          <small data-summary-assets>{content.ui.summaryFallbacks.assets}</small>
+        </article>
+      </div>
+
+      <div class="development-confirm-actions">
+        <button class="development-secondary-link development-secondary-link--button" type="button" data-confirm-cancel>
+          {content.confirmModalCancelLabel}
+        </button>
+
+        <button class="development-primary-link development-primary-link--button" type="button" data-confirm-send>
+          <span data-confirm-send-label>{content.confirmModalConfirmLabel}</span>
+          <span aria-hidden="true" data-confirm-send-icon>-&gt;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { initAllProjectRequestWizards } from './projectWizard.client';
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllProjectRequestWizards, { once: true });
+  } else {
+    initAllProjectRequestWizards();
+  }
+
+  window.addEventListener('astro:page-load', initAllProjectRequestWizards);
+</script>
+
