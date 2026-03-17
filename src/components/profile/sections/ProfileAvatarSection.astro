@@ -28,7 +28,7 @@ const { content } = Astro.props;
           </div>
 
           <p class="profile-avatar-role">{content.role}</p>
-          <div class="flex flex-wrap gap-2">
+          <div class="profile-avatar-traits">
             {content.traits.map((trait) => (
               <span class="profile-avatar-chip">{trait}</span>
             ))}
@@ -36,7 +36,7 @@ const { content } = Astro.props;
         </article>
 
         <div class="profile-avatar-showcase">
-          <div class="grid gap-3">
+          <div class="profile-avatar-copy">
             <p class="profile-story-label">{content.kicker}</p>
             <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text sm:text-3xl">
               {content.title}
