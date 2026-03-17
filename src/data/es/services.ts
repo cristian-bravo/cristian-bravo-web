@@ -46,21 +46,21 @@ export const servicesIntro: ServicesIntroContent = {
 
 export const serviceCards: ServiceCardContent[] = [
   {
-    title: 'Consultoría digital',
+    title: 'APIs y backend',
     description:
-      'Entendemos tu negocio, ordenamos el camino y definimos un plan claro para crecer sin improvisar.',
+      'Diseño y desarrollo APIs y lógica backend con enfoque en rendimiento, escalabilidad y estructuras bien definidas.',
     modalId: 'modal-consultoria',
   },
   {
-    title: 'Plataformas empresariales',
+    title: 'Plataformas y sistemas',
     description:
-      'Creamos sistemas a tu medida que automatizan procesos, conectan tu operación y acompañan tu crecimiento.',
+      'Construyo plataformas en producción integrando frontend, backend y arquitectura para resolver necesidades reales.',
     modalId: 'modal-plataformas',
   },
   {
-    title: 'Operación y soporte',
+    title: 'Evolución y mantenimiento',
     description:
-      'Seguimos contigo después del lanzamiento mejorando y cuidando tu plataforma para que nada se detenga.',
+      'Mantengo y mejoro sistemas en producción, asegurando estabilidad, rendimiento y evolución constante.',
     modalId: 'modal-operacion',
   },
 ];

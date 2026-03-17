@@ -153,16 +153,16 @@ export interface ProfileVisionContent {
 }
 
 export const profilePageMeta: PageMetadata = {
-  title: 'Perfil | Cristian Bravo',
+  title: 'Sobre mi | Cristian',
   description: 'Perfil profesional, enfoque tecnico y mundo creativo de Cristian Bravo en CYSTEMS.',
 };
 
 export const profileHeroContent: ProfileHeroContent = {
   kicker: 'Perfil profesional',
   title: 'Cristian Bravo',
-  lead: 'Desarrollador, estratega digital y frontend builder con gusto real por programar, pulir interfaces y convertir ideas en sistemas utiles.',
+  lead: 'Trabajo desarrollando plataformas, APIs y sistemas en producción, combinando desarrollo, arquitectura y criterio técnico.',
   description:
-    'Trabajo uniendo producto, UI, arquitectura y acompanamiento continuo para que cada proyecto tenga claridad de negocio, buena experiencia y una identidad propia.',
+    'Me gusta entender el problema completo y construir soluciones claras, útiles y bien estructuradas.',
   primaryAction: {
     label: 'Hablemos de tu proyecto',
     href: '/empezar-proyecto',
@@ -175,24 +175,27 @@ export const profileHeroContent: ProfileHeroContent = {
   stats: [
     {
       label: 'Enfoque',
-      value: 'Producto + negocio',
-      detail: 'Cada decision tecnica y visual debe ayudar a entender, vender y operar mejor.',
+      value: 'Producto + sistemas',
+      detail:
+        'Cada decisión técnica está orientada a construir soluciones claras, funcionales y escalables.',
     },
     {
       label: 'Modo de trabajo',
-      value: 'De la idea al deploy',
-      detail: 'Consultoria, construccion, iteracion y soporte dentro del mismo acompanamiento.',
+      value: 'De la idea al sistema',
+      detail:
+        'Analizo, desarrollo, itero y mejoro cada solución dentro de entornos reales de producción.',
     },
     {
       label: 'Motor personal',
-      value: 'Programar me gusta de verdad',
-      detail: 'Disfruto resolver problemas, ordenar procesos y convertir complejidad en algo claro.',
+      value: 'Construir soluciones reales',
+      detail:
+        'Disfruto resolver problemas, estructurar sistemas y convertir complejidad en algo claro.',
     },
   ],
-  noteTitle: 'Lo que vas a encontrar aqui',
+  noteTitle: 'Mi enfoque',
   noteBody:
-    'Una version mas completa de mi perfil: lo que he construido, lo que me inspira, como nace CYSTEMS y hacia donde quiero llevar esta vision.',
-  floatingNotes: ['Codigo con criterio', 'UI con atmosfera', 'Siempre iterando', 'Sistemas que crecen'],
+  'Un resumen de cómo trabajo, los sistemas que he construido y la forma en que desarrollo soluciones reales.',
+  floatingNotes: ['Código con criterio', 'UI clara', 'Siempre iterando', 'Sistemas que crecen', 'Arquitectura sólida'],
   floatingStickers: [allStickers[0], allStickers[5], allStickers[10], allStickers[15], allStickers[20]],
   videoKicker: 'Loop creativo',
   videoTitle: 'Movimiento, atmosfera y una interfaz con personalidad.',
@@ -204,25 +207,20 @@ export const profileHeroContent: ProfileHeroContent = {
 };
 
 export const profileAvatarContent: ProfileAvatarContent = {
-  kicker: 'Mi avatar',
-  title: 'Una presencia visual que conecta lo tecnico con lo creativo',
+  kicker: 'SOBRE MÍ',
+  title: 'Desarrollo soluciones full stack con enfoque en producto y escalabilidad',
   description:
-    'Debajo del hero quise dejar una presentacion mas personal. No solo lo que hago, sino tambien la energia con la que construyo: frontend, direccion visual y criterio tecnico trabajando juntos.',
-  role: 'Frontend + estrategia + identidad visual',
+    'Construyo plataformas en producción combinando desarrollo, diseño y criterio técnico.',
+  role: 'Full Stack + Arquitectura + Producto',
   imageSrc: '/avatar/avatar_1.webp',
   imageAlt: 'Avatar de Cristian Bravo para la seccion de perfil',
-  traits: ['Builder', 'UI con identidad', 'Pensamiento de producto', 'Detalle visual'],
+  traits: ['Full Stack', 'Producto', 'Arquitectura', 'Escalabilidad','Sistemas'],
   stickers: [
     allStickers[1],
     allStickers[3],
     allStickers[6],
     allStickers[8],
     allStickers[11],
-    allStickers[13],
-    allStickers[16],
-    allStickers[18],
-    allStickers[21],
-    allStickers[23],
   ],
   videoSrc: '/wallpapers/klee/KleeWP.mp4',
   videoPoster: '/wallpapers/klee/preview.gif',
@@ -230,70 +228,74 @@ export const profileAvatarContent: ProfileAvatarContent = {
 
 export const profileStoryContent: ProfileStoryContent = {
   header: {
-    kicker: 'Quien soy',
-    title: 'Quien soy y como nace la idea detras de CYSTEMS',
+    kicker: 'Sobre mí',
+    title: 'Quién soy y cómo nace CYSTEMS',
     description:
-      'No veo la tecnologia como una lista de entregables. La veo como una forma de ordenar negocios, dar claridad y construir experiencias utiles con identidad.',
+      'CYSTEMS nace de mi amor por la programación, de mis ganas de aprender, mejorar y construir algo propio a partir de eso.',
   },
-  introTitle: 'Programar para mi es construir claridad',
+  introTitle: 'Programar es más que código para mí',
   introParagraphs: [
-    'Me gusta programar porque me permite tomar algo complejo, desordenado o difuso y transformarlo en una experiencia clara, medible y funcional.',
-    'Disfruto especialmente el frontend cuando mezcla criterio tecnico, narrativa visual, buena jerarquia, rendimiento y detalles que hacen memorable una interfaz.',
+    'Empecé con curiosidad por entender cómo funcionan las cosas, y con el tiempo se volvió una pasión.',
+    'Hoy programar es mi forma de construir, de aprender constantemente y de convertir ideas en algo real.',
   ],
-  originTitle: 'CYSTEMS surge para acompanar mejor',
+  originTitle: 'CYSTEMS es parte de ese camino',
   originParagraphs: [
-    'La idea surge de ver un problema repetido: empresas con necesidades reales, procesos urgentes y mucha friccion entre la estrategia, el desarrollo y la operacion.',
-    'CYSTEMS nace como una respuesta mas cercana y mas completa: consultoria digital, plataformas empresariales y operacion continua conectadas en una misma conversacion.',
+    'No nace como una empresa tradicional, sino como una forma de crecer como desarrollador y vivir de esto.',
+    'También es una solución para startups: acompañamiento técnico desde cero, ayudando a construir sistemas reales paso a paso.',
   ],
-  quote: 'La tecnologia bien hecha no complica mas el negocio; lo aclara.',
-  quoteAuthor: 'Cristian Bravo',
+  quote: 'Solo quiero vivir de lo que me gusta: programar y construir.',
+  quoteAuthor: 'Cristian',
   points: [
     {
       label: 'Identidad',
-      title: 'Interfaces con caracter y direccion',
+      title: 'Construir con intención',
       description:
-        'Me interesan los productos que no se sienten genericos, sino pensados para la marca, el contexto y la persona que los usa.',
+        'Me gusta que cada proyecto tenga sentido y no sea solo código sin propósito.',
       sticker: allStickers[4],
     },
     {
       label: 'Criterio',
-      title: 'Cada modulo debe servir a la operacion',
+      title: 'Aprender y mejorar',
       description:
-        'No busco sumar pantallas por sumar. Prefiero construir piezas que realmente ayuden al negocio a moverse mejor.',
+        'Siempre estoy buscando escribir mejor código y entender mejor lo que hago.',
       sticker: allStickers[7],
     },
     {
-      label: 'Escala',
-      title: 'Arquitectura lista para crecer',
+      label: 'Camino',
+      title: 'Crecer constantemente',
       description:
-        'Pienso los proyectos para que evolucionen sin tener que romper todo cuando llegan nuevas etapas, equipos o procesos.',
+        'CYSTEMS también es parte de mi crecimiento como desarrollador.',
       sticker: allStickers[9],
     },
   ],
   companions: [
     {
       src: companionPets[0],
-      alt: 'Mascota de CYSTEMS representando curiosidad constante',
+      alt: 'Curiosidad constante',
       title: 'Curiosidad constante',
-      description: 'Aprender, probar referencias y buscar una mejor solucion forma parte de mi forma de trabajar.',
+      description:
+        'Siempre quiero entender más y aprender algo nuevo.',
     },
     {
       src: companionPets[1],
-      alt: 'Mascota de CYSTEMS enfocada en detalle visual',
-      title: 'Detalle visual',
-      description: 'Me atraen los recursos que vuelven una interfaz mas clara, mas humana y mas reconocible.',
+      alt: 'Detalle',
+      title: 'Detalle',
+      description:
+        'Me gusta hacer las cosas bien, incluso en lo pequeño.',
     },
     {
       src: companionPets[2],
-      alt: 'Mascota de CYSTEMS simbolizando iteracion',
-      title: 'Iteracion real',
-      description: 'Pulir, medir y ajustar me interesa tanto como lanzar una primera version.',
+      alt: 'Iteración',
+      title: 'Iterar y mejorar',
+      description:
+        'Voy mejorando poco a poco, proyecto tras proyecto.',
     },
     {
       src: companionPets[3],
-      alt: 'Mascota de CYSTEMS simbolizando acompanamiento',
-      title: 'Acompanamiento cercano',
-      description: 'Prefiero trabajar pegado al problema para construir algo que se sienta util desde el dia uno.',
+      alt: 'Motivación',
+      title: 'Motivación real',
+      description:
+        'Mi objetivo es claro: vivir de esto y seguir construyendo.',
     },
   ],
 };
@@ -301,44 +303,44 @@ export const profileStoryContent: ProfileStoryContent = {
 export const profileExpertiseContent: ProfileExpertiseContent = {
   header: {
     kicker: 'Perfil profesional',
-    title: 'Lo que he construido y donde ya genero valor',
+    title: 'Lo que he construido y donde genero valor',
     description:
-      'He trabajado desde el diagnostico y la arquitectura hasta la interfaz, las integraciones y la operacion que sostiene el proyecto despues del lanzamiento.',
+      'He trabajado desde el análisis y la arquitectura hasta la interfaz, las integraciones y la operación que sostiene cada sistema en producción.',
   },
   cards: [
     {
-      badge: 'Consultoria digital',
-      title: 'Ordeno ideas, procesos y prioridades',
+      badge: 'Enfoque y estructura',
+      title: 'Ordeno ideas, procesos y decisiones',
       description:
-        'Cuando un proyecto arranca con ruido, ayudo a convertirlo en una hoja de ruta clara, viable y conectada con el negocio.',
+        'Cuando un proyecto inicia sin claridad, lo transformo en una hoja de ruta técnica y de producto coherente y viable.',
       bullets: [
-        'Revision tecnica y de producto para detectar riesgos, fricciones y oportunidades reales.',
-        'Roadmaps por fases que permiten avanzar sin improvisar ni frenar la operacion.',
-        'Arquitectura y decisiones alineadas a objetivos, presupuesto y crecimiento.',
+        'Revisión técnica y de producto para identificar riesgos, fricciones y oportunidades.',
+        'Definición de roadmaps por fases que permiten avanzar sin improvisar.',
+        'Decisiones de arquitectura alineadas a objetivos, contexto y crecimiento.',
       ],
       sticker: allStickers[12],
     },
     {
-      badge: 'Plataformas empresariales',
-      title: 'Construyo sistemas pensados para crecer',
+      badge: 'Plataformas y sistemas',
+      title: 'Construyo soluciones pensadas para crecer',
       description:
-        'Desde dashboards internos hasta experiencias visibles para clientes, me enfoco en claridad, modularidad, UX y continuidad.',
+        'Desarrollo sistemas en producción donde frontend, backend y arquitectura trabajan de forma clara, modular y escalable.',
       bullets: [
-        `Casos visibles que respaldan este enfoque: ${publicProjects.join(', ')}.`,
-        'Experiencia en dashboards, catalogos, portales de gestion y seguimiento operativo.',
-        'Integraciones con APIs, automatizacion y estructuras listas para nuevas etapas.',
+        `Proyectos reales que respaldan este enfoque: ${publicProjects.join(', ')}.`,
+        'Experiencia en dashboards, portales de gestión y plataformas digitales.',
+        'Integraciones con APIs, automatización y estructuras preparadas para evolución.',
       ],
       sticker: allStickers[14],
     },
     {
-      badge: 'Operacion y soporte',
-      title: 'Acompano mas alla del lanzamiento',
+      badge: 'Evolución y soporte',
+      title: 'Acompaño el sistema en producción',
       description:
-        'Me importa tanto el resultado en produccion como la construccion inicial: deploy, estabilidad, mejoras y soporte continuo.',
+        'Me enfoco en la estabilidad, mejora continua y evolución del sistema una vez que está en funcionamiento.',
       bullets: [
-        'Configuracion de VPS, dominios, SSL y entornos productivos con criterio tecnico.',
-        'Monitoreo, ajustes y evolucion constante para que el sistema siga respondiendo bien.',
-        `Trabajo reservado en iniciativas como ${privateProjects.join(', ')}.`,
+        'Configuración de VPS, dominios, SSL y entornos productivos con criterio técnico.',
+        'Monitoreo, ajustes y mejoras para mantener rendimiento y estabilidad.',
+        `Participación en iniciativas como ${privateProjects.join(', ')}.`,
       ],
       sticker: allStickers[17],
     },
@@ -351,47 +353,47 @@ export const profileExpertiseContent: ProfileExpertiseContent = {
 export const profileInterestsContent: ProfileInterestsContent = {
   header: {
     kicker: 'Gustos e influencias',
-    title: 'Lo personal tambien empuja mi forma de disenar',
+    title: 'Lo que también forma parte de mí',
     description:
-      'Anime, videojuegos narrativos, loops visuales y recursos con carisma alimentan mi criterio para construir interfaces con mas presencia.',
+      'El anime, los videojuegos y la cultura japonesa influyen en cómo pienso, aprendo y construyo.',
   },
-  narrativeTitle: 'No separo del todo lo creativo de lo tecnico',
+  narrativeTitle: 'No todo es código',
   narrativeParagraphs: [
-    'Me interesan los universos visuales que cuentan algo antes del primer click. Por eso conecto mucho con el anime, los videojuegos narrativos, el pixel art y los stickers con personalidad.',
-    'Todo eso termina apareciendo en como pienso una UI: atmosfera, pequenos gestos de motion, recursos memorables y una experiencia que se sienta intencional.',
+    'Me gusta mucho el anime y los videojuegos. Más allá de entretener, muchas veces me han enseñado sobre constancia, esfuerzo y seguir avanzando.',
+    'También me gusta programar incluso fuera del trabajo. Para mí no es solo una obligación, es algo que realmente disfruto.',
   ],
-  tags: ['Anime', 'Videojuegos narrativos', 'Pixel art', 'Stickers', 'UI expresiva', 'Motion con criterio'],
+  tags: ['Anime', 'Videojuegos', 'Cultura japonesa', 'LoL', 'Programación', 'Aprendizaje constante'],
   clusters: [
     {
       accent: 'rgba(124, 60, 255, 0.24)',
-      label: 'Moodboard 01',
-      title: 'Narrativa visual',
+      label: 'Anime',
+      title: 'Historias que inspiran',
       description:
-        'Referencias que me recuerdan que una interfaz tambien puede contar una historia y sostener un tono propio.',
+        'El anime me gusta porque transmite crecimiento, disciplina y metas que parecen imposibles.',
       stickers: allStickers.slice(0, 6),
     },
     {
       accent: 'rgba(59, 130, 246, 0.24)',
-      label: 'Moodboard 02',
-      title: 'Energia y carisma',
+      label: 'Gaming',
+      title: 'Competir y mejorar',
       description:
-        'Me gustan las experiencias con ritmo, presencia y detalles que transmiten energia sin perder claridad.',
+        'Los videojuegos forman parte de cómo pienso: aprender, equivocarme y seguir mejorando.',
       stickers: allStickers.slice(6, 12),
     },
     {
       accent: 'rgba(244, 114, 182, 0.2)',
-      label: 'Moodboard 03',
-      title: 'Detalle y craft',
+      label: 'Cultura',
+      title: 'Disciplina y constancia',
       description:
-        'Los pequenos recursos visuales me ayudan a recordar que el acabado tambien comunica calidad y criterio.',
+        'La cultura japonesa me inspira por su enfoque en la mejora continua y el detalle.',
       stickers: allStickers.slice(12, 18),
     },
     {
       accent: 'rgba(45, 212, 191, 0.2)',
-      label: 'Moodboard 04',
-      title: 'Juego y exploracion',
+      label: 'Código',
+      title: 'Programar como hobby',
       description:
-        'Explorar mundos, sistemas y loops creativos alimenta mi forma de pensar producto, motion y continuidad visual.',
+        'Incluso fuera del trabajo sigo programando. Es algo que me gusta de verdad.',
       stickers: allStickers.slice(18, 24),
     },
   ],
@@ -399,57 +401,58 @@ export const profileInterestsContent: ProfileInterestsContent = {
 
 export const profileVisionContent: ProfileVisionContent = {
   header: {
-    kicker: 'Vision a futuro',
-    title: 'Frases, metas y la direccion que quiero seguir construyendo',
+    kicker: 'Visión',
+    title: 'Hacia dónde quiero llegar',
     description:
-      'Quiero seguir creciendo como desarrollador y estratega para construir productos con peso tecnico, buena interfaz y una voz visual reconocible.',
+      'Quiero seguir creciendo como desarrollador, construir mejores sistemas y poder vivir completamente de esto.',
   },
-  motto: 'Mi meta no es solo entregar software; es construir sistemas que ayuden a crecer y que al mismo tiempo demuestren que la tecnologia puede tener alma.',
+  motto:
+    'Mi meta no es solo entregar software, sino construir sistemas que ayuden a crecer y demuestren que la tecnología también puede tener alma.',
   mottoDetail:
-    'Quiero que CYSTEMS siga evolucionando como una marca que combina criterio tecnico, buenas decisiones de producto y una experiencia visual cuidada de principio a fin.',
+    'CYSTEMS también es parte de ese camino. Un proyecto que crece conmigo mientras aprendo, construyo y gano experiencia real.',
   phraseColumn: {
-    title: 'Frases profesionales',
+    title: 'Lo que pienso',
     items: [
-      'La interfaz no debe decorar el sistema; debe explicar el negocio.',
-      'Un buen frontend no solo se ve bien: reduce friccion y genera confianza.',
-      'Si una solucion no puede mantenerse, todavia no esta bien resuelta.',
-      'Programar es precision, pero tambien una forma de crear.',
+      'Prefiero algo simple que funcione bien antes que algo complejo sin sentido.',
+      'Si un sistema no se entiende, todavía no está bien hecho.',
+      'Programar es resolver problemas, no solo escribir código.',
+      'Siempre hay una mejor forma de hacer las cosas.',
     ],
     sticker: allStickers[19],
   },
   dreamsColumn: {
-    title: 'Suenos',
+    title: 'Lo que quiero lograr',
     items: [
-      'Crear productos digitales cada vez mas solidos para empresas de LATAM.',
-      'Profundizar en arquitectura, automatizacion y experiencias frontend de alto nivel.',
-      'Consolidar una identidad propia para CYSTEMS que se reconozca por su calidad y criterio.',
+      'Vivir completamente de la programación.',
+      'Trabajar en sistemas cada vez más grandes y complejos.',
+      'Seguir aprendiendo y subiendo mi nivel como desarrollador.',
     ],
     sticker: allStickers[20],
   },
   goalsColumn: {
-    title: 'Metas concretas',
+    title: 'En lo que estoy ahora',
     items: [
-      'Llevar proyectos desde la idea hasta la operacion sin perder claridad ni calidad visual.',
-      'Seguir aprendiendo todos los dias y subir el nivel tecnico en cada entrega.',
-      'Construir un portafolio donde estrategia, codigo, UI y narrativa visual trabajen juntos.',
+      'Construyendo proyectos reales que me hagan crecer.',
+      'Mejorando mi código y mi forma de pensar sistemas.',
+      'Desarrollando CYSTEMS como parte de mi camino.',
     ],
     sticker: allStickers[22],
   },
-  ctaTitle: 'Si tu proyecto necesita criterio tecnico y una experiencia cuidada, conversemos.',
+  ctaTitle: 'Si tienes una idea o proyecto, podemos construirlo.',
   ctaDescription:
-    'Me interesa trabajar en productos donde frontend, operacion y estrategia tengan el mismo peso y donde cada decision empuje resultados reales.',
+    'Me interesa trabajar en cosas reales donde pueda aportar, aprender y seguir creciendo como desarrollador.',
   primaryAction: {
-    label: 'Empezar proyecto',
+    label: 'Empezar',
     href: '/empezar-proyecto',
   },
   secondaryAction: {
-    label: 'Empezar proyecto',
-    href: '/empezar-proyecto',
+    label: 'Ver proyectos',
+    href: '/proyectos',
   },
   pet: {
     src: companionPets[3],
-    alt: 'Mascota de CYSTEMS acompanando la seccion de vision',
+    alt: 'Mascota acompañando la visión',
     title: 'Siguiente nivel',
-    description: 'Siempre buscando una forma mas clara, mas solida y mas expresiva de construir.',
+    description: 'Siempre buscando mejorar y dar un paso más.',
   },
 };
