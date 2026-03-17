@@ -108,8 +108,6 @@ flowchart LR
 /contacto
 ```
 
-> Nota: `/contacto` sigue existiendo en el proyecto, pero ya no es el acceso principal desde la UI.
-
 ## Principios del Proyecto
 
 - **Contenido guiado por negocio**: cada pagina responde a una etapa del proceso comercial.
