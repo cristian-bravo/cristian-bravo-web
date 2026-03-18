@@ -97,10 +97,10 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
       'Casos publicos y menciones confidenciales que reflejan experiencia en plataformas empresariales.',
   },
   heroAvatar: {
-    label: 'CB',
-    caption: 'Portfolio engineering',
-    imageSrc: '/avatar/yuki_chibi.webp',
-    imageAlt: 'Avatar de referencia para la portada del portafolio',
+    label: 'Cristian Bravo',
+    caption: 'Digital Systems Portfolio',
+    imageSrc: '/avatar/avatar_HD2.webp',
+    imageAlt: 'Avatar principal para la portada del portafolio',
   },
   groups: [
     {
