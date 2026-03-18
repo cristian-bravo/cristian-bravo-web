@@ -348,8 +348,8 @@
 
 .ps-hero__avatar-badge-caption {
   font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-style: italic;
+  letter-spacing: 0.08em;
   color: #64748b;
 }
 .dark .ps-hero__avatar-badge-caption { color: #94a3b8; }
