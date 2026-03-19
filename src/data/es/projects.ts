@@ -9,12 +9,20 @@ export interface ProjectGalleryItemContent {
   variant?: ProjectGalleryItemVariant;
 }
 
+export interface ProjectActionContent {
+  label: string;
+  href: string;
+  variant: 'primary' | 'secondary';
+}
+
 export interface ProjectReferenceContent {
   title: string;
   description: string;
   visibility: string;
   tags: string[];
   gallery: ProjectGalleryItemContent[];
+  actions?: ProjectActionContent[];
+  githubUrl?: string;
   isConfidential?: boolean;
   confidentialLabel?: string;
 }
@@ -34,8 +42,13 @@ export interface ProjectsHeroAvatarContent {
 
 export interface ProjectsFinalCtaContent {
   kicker: string;
-  title: string;
-  action: LinkActionContent;
+  title?: string;
+  action?: LinkActionContent;
+  cards?: Array<{
+    title: string;
+    description?: string;
+    action: LinkActionContent;
+  }>;
 }
 
 export interface ProjectsPortfolioContent {
@@ -107,12 +120,44 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
       title: 'Proyectos públicos',
       references: [
         {
+          title: 'NY Campus Virtual',
+          description:
+            'Plataforma educativa completa con múltiples niveles de acceso (administrativo, docente y estudiante). Incluye aula virtual, gestión académica y automatización de procesos internos. Actualmente soporta más de 50.000 usuarios y está diseñada con proyección de crecimiento y escalabilidad.',
+          visibility: 'Publico',
+          tags: ['EdTech', 'Escalabilidad', 'Aula virtual', 'Automatización'],
+          gallery: [
+            SHARED_PUBLIC_GALLERY[2],
+            SHARED_PUBLIC_GALLERY[0],
+            SHARED_PUBLIC_GALLERY[1],
+          ],
+          actions: [
+            {
+              label: 'Ver proyecto',
+              href: 'https://nycampusvirtual.net/',
+              variant: 'primary',
+            },
+          ],
+        },
+        {
           title: 'Fualtec',
           description:
             'Desarrollo de un ecosistema corporativo compuesto por una landing institucional y un portal privado para clientes. En este portal, los usuarios pueden acceder de forma segura a su documentación técnica, permitiendo centralizar la información y mejorar la gestión documental dentro de la empresa.',
           visibility: 'Publico',
           tags: ['B2B', 'Portal clientes', 'Documentos', 'Seguridad'],
           gallery: SHARED_PUBLIC_GALLERY,
+          actions: [
+            {
+              label: 'Ver sitio',
+              href: 'http://fualtec.com.ec/',
+              variant: 'primary',
+            },
+            {
+              label: 'Acceso clientes',
+              href: 'http://fualtec.com.ec/client-access/login',
+              variant: 'secondary',
+            },
+          ],
+          githubUrl: 'https://github.com/cristian-bravo/fualtec-project',
         },
         {
           title: 'Alkosto',
@@ -125,17 +170,42 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
             SHARED_PUBLIC_GALLERY[0],
             SHARED_PUBLIC_GALLERY[2],
           ],
+          actions: [
+            {
+              label: 'Ver sitio',
+              href: 'http://alkostoec.com/',
+              variant: 'primary',
+            },
+            {
+              label: 'Panel administrativo',
+              href: 'https://inventario.alkostoec.com/admin',
+              variant: 'secondary',
+            },
+          ],
         },
         {
-          title: 'NY Campus Virtual',
+          title: 'Plataformas educativas',
           description:
-            'Plataforma educativa completa con múltiples niveles de acceso (administrativo, docente y estudiante). Incluye aula virtual, gestión académica y automatización de procesos internos. Actualmente soporta más de 50.000 usuarios y está diseñada con proyección de crecimiento y escalabilidad.',
+            'Desarrollo de dos soluciones educativas: un sitio institucional para un colegio y una plataforma universitaria que incluye landing page, biblioteca digital y aula virtual administrada en Moodle, orientada a la gestión académica.',
           visibility: 'Publico',
-          tags: ['EdTech', 'Escalabilidad', 'Aula virtual', 'Automatización'],
-          gallery: [
-            SHARED_PUBLIC_GALLERY[2],
-            SHARED_PUBLIC_GALLERY[0],
-            SHARED_PUBLIC_GALLERY[1],
+          tags: ['EdTech', 'Moodle', 'Biblioteca', 'Landing'],
+          gallery: SHARED_PUBLIC_GALLERY,
+          actions: [
+            {
+              label: 'Ver colegio',
+              href: 'https://unidadeducativacentebad.com',
+              variant: 'primary',
+            },
+            {
+              label: 'Ver instituto',
+              href: 'https://institutotecnologiconuevaloja.com/',
+              variant: 'secondary',
+            },
+            {
+              label: 'Acceso biblioteca',
+              href: 'https://bibliotecas.institutotecnologiconuevaloja.com/login',
+              variant: 'secondary',
+            },
           ],
         },
       ],
@@ -165,16 +235,6 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
           isConfidential: true,
           confidentialLabel: 'Proyecto confidencial',
         },
-        {
-          title: 'Plataformas educativas',
-          description:
-            'Desarrollo de dos soluciones educativas: un sitio institucional para un colegio y una plataforma universitaria que incluye landing page, biblioteca digital y aula virtual administrada en Moodle, orientada a la gestión académica.',
-          visibility: 'Privado',
-          tags: ['EdTech', 'Moodle', 'Biblioteca', 'Landing'],
-          gallery: confidentialGallery('Plataformas educativas'),
-          isConfidential: true,
-          confidentialLabel: 'Proyecto confidencial',
-        },
       ],
     },
   ],
@@ -185,5 +245,23 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
       label: 'Empezar proyecto',
       href: '/empezar-proyecto',
     },
+    cards: [
+      {
+        title: 'Explora mi codigo y proyectos publicos',
+        description: 'Revisa repositorios, codigo compartido y proyectos abiertos publicados en GitHub.',
+        action: {
+          label: 'Ir a GitHub',
+          href: 'https://github.com/cristian-bravo',
+        },
+      },
+      {
+        title: 'Construyamos algo juntos',
+        description: 'Si tienes una idea, una plataforma o una mejora pendiente, podemos convertirla en un producto real.',
+        action: {
+          label: 'Empezar proyecto',
+          href: '/empezar-proyecto',
+        },
+      },
+    ],
   },
 };

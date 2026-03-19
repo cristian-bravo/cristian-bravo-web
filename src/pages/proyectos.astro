@@ -3,9 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import { getData } from '../data';
 import '../styles/proyectos-scene.css';
+import '../styles/hero-animations.css';
 
 const { projects } = getData('es');
 const { projectsPageMeta, projectsPortfolioContent } = projects;
+const finalCtaCards = projectsPortfolioContent.finalCta.cards ?? [];
 
 const allProjects = projectsPortfolioContent.groups.flatMap((group, gi) =>
   group.references.map((project, pi) => ({
@@ -18,20 +20,18 @@ const allProjects = projectsPortfolioContent.groups.flatMap((group, gi) =>
 );
 
 const totalProjects = allProjects.length;
-// Scenes: 1 hero + N projects + 1 CTA
 const totalScenes = 1 + totalProjects + 1;
 
 const toneForStep = (i: number) => i % 6;
 ---
 <BaseLayout title={projectsPageMeta.title} description={projectsPageMeta.description}>
   <div class="ps-root">
-    <!-- Scroll spacer: height set by JS = totalScenes × 100vh -->
+    <!-- Scroll spacer: height set by JS = totalScenes x 100vh -->
     <div data-ps-spacer style="height: 100vh;"></div>
 
-    <!-- Fixed stage (the actual visual canvas) -->
+    <!-- Fixed stage -->
     <div class="ps-stage" data-ps-stage>
-
-      <!-- ── SCENE 0: HERO ── -->
+      <!-- SCENE 0: HERO -->
       <div
         class="ps-scene ps-scene--hero"
         data-ps-scene
@@ -101,20 +101,26 @@ const toneForStep = (i: number) => i % 6;
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ── SCENES 1..N: PROJECTS ── -->
+      <!-- SCENES 1..N: PROJECTS -->
       {allProjects.map(({ project, groupTitle, stepIndex }) => {
         const tone = toneForStep(stepIndex);
         const isReverse = stepIndex % 2 === 1;
-        const wideItem = project.gallery.find(g => g.variant === 'wide');
-        const squareItem = project.gallery.find(g => g.variant === 'square');
-        const tallItem = project.gallery.find(g => g.variant === 'tall');
+        const wideItem = project.gallery.find((item) => item.variant === 'wide');
+        const squareItem = project.gallery.find((item) => item.variant === 'square');
+        const tallItem = project.gallery.find((item) => item.variant === 'tall');
+        const coverMedia =
+          project.gallery.find((item) => item.variant === 'wide' && item.src) ??
+          project.gallery.find((item) => item.src) ??
+          project.gallery.find((item) => item.variant === 'wide') ??
+          project.gallery[0];
+        const projectActions = project.actions ?? [];
+        const hasActionBar = projectActions.length > 0 || Boolean(project.githubUrl);
 
         return (
           <div
@@ -125,170 +131,288 @@ const toneForStep = (i: number) => i % 6;
             aria-label={`Proyecto: ${project.title}`}
           >
             <div class="ps-scene__inner">
-              <div class:list={['ps-project', isReverse && 'ps-project--reverse']}>
-                <!-- Left: text content -->
-                <div class="ps-project__left">
-                  <div class="ps-project__meta" data-reveal>
-                    <span class="ps-project__step">
-                      {String(stepIndex + 1).padStart(2, '0')} / {String(totalProjects).padStart(2, '0')}
-                    </span>
-                    <span class="ps-project__separator" aria-hidden="true">·</span>
-                    <span class="ps-project__group">{groupTitle}</span>
-                    <span class:list={[
-                      'ps-project__visibility',
-                      project.isConfidential ? 'ps-project__visibility--private' : 'ps-project__visibility--public'
-                    ]}>
-                      {project.visibility}
-                    </span>
+              <div class="ps-project-shell">
+                <div class:list={['ps-project', isReverse && 'ps-project--reverse']}>
+                  <div class="ps-project__left">
+                    <div class="ps-project__meta" data-reveal>
+                      <span class="ps-project__step">
+                        {String(stepIndex + 1).padStart(2, '0')} / {String(totalProjects).padStart(2, '0')}
+                      </span>
+                      <span class="ps-project__separator" aria-hidden="true">&middot;</span>
+                      <span class="ps-project__group">{groupTitle}</span>
+                      <span
+                        class:list={[
+                          'ps-project__visibility',
+                          project.isConfidential
+                            ? 'ps-project__visibility--private'
+                            : 'ps-project__visibility--public',
+                        ]}
+                      >
+                        {project.visibility}
+                      </span>
+                    </div>
+
+                    <h2 class="ps-project__title" data-reveal>
+                      {project.title}
+                    </h2>
+
+                    <p class="ps-project__desc" data-reveal>
+                      {project.description}
+                    </p>
+
+                    {project.isConfidential && (
+                      <p class="ps-project__confidential" data-reveal>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V8Z" />
+                        </svg>
+                        {project.confidentialLabel ?? 'Proyecto confidencial'}
+                      </p>
+                    )}
+
+                    <ul class="ps-project__tags" data-reveal aria-label="Tecnologias y areas">
+                      {project.tags.map((tag) => (
+                        <li class="ps-project__tag">{tag}</li>
+                      ))}
+                    </ul>
                   </div>
 
-                  <h2 class="ps-project__title" data-reveal>
-                    {project.title}
-                  </h2>
+                  <div class="ps-project__right" data-reveal>
+                    <div class="ps-project__gallery">
+                      {wideItem && (
+                        <figure class="ps-project__gallery-item ps-project__gallery-item--wide">
+                          {wideItem.src ? (
+                            <img
+                              src={wideItem.src}
+                              alt={wideItem.alt}
+                              class="ps-project__gallery-img"
+                              loading="lazy"
+                              decoding="async"
+                              width="800"
+                              height="350"
+                            />
+                          ) : (
+                            <div class="ps-project__gallery-placeholder">{wideItem.caption}</div>
+                          )}
+                          {project.isConfidential && (
+                            <div class="ps-project__lock-overlay" aria-hidden="true">
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                                <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z" />
+                              </svg>
+                            </div>
+                          )}
+                        </figure>
+                      )}
 
-                  <p class="ps-project__desc" data-reveal>
-                    {project.description}
-                  </p>
+                      {squareItem && (
+                        <figure class="ps-project__gallery-item">
+                          {squareItem.src ? (
+                            <img
+                              src={squareItem.src}
+                              alt={squareItem.alt}
+                              class="ps-project__gallery-img"
+                              loading="lazy"
+                              decoding="async"
+                              width="400"
+                              height="250"
+                            />
+                          ) : (
+                            <div class="ps-project__gallery-placeholder">{squareItem.caption}</div>
+                          )}
+                          {project.isConfidential && (
+                            <div class="ps-project__lock-overlay" aria-hidden="true">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                                <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z" />
+                              </svg>
+                            </div>
+                          )}
+                        </figure>
+                      )}
 
-                  {project.isConfidential && (
-                    <p class="ps-project__confidential" data-reveal>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V8Z"/>
-                      </svg>
-                      {project.confidentialLabel ?? 'Proyecto confidencial'}
-                    </p>
-                  )}
+                      {tallItem && (
+                        <figure class="ps-project__gallery-item">
+                          {tallItem.src ? (
+                            <img
+                              src={tallItem.src}
+                              alt={tallItem.alt}
+                              class="ps-project__gallery-img"
+                              loading="lazy"
+                              decoding="async"
+                              width="400"
+                              height="250"
+                            />
+                          ) : (
+                            <div class="ps-project__gallery-placeholder">{tallItem.caption}</div>
+                          )}
+                          {project.isConfidential && (
+                            <div class="ps-project__lock-overlay" aria-hidden="true">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                                <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z" />
+                              </svg>
+                            </div>
+                          )}
+                        </figure>
+                      )}
+                    </div>
 
-                  <ul class="ps-project__tags" data-reveal aria-label="Tecnologías y áreas">
-                    {project.tags.map(tag => (
-                      <li class="ps-project__tag">{tag}</li>
-                    ))}
-                  </ul>
+                    {hasActionBar && (
+                      <div class="ps-project__actions">
+                        <div class="ps-project__action-row ps-project__action-row--single">
+                          {projectActions.map((action, actionIndex) => (
+                            <a
+                              href={action.href}
+                              class:list={[
+                                'ps-project__action',
+                                action.variant === 'primary' && actionIndex === 0
+                                  ? 'ps-project__action--primary'
+                                  : 'ps-project__action--secondary',
+                              ]}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${action.label} de ${project.title}`}
+                            >
+                              {action.label}
+                            </a>
+                          ))}
+
+                          {project.githubUrl && (
+                            <a
+                              href={project.githubUrl}
+                              class="ps-project__github-link"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`Abrir codigo de ${project.title}`}
+                            >
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.137 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                              </svg>
+                              <span>Codigo</span>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                <!-- Right: gallery + links -->
-                <div class="ps-project__right" data-reveal>
-
-                  <!-- Production link (above gallery) -->
-                  {project.productionUrl && (
-                    <a
-                      href={project.productionUrl}
-                      class="ps-project__link ps-project__link--prod"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Ver ${project.title} en producción`}
-                    >
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-                      </svg>
-                      Producción
-                    </a>
-                  )}
-
-                  <!-- Gallery -->
-                  <div class="ps-project__gallery">
-                    <!-- Wide item spans full width -->
-                    {wideItem && (
-                      <figure class="ps-project__gallery-item ps-project__gallery-item--wide">
-                        {wideItem.src ? (
-                          <img
-                            src={wideItem.src}
-                            alt={wideItem.alt}
-                            class="ps-project__gallery-img"
-                            loading="lazy"
-                            decoding="async"
-                            width="800"
-                            height="350"
-                          />
-                        ) : (
-                          <div class="ps-project__gallery-placeholder">{wideItem.caption}</div>
-                        )}
-                        {project.isConfidential && (
-                          <div class="ps-project__lock-overlay" aria-hidden="true">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
-                              <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z"/>
-                            </svg>
-                          </div>
-                        )}
-                      </figure>
-                    )}
-
-                    <!-- Square -->
-                    {squareItem && (
-                      <figure class="ps-project__gallery-item">
-                        {squareItem.src ? (
-                          <img
-                            src={squareItem.src}
-                            alt={squareItem.alt}
-                            class="ps-project__gallery-img"
-                            loading="lazy"
-                            decoding="async"
-                            width="400"
-                            height="250"
-                          />
-                        ) : (
-                          <div class="ps-project__gallery-placeholder">{squareItem.caption}</div>
-                        )}
-                        {project.isConfidential && (
-                          <div class="ps-project__lock-overlay" aria-hidden="true">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
-                              <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z"/>
-                            </svg>
-                          </div>
-                        )}
-                      </figure>
-                    )}
-
-                    <!-- Tall -->
-                    {tallItem && (
-                      <figure class="ps-project__gallery-item">
-                        {tallItem.src ? (
-                          <img
-                            src={tallItem.src}
-                            alt={tallItem.alt}
-                            class="ps-project__gallery-img"
-                            loading="lazy"
-                            decoding="async"
-                            width="400"
-                            height="250"
-                          />
-                        ) : (
-                          <div class="ps-project__gallery-placeholder">{tallItem.caption}</div>
-                        )}
-                        {project.isConfidential && (
-                          <div class="ps-project__lock-overlay" aria-hidden="true">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
-                              <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z"/>
-                            </svg>
-                          </div>
-                        )}
-                      </figure>
+                <div class="ps-project-mobile">
+                  <div class="ps-project__media" aria-hidden="true">
+                    {coverMedia?.src ? (
+                      <img
+                        src={coverMedia.src}
+                        alt=""
+                        class="ps-project__image"
+                        loading="lazy"
+                        decoding="async"
+                        width="1600"
+                        height="900"
+                      />
+                    ) : (
+                      <div class="ps-project__media-placeholder">
+                        <span>{coverMedia?.caption ?? 'Vista reservada'}</span>
+                      </div>
                     )}
                   </div>
 
-                  <!-- GitHub link / private badge (below gallery) -->
-                  {project.isPrivateRepo ? (
-                    <span class="ps-project__link ps-project__link--private" aria-label="Repositorio privado">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z"/>
-                      </svg>
-                      GitHub privado
-                    </span>
-                  ) : project.repoUrl ? (
-                    <a
-                      href={project.repoUrl}
-                      class="ps-project__link ps-project__link--github"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Ver código de ${project.title} en GitHub`}
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.137 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
-                      </svg>
-                      GitHub
-                    </a>
-                  ) : null}
+                  <div
+                    class:list={[
+                      'ps-project__scrim',
+                      project.isConfidential && 'ps-project__scrim--confidential',
+                    ]}
+                    aria-hidden="true"
+                  ></div>
+                  <div class="ps-project__glow" aria-hidden="true"></div>
 
+                  {project.isConfidential && (
+                    <div class="ps-project__lock-overlay" aria-hidden="true">
+                      <div class="ps-project__lock-chip">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V8Z" />
+                        </svg>
+                        <span>{project.confidentialLabel ?? 'Proyecto confidencial'}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div class="ps-project__content">
+                    <div class="ps-project__meta" data-reveal>
+                      <span class="ps-project__step">
+                        {String(stepIndex + 1).padStart(2, '0')} / {String(totalProjects).padStart(2, '0')}
+                      </span>
+                      <span class="ps-project__separator" aria-hidden="true">&middot;</span>
+                      <span class="ps-project__group">{groupTitle}</span>
+                      <span
+                        class:list={[
+                          'ps-project__visibility',
+                          project.isConfidential
+                            ? 'ps-project__visibility--private'
+                            : 'ps-project__visibility--public',
+                        ]}
+                      >
+                        {project.visibility}
+                      </span>
+                    </div>
+
+                    <h2 class="ps-project__title" data-reveal>
+                      {project.title}
+                    </h2>
+
+                    <p class="ps-project__desc" data-reveal>
+                      {project.description}
+                    </p>
+
+                    {project.isConfidential && (
+                      <p class="ps-project__confidential" data-reveal>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V8Z" />
+                        </svg>
+                        {project.confidentialLabel ?? 'Proyecto confidencial'}
+                      </p>
+                    )}
+
+                    <ul class="ps-project__tags" data-reveal aria-label="Tecnologias y areas">
+                      {project.tags.map((tag) => (
+                        <li class="ps-project__tag">{tag}</li>
+                      ))}
+                    </ul>
+
+                    {hasActionBar && (
+                      <div class="ps-project__actions" data-reveal>
+                        <div class="ps-project__action-row">
+                          {projectActions.map((action, actionIndex) => (
+                            <a
+                              href={action.href}
+                              class:list={[
+                                'ps-project__action',
+                                action.variant === 'primary' && actionIndex === 0
+                                  ? 'ps-project__action--primary'
+                                  : 'ps-project__action--secondary',
+                              ]}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${action.label} de ${project.title}`}
+                            >
+                              {action.label}
+                            </a>
+                          ))}
+
+                          {project.githubUrl && (
+                            <a
+                              href={project.githubUrl}
+                              class="ps-project__github-link"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`Abrir codigo de ${project.title}`}
+                            >
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.137 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                              </svg>
+                              <span>Codigo</span>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -296,39 +420,82 @@ const toneForStep = (i: number) => i % 6;
         );
       })}
 
-      <!-- ── FINAL SCENE: CTA ── -->
+      <!-- FINAL SCENE: CTA -->
       <div
         class="ps-scene ps-scene--cta"
         data-ps-scene
         data-scene-index={totalProjects + 1}
-        aria-label="Siguiente paso"
+        aria-label="Cierre del portafolio"
       >
         <div class="ps-scene__inner">
-          <div class="ps-cta">
-            <div class="ps-cta__panel" data-reveal>
+          <div class="ps-cta hero-motion-root">
+            <div class="ps-cta__bg hero-bg-breathing pointer-events-none absolute inset-0 bg-hero-glow" aria-hidden="true"></div>
+            <div class="ps-cta__shell hero-motion-shell">
               <p class="ps-cta__kicker" data-reveal>
                 {projectsPortfolioContent.finalCta.kicker}
               </p>
-              <h2 class="ps-cta__title" data-reveal>
-                {projectsPortfolioContent.finalCta.title}
-              </h2>
-              <a
-                class="ps-cta__button"
-                href={projectsPortfolioContent.finalCta.action.href}
-                data-reveal
-              >
-                {projectsPortfolioContent.finalCta.action.label}
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M5 12h14M13 6l6 6-6 6"/>
-                </svg>
-              </a>
+
+              <div class="ps-cta__grid">
+                {finalCtaCards.map((card, cardIndex) => {
+                  const isGithubCard = card.action.href.includes('github.com');
+
+                  return (
+                    <article class="ps-cta__card" data-reveal>
+                      <div class="ps-cta__card-glow" aria-hidden="true"></div>
+                      <div class="ps-cta__card-copy">
+                        <h2 class="ps-cta__card-title">
+                          {card.title}
+                        </h2>
+                        {card.description && (
+                          <p class="ps-cta__card-desc">
+                            {card.description}
+                          </p>
+                        )}
+                      </div>
+
+                      <a
+                        class:list={[
+                          'ps-cta__button',
+                          cardIndex === 0 ? 'ps-cta__button--secondary' : 'ps-cta__button--primary',
+                        ]}
+                        href={card.action.href}
+                        data-reveal
+                        target={isGithubCard ? '_blank' : undefined}
+                        rel={isGithubCard ? 'noopener noreferrer' : undefined}
+                      >
+                        {isGithubCard && (
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.137 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                          </svg>
+                        )}
+                        <span>{card.action.label}</span>
+                        {!isGithubCard && (
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 12h14M13 6l6 6-6 6" />
+                          </svg>
+                        )}
+                      </a>
+                    </article>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div><!-- /ps-stage -->
+    </div>
 
-    <!-- Header (above stage, z-index header > stage) -->
+    <!-- Header -->
     <header-wrapper style="position:fixed;top:0;left:0;right:0;z-index:200;">
       <Header />
     </header-wrapper>
@@ -344,12 +511,12 @@ const toneForStep = (i: number) => i % 6;
           title={
             i === 0 ? 'Portada' :
             i <= totalProjects ? `Proyecto ${i}` :
-            'Empezar proyecto'
+            'Cierre del portafolio'
           }
           aria-label={
             i === 0 ? 'Ir a portada' :
             i <= totalProjects ? `Ir al proyecto ${i}` :
-            'Ir a empezar proyecto'
+            'Ir al cierre del portafolio'
           }
         ></button>
       ))}
@@ -366,8 +533,7 @@ const toneForStep = (i: number) => i % 6;
       <span>/</span>
       <span data-ps-counter-total>{totalScenes}</span>
     </div>
-
-  </div><!-- /ps-root -->
+  </div>
 
   <script>
     import { initProjectsScrollAnimation } from '../scripts/projectsScrollAnimation';
@@ -391,4 +557,3 @@ const toneForStep = (i: number) => i % 6;
     }, { once: true });
   </script>
 </BaseLayout>
-
