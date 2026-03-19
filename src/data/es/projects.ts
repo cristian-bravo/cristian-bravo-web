@@ -17,12 +17,6 @@ export interface ProjectReferenceContent {
   gallery: ProjectGalleryItemContent[];
   isConfidential?: boolean;
   confidentialLabel?: string;
-  /** URL del sitio en produccion (se muestra sobre la imagen) */
-  productionUrl?: string;
-  /** URL del repositorio en GitHub (se muestra bajo la imagen) */
-  repoUrl?: string;
-  /** Si es true, el repo es privado: muestra "GitHub privado" sin enlace */
-  isPrivateRepo?: boolean;
 }
 
 export interface ProjectGroupContent {
@@ -98,9 +92,9 @@ export const projectsPageMeta: PageMetadata = {
 export const projectsPortfolioContent: ProjectsPortfolioContent = {
   intro: {
     kicker: 'Portafolio',
-    title: 'Proyectos con impacto real',
+    title: 'Proyectos desarrollados',
     description:
-      'Casos publicos y menciones confidenciales que reflejan experiencia en plataformas empresariales.',
+      'Desarrollo plataformas web empresariales, educativas y de comercio electrónico, orientadas a resolver necesidades reales de operación y gestión.',
   },
   heroAvatar: {
     label: 'Cristian Bravo',
@@ -110,86 +104,83 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
   },
   groups: [
     {
-      title: 'Proyectos publicos',
+      title: 'Proyectos públicos',
       references: [
         {
           title: 'Fualtec',
-          description: 'Plataforma digital para procesos industriales y operaciones B2B.',
+          description:
+            'Desarrollo de un ecosistema corporativo compuesto por una landing institucional y un portal privado para clientes. En este portal, los usuarios pueden acceder de forma segura a su documentación técnica, permitiendo centralizar la información y mejorar la gestión documental dentro de la empresa.',
           visibility: 'Publico',
-          tags: ['B2B', 'Operacion', 'Dashboard', 'Escalabilidad'],
+          tags: ['B2B', 'Portal clientes', 'Documentos', 'Seguridad'],
           gallery: SHARED_PUBLIC_GALLERY,
-          productionUrl: 'https://fualtec.com',
-          repoUrl: 'https://github.com/cristian-bravo/fualtec',
         },
         {
           title: 'Alkosto',
-          description: 'Integraciones de catalogo y experiencia de compra omnicanal.',
+          description:
+            'Implementación de dos sistemas complementarios: una plataforma administrativa para la gestión de productos e inventario, y una plataforma pública para la publicación de estos productos en un entorno e-commerce. Ambos sistemas se encuentran integrados para mantener coherencia en la información y facilitar la operación diaria.',
           visibility: 'Publico',
-          tags: ['E-commerce', 'Catalogo', 'Integraciones', 'UX'],
+          tags: ['E-commerce', 'Inventario', 'Integración', 'APIs'],
           gallery: [
             SHARED_PUBLIC_GALLERY[1],
             SHARED_PUBLIC_GALLERY[0],
             SHARED_PUBLIC_GALLERY[2],
           ],
-          productionUrl: 'https://alkosto.com',
-          repoUrl: 'https://github.com/cristian-bravo/alkosto-integration',
         },
         {
-          title: 'NYProject',
-          description: 'Portal de proyectos con indicadores de avance en tiempo real.',
+          title: 'NY Campus Virtual',
+          description:
+            'Plataforma educativa completa con múltiples niveles de acceso (administrativo, docente y estudiante). Incluye aula virtual, gestión académica y automatización de procesos internos. Actualmente soporta más de 50.000 usuarios y está diseñada con proyección de crecimiento y escalabilidad.',
           visibility: 'Publico',
-          tags: ['PMO', 'KPIs', 'Tiempo real', 'Colaboracion'],
+          tags: ['EdTech', 'Escalabilidad', 'Aula virtual', 'Automatización'],
           gallery: [
             SHARED_PUBLIC_GALLERY[2],
             SHARED_PUBLIC_GALLERY[0],
             SHARED_PUBLIC_GALLERY[1],
           ],
-          productionUrl: 'https://nyproject.app',
-          repoUrl: 'https://github.com/cristian-bravo/nyproject',
         },
       ],
     },
     {
       title: 'Proyectos privados (menciones)',
       description:
-        'Por acuerdos de confidencialidad, compartimos solo una referencia general de estos trabajos.',
+        'Algunos proyectos no pueden mostrarse públicamente por acuerdos de confidencialidad, pero se mencionan de forma general para reflejar la experiencia adquirida.',
       references: [
         {
-          title: '360 Integration',
-          description: 'Integraciones empresariales de alto volumen para multiples unidades de negocio.',
+          title: '360IO',
+          description:
+            'Participación en un proyecto de integraciones empresariales dentro de un entorno seguro para una empresa estadounidense. Trabajo en equipo bajo metodologías ágiles, enfocado en la comunicación entre sistemas y la automatización de procesos.',
           visibility: 'Privado',
-          tags: ['ETL', 'APIs', 'Automatizacion', 'Alta disponibilidad'],
+          tags: ['Integraciones', 'Ágil', 'Backend', 'Seguridad'],
           gallery: confidentialGallery('360 Integration'),
           isConfidential: true,
           confidentialLabel: 'Proyecto confidencial',
-          isPrivateRepo: true,
         },
         {
           title: 'Club Guias',
-          description: 'Ecosistema privado para fidelizacion y contenido especializado.',
+          description:
+            'Primer proyecto profesional, orientado a una empresa de publicidad. Desarrollo de sitios web comerciales utilizando WordPress, con enfoque en posicionamiento SEO y presencia digital para distintos clientes.',
           visibility: 'Privado',
-          tags: ['Contenido', 'Comunidad', 'Membresias', 'Backend'],
+          tags: ['WordPress', 'SEO', 'Web comercial', 'Marketing'],
           gallery: confidentialGallery('Club Guias'),
           isConfidential: true,
           confidentialLabel: 'Proyecto confidencial',
-          isPrivateRepo: true,
         },
         {
           title: 'Plataformas educativas',
-          description: 'Suite privada para formacion, analitica y seguimiento academico.',
+          description:
+            'Desarrollo de dos soluciones educativas: un sitio institucional para un colegio y una plataforma universitaria que incluye landing page, biblioteca digital y aula virtual administrada en Moodle, orientada a la gestión académica.',
           visibility: 'Privado',
-          tags: ['EdTech', 'Analitica', 'Roles', 'Escala'],
+          tags: ['EdTech', 'Moodle', 'Biblioteca', 'Landing'],
           gallery: confidentialGallery('Plataformas educativas'),
           isConfidential: true,
           confidentialLabel: 'Proyecto confidencial',
-          isPrivateRepo: true,
         },
       ],
     },
   ],
   finalCta: {
     kicker: 'Siguiente paso',
-    title: 'Listo para transformar tu idea en una plataforma real?',
+    title: '¿Tienes una idea o proyecto en mente?',
     action: {
       label: 'Empezar proyecto',
       href: '/empezar-proyecto',
