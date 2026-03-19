@@ -27,6 +27,9 @@ const projectDomains = Array.from(
 
 const serviceLabels = serviceCards.map((card) => card.title);
 
+export type ProfileHeroQuickLinkIcon = 'cv' | 'linkedin' | 'github' | 'email';
+export type ProfileHeroQuickLinkPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+
 export interface ProfileDetailCardContent {
   title: string;
   description?: string;
@@ -40,6 +43,15 @@ export interface ProfileHeroStatContent {
   detail: string;
 }
 
+export interface ProfileHeroQuickLinkContent {
+  label: string;
+  href: string;
+  icon: ProfileHeroQuickLinkIcon;
+  position: ProfileHeroQuickLinkPosition;
+  ariaLabel: string;
+  download?: boolean;
+}
+
 export interface ProfileHeroContent {
   kicker: string;
   title: string;
@@ -47,6 +59,7 @@ export interface ProfileHeroContent {
   description: string;
   primaryAction: LinkActionContent;
   secondaryAction: LinkActionContent;
+  quickLinks: ProfileHeroQuickLinkContent[];
   badges: string[];
   stats: ProfileHeroStatContent[];
   noteTitle: string;
@@ -171,6 +184,37 @@ export const profileHeroContent: ProfileHeroContent = {
     label: 'Ver proyectos',
     href: '/proyectos',
   },
+  quickLinks: [
+    {
+      label: 'GitHub',
+      href: 'https://github.com/cristian-bravo',
+      icon: 'github',
+      position: 'top-left',
+      ariaLabel: 'Abrir perfil de GitHub de Cristian Bravo',
+    },
+    {
+      label: 'Email',
+      href: 'mailto:cristianhbravo@outlook.es',
+      icon: 'email',
+      position: 'bottom-left',
+      ariaLabel: 'Enviar correo a Cristian Bravo',
+    },
+    {
+      label: 'CV',
+      href: '/cv/CV_Cristian_Hernan_Bravo.pdf',
+      icon: 'cv',
+      position: 'top-right',
+      ariaLabel: 'Descargar CV de Cristian Bravo en PDF',
+      download: true,
+    },
+    {
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/in/cristian-bravodev/',
+      icon: 'linkedin',
+      position: 'bottom-right',
+      ariaLabel: 'Abrir LinkedIn de Cristian Bravo',
+    },
+  ],
   badges: [...serviceLabels, 'Frontend con identidad'],
   stats: [
     {
