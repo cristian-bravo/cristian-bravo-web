@@ -186,6 +186,27 @@
   }
 }
 
+@media (max-width: 899px) {
+  .ps-scene--hero {
+    padding-top: 4.25rem;
+  }
+
+  .ps-hero {
+    justify-items: center;
+    gap: 1.5rem;
+  }
+
+  .ps-hero__copy {
+    width: min(100%, 40rem);
+    text-align: center;
+    justify-items: center;
+  }
+
+  .ps-hero__desc {
+    max-width: 44ch;
+  }
+}
+
 .ps-hero__copy {
   display: grid;
   gap: 1rem;
@@ -277,29 +298,87 @@
   opacity: 0;
 }
 
+.ps-hero__avatar-shell {
+  position: relative;
+  width: min(100%, 34rem);
+}
+
+.ps-hero__avatar-card {
+  position: relative;
+  display: grid;
+  gap: clamp(1.5rem, 2.4vw, 2.1rem);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border-radius: 2rem;
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.58)),
+    radial-gradient(circle at top left, rgba(124, 58, 237, 0.05), transparent 45%);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08), 0 4px 14px rgba(15, 23, 42, 0.05);
+  backdrop-filter: blur(18px);
+  overflow: hidden;
+}
+.dark .ps-hero__avatar-card {
+  border-color: rgba(129, 140, 248, 0.12);
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.64)),
+    radial-gradient(circle at top left, rgba(129, 140, 248, 0.06), transparent 45%);
+  box-shadow: 0 18px 42px rgba(2, 6, 23, 0.3), 0 4px 14px rgba(2, 6, 23, 0.24);
+}
+
+.ps-hero__avatar-card::before {
+  content: '';
+  position: absolute;
+  inset: 1.1rem;
+  border-radius: 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  pointer-events: none;
+}
+.dark .ps-hero__avatar-card::before {
+  border-color: rgba(148, 163, 184, 0.08);
+}
+
+.ps-hero__avatar-topline {
+  display: grid;
+  place-items: center;
+  min-height: 1rem;
+  line-height: 1;
+  margin: 0;
+  text-align: center;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(79, 70, 229, 0.5);
+}
+.dark .ps-hero__avatar-topline {
+  color: rgba(199, 210, 254, 0.5);
+}
+
 .ps-hero__avatar-orb {
   position: relative;
-  width: clamp(14rem, 28vw, 22rem);
+  width: min(100%, 28rem);
+  margin: 0 auto;
   aspect-ratio: 1;
-  border-radius: 999px;
+  border-radius: 2rem;
   border: 1.5px solid rgba(124, 58, 237, 0.24);
   background:
-    radial-gradient(circle at 38% 30%, rgba(124, 58, 237, 0.18), transparent 58%),
-    radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.14), transparent 58%),
-    rgba(255, 255, 255, 0.6);
-  box-shadow: 0 24px 64px rgba(124, 58, 237, 0.15), 0 4px 16px rgba(15, 23, 42, 0.08);
+    radial-gradient(circle at 38% 30%, rgba(124, 58, 237, 0.22), transparent 58%),
+    radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.18), transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(226, 232, 240, 0.5));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 24px 64px rgba(124, 58, 237, 0.15), 0 4px 16px rgba(15, 23, 42, 0.08);
   backdrop-filter: blur(12px);
   display: grid;
   place-items: center;
   animation: ps-orb-float 8s ease-in-out infinite alternate;
+  overflow: hidden;
 }
 .dark .ps-hero__avatar-orb {
   background:
-    radial-gradient(circle at 38% 30%, rgba(129, 140, 248, 0.22), transparent 58%),
-    radial-gradient(circle at 70% 70%, rgba(56, 189, 248, 0.16), transparent 58%),
-    rgba(15, 23, 42, 0.5);
+    radial-gradient(circle at 38% 30%, rgba(129, 140, 248, 0.26), transparent 58%),
+    radial-gradient(circle at 70% 70%, rgba(56, 189, 248, 0.18), transparent 58%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(30, 41, 59, 0.58));
   border-color: rgba(129, 140, 248, 0.3);
-  box-shadow: 0 24px 64px rgba(129, 140, 248, 0.2), 0 4px 16px rgba(2, 6, 23, 0.4);
+  box-shadow: inset 0 1px 0 rgba(148, 163, 184, 0.08), 0 24px 64px rgba(129, 140, 248, 0.2), 0 4px 16px rgba(2, 6, 23, 0.4);
 }
 
 @keyframes ps-orb-float {
@@ -308,62 +387,152 @@
 }
 
 .ps-hero__avatar-img {
-  width: 70%;
-  height: 70%;
+  width: 84%;
+  height: 84%;
   object-fit: contain;
-  border-radius: 999px;
+  border-radius: 1.5rem;
   z-index: 1;
+  filter: drop-shadow(0 16px 32px rgba(15, 23, 42, 0.18));
+}
+
+.ps-hero__avatar-fallback {
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  font-weight: 700;
+  color: #4f46e5;
+  text-align: center;
+  padding: 2rem;
+}
+
+.ps-hero__avatar-panel {
+  display: grid;
+  gap: 1.15rem;
 }
 
 .ps-hero__avatar-badge {
-  position: absolute;
-  bottom: -1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  min-width: max-content;
   display: grid;
-  text-align: center;
-  gap: 0.08rem;
-  padding: 0.55rem 1rem;
-  border-radius: 1rem;
-  border: 1px solid rgba(124, 58, 237, 0.2);
-  background: rgba(255, 255, 255, 0.85);
+  place-items: center;
+  gap: 0.38rem;
+  padding: 1.65rem 1.5rem 1.5rem;
+  border-radius: 1.2rem;
+  border: 1px solid rgba(124, 58, 237, 0.08);
+  background: rgba(255, 255, 255, 0.56);
   backdrop-filter: blur(10px);
-  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.12);
+  text-align: center;
 }
 .dark .ps-hero__avatar-badge {
-  background: rgba(15, 23, 42, 0.85);
-  border-color: rgba(129, 140, 248, 0.28);
-  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.5);
+  background: rgba(15, 23, 42, 0.42);
+  border-color: rgba(129, 140, 248, 0.1);
 }
 
 .ps-hero__avatar-badge-label {
-  font-size: 0.7rem;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(1.58rem, 1.35vw + 1.02rem, 2.15rem);
   font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #4f46e5;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  background: linear-gradient(120deg, #7c3aed 0%, #3b82f6 50%, #7c3aed 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
-.dark .ps-hero__avatar-badge-label { color: #a5b4fc; }
+.dark .ps-hero__avatar-badge-label {
+  background: linear-gradient(120deg, #a78bfa 0%, #60a5fa 50%, #a78bfa 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
 .ps-hero__avatar-badge-caption {
-  font-size: 0.65rem;
+  margin: 0;
+  max-width: 24ch;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(0.78rem, 0.25vw + 0.74rem, 0.9rem);
   font-style: italic;
+  font-weight: 500;
+  line-height: 1.45;
   letter-spacing: 0.08em;
-  color: #64748b;
+  color: rgba(100, 116, 139, 0.68);
 }
-.dark .ps-hero__avatar-badge-caption { color: #94a3b8; }
+.dark .ps-hero__avatar-badge-caption { color: rgba(203, 213, 225, 0.64); }
+
+.ps-hero__avatar-meta {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0 0.45rem 0.3rem;
+}
+
+.ps-hero__avatar-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.55rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(79, 70, 229, 0.05);
+  border: 1px solid rgba(79, 70, 229, 0.08);
+  color: rgba(67, 56, 202, 0.82);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.dark .ps-hero__avatar-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(248, 250, 252, 0.82);
+}
+
+.ps-hero__avatar-pulse {
+  position: absolute;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.12);
+  z-index: 0;
+}
+
+.ps-hero__avatar-pulse--a {
+  width: 0.95rem;
+  height: 0.95rem;
+  top: 18%;
+  right: 14%;
+  animation: ps-pulse-drift 5.5s ease-in-out infinite;
+}
+
+.ps-hero__avatar-pulse--b {
+  width: 0.7rem;
+  height: 0.7rem;
+  left: 12%;
+  bottom: 16%;
+  animation: ps-pulse-drift 6.4s ease-in-out infinite reverse;
+}
+
+.dark .ps-hero__avatar-pulse {
+  background: rgba(224, 231, 255, 0.26);
+  border-color: rgba(224, 231, 255, 0.4);
+  box-shadow: 0 0 0 8px rgba(99, 102, 241, 0.12);
+}
+
+@keyframes ps-pulse-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0.4rem, -0.4rem, 0) scale(1.08); }
+}
 
 /* Ring decorations */
 .ps-hero__avatar-ring {
   position: absolute;
-  inset: 0.8rem;
+  inset: 1rem;
   border-radius: inherit;
   border: 1px solid rgba(124, 58, 237, 0.16);
   animation: ps-ring-spin 20s linear infinite;
 }
 .ps-hero__avatar-ring--inner {
-  inset: 1.6rem;
+  inset: 2.1rem;
   border-style: dashed;
   border-color: rgba(59, 130, 246, 0.2);
   animation-direction: reverse;
@@ -375,6 +544,134 @@
 @keyframes ps-ring-spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
+}
+
+@media (max-width: 899px) {
+  .ps-hero__avatar-shell {
+    width: min(100%, 27rem);
+  }
+
+  .ps-hero__avatar-card {
+    gap: 1.25rem;
+    padding: 1.25rem;
+    border-radius: 1.6rem;
+  }
+
+  .ps-hero__avatar-card::before {
+    inset: 0.8rem;
+    border-radius: 1.15rem;
+  }
+
+  .ps-hero__avatar-orb {
+    width: min(100%, 22rem);
+    border-radius: 1.5rem;
+  }
+
+  .ps-hero__avatar-img {
+    border-radius: 1.15rem;
+  }
+
+  .ps-hero__avatar-badge {
+    padding: 1.25rem 1.1rem 1.15rem;
+  }
+
+  .ps-hero__avatar-meta {
+    gap: 0.35rem;
+    padding-inline: 0.2rem;
+  }
+
+  .ps-hero__avatar-chip {
+    font-size: 0.6rem;
+    padding: 0.16rem 0.5rem;
+    min-height: 1.45rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .ps-scene--hero {
+    padding-top: 4rem;
+  }
+
+  .ps-scene--hero .ps-scene__inner {
+    padding-inline: 0.85rem;
+  }
+
+  .ps-hero {
+    min-height: calc(100vh - 5.5rem);
+    align-content: center;
+  }
+
+  .ps-hero__copy {
+    display: none;
+  }
+
+  .ps-hero__avatar {
+    width: 100%;
+  }
+
+  .ps-hero__avatar-shell {
+    width: min(100%, 24rem);
+  }
+
+  .ps-hero__avatar-card {
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 1.35rem;
+  }
+
+  .ps-hero__avatar-card::before {
+    inset: 0.7rem;
+    border-radius: 0.95rem;
+  }
+
+  .ps-hero__avatar-topline {
+    min-height: 0.85rem;
+    font-size: 0.5rem;
+    letter-spacing: 0.28em;
+  }
+
+  .ps-hero__avatar-orb {
+    width: min(100%, 18.5rem);
+    border-radius: 1.2rem;
+  }
+
+  .ps-hero__avatar-ring {
+    inset: 0.8rem;
+  }
+
+  .ps-hero__avatar-ring--inner {
+    inset: 1.55rem;
+  }
+
+  .ps-hero__avatar-img {
+    border-radius: 0.95rem;
+  }
+
+  .ps-hero__avatar-badge {
+    gap: 0.3rem;
+    padding: 1rem 0.85rem 0.9rem;
+  }
+
+  .ps-hero__avatar-badge-label {
+    font-size: clamp(1.2rem, 5vw, 1.55rem);
+  }
+
+  .ps-hero__avatar-badge-caption {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+  }
+
+  .ps-hero__avatar-meta {
+    gap: 0.28rem;
+    padding: 0 0.05rem 0.1rem;
+  }
+
+  .ps-hero__avatar-chip {
+    min-height: 1.3rem;
+    padding: 0.12rem 0.42rem;
+    font-size: 0.54rem;
+    letter-spacing: 0.03em;
+  }
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

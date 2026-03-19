@@ -59,32 +59,49 @@ const toneForStep = (i: number) => i % 6;
             </div>
 
             <div class="ps-hero__avatar" data-reveal>
-              <div class="ps-hero__avatar-orb">
-                <div class="ps-hero__avatar-ring" aria-hidden="true"></div>
-                <div class="ps-hero__avatar-ring ps-hero__avatar-ring--inner" aria-hidden="true"></div>
-                {projectsPortfolioContent.heroAvatar.imageSrc ? (
-                  <img
-                    src={projectsPortfolioContent.heroAvatar.imageSrc}
-                    alt={projectsPortfolioContent.heroAvatar.imageAlt ?? ''}
-                    class="ps-hero__avatar-img"
-                    width="320"
-                    height="320"
-                    loading="eager"
-                    decoding="async"
-                  />
-                ) : (
-                  <span style="font-size:3rem;font-weight:700;color:#7c3aed;">
-                    {projectsPortfolioContent.heroAvatar.label}
-                  </span>
-                )}
-                <div class="ps-hero__avatar-badge">
-                  <span class="ps-hero__avatar-badge-label">
-                    {projectsPortfolioContent.heroAvatar.label}
-                  </span>
-                  <span class="ps-hero__avatar-badge-caption">
-                    {projectsPortfolioContent.heroAvatar.caption}
-                  </span>
+              <div class="ps-hero__avatar-shell">
+                <div class="ps-hero__avatar-card">
+                  <div class="ps-hero__avatar-topline">Perfil</div>
+                  <div class="ps-hero__avatar-orb">
+                    <div class="ps-hero__avatar-ring" aria-hidden="true"></div>
+                    <div class="ps-hero__avatar-ring ps-hero__avatar-ring--inner" aria-hidden="true"></div>
+                    <span class="ps-hero__avatar-pulse ps-hero__avatar-pulse--a" aria-hidden="true"></span>
+                    <span class="ps-hero__avatar-pulse ps-hero__avatar-pulse--b" aria-hidden="true"></span>
+                    {projectsPortfolioContent.heroAvatar.imageSrc ? (
+                      <img
+                        src={projectsPortfolioContent.heroAvatar.imageSrc}
+                        alt={projectsPortfolioContent.heroAvatar.imageAlt ?? ''}
+                        class="ps-hero__avatar-img"
+                        width="400"
+                        height="400"
+                        loading="eager"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span class="ps-hero__avatar-fallback">
+                        {projectsPortfolioContent.heroAvatar.label}
+                      </span>
+                    )}
+                  </div>
+
+                  <div class="ps-hero__avatar-panel">
+                    <div class="ps-hero__avatar-badge">
+                      <span class="ps-hero__avatar-badge-label">
+                        {projectsPortfolioContent.heroAvatar.label}
+                      </span>
+                      <span class="ps-hero__avatar-badge-caption">
+                        {projectsPortfolioContent.heroAvatar.caption}
+                      </span>
+                    </div>
+
+                    <div class="ps-hero__avatar-meta" aria-label="Enfoque del portafolio">
+                      <span class="ps-hero__avatar-chip">Aplicaciones Web</span>
+                      <span class="ps-hero__avatar-chip">UI/UX</span>
+                      <span class="ps-hero__avatar-chip">Sistemas</span>
+                    </div>
+                  </div>
                 </div>
+
               </div>
             </div>
           </div>
