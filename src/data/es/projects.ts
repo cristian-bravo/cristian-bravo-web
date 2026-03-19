@@ -17,6 +17,12 @@ export interface ProjectReferenceContent {
   gallery: ProjectGalleryItemContent[];
   isConfidential?: boolean;
   confidentialLabel?: string;
+  /** URL del sitio en produccion (se muestra sobre la imagen) */
+  productionUrl?: string;
+  /** URL del repositorio en GitHub (se muestra bajo la imagen) */
+  repoUrl?: string;
+  /** Si es true, el repo es privado: muestra "GitHub privado" sin enlace */
+  isPrivateRepo?: boolean;
 }
 
 export interface ProjectGroupContent {
@@ -112,6 +118,8 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
           visibility: 'Publico',
           tags: ['B2B', 'Operacion', 'Dashboard', 'Escalabilidad'],
           gallery: SHARED_PUBLIC_GALLERY,
+          productionUrl: 'https://fualtec.com',
+          repoUrl: 'https://github.com/cristian-bravo/fualtec',
         },
         {
           title: 'Alkosto',
@@ -123,6 +131,8 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
             SHARED_PUBLIC_GALLERY[0],
             SHARED_PUBLIC_GALLERY[2],
           ],
+          productionUrl: 'https://alkosto.com',
+          repoUrl: 'https://github.com/cristian-bravo/alkosto-integration',
         },
         {
           title: 'NYProject',
@@ -134,6 +144,8 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
             SHARED_PUBLIC_GALLERY[0],
             SHARED_PUBLIC_GALLERY[1],
           ],
+          productionUrl: 'https://nyproject.app',
+          repoUrl: 'https://github.com/cristian-bravo/nyproject',
         },
       ],
     },
@@ -150,6 +162,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
           gallery: confidentialGallery('360 Integration'),
           isConfidential: true,
           confidentialLabel: 'Proyecto confidencial',
+          isPrivateRepo: true,
         },
         {
           title: 'Club Guias',
@@ -159,6 +172,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
           gallery: confidentialGallery('Club Guias'),
           isConfidential: true,
           confidentialLabel: 'Proyecto confidencial',
+          isPrivateRepo: true,
         },
         {
           title: 'Plataformas educativas',
@@ -168,6 +182,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
           gallery: confidentialGallery('Plataformas educativas'),
           isConfidential: true,
           confidentialLabel: 'Proyecto confidencial',
+          isPrivateRepo: true,
         },
       ],
     },

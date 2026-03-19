@@ -89,10 +89,10 @@ export function initProjectsScrollAnimation(): Cleanup {
   // We change scenes faster by requiring less scroll pixels per scene (e.g., 0.45x viewport height).
   const getScrollDistance = () => window.innerHeight * 0.45;
 
-  // Set spacer height so browser has room to scroll — 
-  // (Total Scenes - 1) * scrollDistance + 1 full viewport at the end so it can scroll all the way.
+  // Spacer height: enough for all scenes + 2 full viewports as tail buffer.
+  // This guarantees the user can always physically scroll to trigger the last scene.
   const updateSpacerHeight = () => {
-    spacer.style.height = `${(totalScenes - 1) * getScrollDistance() + window.innerHeight}px`;
+    spacer.style.height = `${(totalScenes - 1) * getScrollDistance() + window.innerHeight * 2}px`;
   };
   updateSpacerHeight();
 
@@ -137,7 +137,11 @@ export function initProjectsScrollAnimation(): Cleanup {
 
   // Scroll → scene mapping
   const onScroll = () => {
-    const index = Math.round(window.scrollY / getScrollDistance());
+    const sd = getScrollDistance();
+    const raw = window.scrollY / sd;
+    // If the user has scrolled past 75% of the last scene's trigger point,
+    // lock to the final scene — prevents the CTA from being unreachable.
+    const index = raw >= totalScenes - 1.25 ? totalScenes - 1 : Math.round(raw);
     goToScene(index);
   };
 

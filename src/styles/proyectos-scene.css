@@ -388,8 +388,33 @@
 
 @media (min-width: 860px) {
   .ps-project {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    /* Equal columns so images are identical in size on both left and right */
+    grid-template-columns: 1fr 1fr;
   }
+
+  /* Alternating layout: swap text/image sides on odd-indexed projects */
+  .ps-project--reverse .ps-project__left  { order: 2; }
+  .ps-project--reverse .ps-project__right { order: 1; }
+}
+
+/* ── Responsive: mobile adjustments ── */
+@media (max-width: 859px) {
+  .ps-scene__inner {
+    padding: 0 1rem;
+  }
+
+  .ps-project__title {
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+  }
+
+  .ps-project__desc {
+    font-size: 0.95rem;
+    max-width: 100%;
+  }
+
+  /* On mobile, always show: text first, image below (no reverse) */
+  .ps-project--reverse .ps-project__left  { order: unset; }
+  .ps-project--reverse .ps-project__right { order: unset; }
 }
 
 .ps-project__left {
@@ -523,11 +548,91 @@
   border-color: rgba(192, 132, 252, 0.2);
 }
 
-/* Right side: gallery */
+/* Right side: gallery + links */
 .ps-project__right {
   display: grid;
   gap: 0.75rem;
   opacity: 0;
+}
+
+/* ── Project links (Production & GitHub) ── */
+.ps-project__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 0.32rem 0.85rem;
+  border: 1px solid currentColor;
+  transition:
+    background-color 200ms ease,
+    transform 180ms ease,
+    box-shadow 200ms ease;
+  width: fit-content;
+}
+
+.ps-project__link svg {
+  flex-shrink: 0;
+}
+
+/* Production link — violet accent */
+.ps-project__link--prod {
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.06);
+  border-color: rgba(124, 58, 237, 0.28);
+}
+.ps-project__link--prod:hover {
+  background: rgba(124, 58, 237, 0.14);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+}
+.dark .ps-project__link--prod {
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.08);
+  border-color: rgba(167, 139, 250, 0.28);
+}
+.dark .ps-project__link--prod:hover {
+  background: rgba(167, 139, 250, 0.15);
+  box-shadow: 0 4px 12px rgba(167, 139, 250, 0.25);
+}
+
+/* GitHub link — slate/neutral */
+.ps-project__link--github {
+  color: #334155;
+  background: rgba(51, 65, 85, 0.05);
+  border-color: rgba(51, 65, 85, 0.22);
+}
+.ps-project__link--github:hover {
+  background: rgba(51, 65, 85, 0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+.dark .ps-project__link--github {
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.06);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+.dark .ps-project__link--github:hover {
+  background: rgba(148, 163, 184, 0.12);
+  box-shadow: 0 4px 12px rgba(2, 6, 23, 0.4);
+}
+
+/* Private repo badge — muted, non-interactive */
+.ps-project__link--private {
+  color: #9333ea;
+  background: rgba(147, 51, 234, 0.05);
+  border-color: rgba(147, 51, 234, 0.18);
+  cursor: default;
+  pointer-events: none;
+}
+.dark .ps-project__link--private {
+  color: #c084fc;
+  background: rgba(192, 132, 252, 0.06);
+  border-color: rgba(192, 132, 252, 0.18);
 }
 
 .ps-project__gallery {
@@ -538,6 +643,7 @@
 }
 
 .ps-project__gallery-item {
+  position: relative;
   border-radius: 0.75rem;
   overflow: hidden;
   border: 1px solid rgba(148, 163, 184, 0.18);
@@ -591,8 +697,6 @@
   background: rgba(15, 23, 42, 0.35);
   backdrop-filter: blur(6px);
 }
-
-.ps-project__gallery-item { position: relative; }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    CTA SCENE
@@ -760,4 +864,28 @@
 .ps-counter__current {
   color: #7c3aed;
   font-size: 0.8rem;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SCROLL FIX
+   Ensure document scroll is not blocked by
+   any competing overflow: hidden at the top
+   level. The spacer (data-ps-spacer) must
+   flow naturally — only ps-stage is fixed.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+html,
+body {
+  /* Allow the body to scroll normally so the
+     spacer can drive the native scroll bar */
+  overflow-x: hidden;
+  /* Do NOT set overflow-y: hidden here — that
+     would prevent the spacer from being scrollable */
+}
+
+.ps-root {
+  /* The root just needs to position its children;
+     it must NOT be overflow: hidden or the spacer
+     would be invisible to the scroll engine */
+  position: relative;
+  min-height: 100vh;
 }
