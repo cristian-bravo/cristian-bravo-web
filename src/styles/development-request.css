@@ -8,6 +8,10 @@
   padding-bottom: clamp(4.5rem, 7vw, 6.4rem);
 }
 
+.development-simple-section {
+  padding-top: clamp(4.5rem, 7vw, 6.4rem);
+}
+
 .development-request-landing-section::before,
 .development-simple-section::before,
 .development-project-section::before {
@@ -562,16 +566,39 @@
   gap: 1rem;
 }
 
+.development-wizard-topbar {
+  align-items: flex-start;
+  gap: 1.15rem;
+  padding-block: clamp(0.25rem, 0.8vw, 0.45rem) clamp(0.45rem, 1.4vw, 0.8rem);
+}
+
 .development-form-card {
   display: grid;
   gap: 1.4rem;
 }
 
+.development-form-card--simple .development-form-card-head > div {
+  display: grid;
+  gap: 0.6rem;
+}
+
 .development-form-card--simple .development-form-footer {
   display: grid;
-  justify-items: start;
+  justify-items: center;
   gap: 1.2rem;
-  margin-top: 0.7rem;
+  margin-top: 1.35rem;
+  padding-top: 0.35rem;
+}
+
+.development-primary-link--simple-submit {
+  min-width: clamp(9.75rem, 14vw, 10.9rem);
+  width: auto;
+}
+
+.development-form-card--simple .development-footer-note {
+  max-width: none;
+  white-space: nowrap;
+  text-align: left;
 }
 
 .development-form-title {
@@ -766,7 +793,7 @@
 
 .development-wizard-shell {
   display: grid;
-  gap: 1.25rem;
+  gap: clamp(1.45rem, 2.3vw, 1.9rem);
 }
 
 .development-wizard-meta {
@@ -891,6 +918,7 @@
   overflow: hidden;
   border-radius: 999px;
   background: rgba(148, 163, 184, 0.18);
+  margin-top: 0.1rem;
 }
 
 .dark .development-progress-track {
@@ -909,18 +937,19 @@
 .development-step-nav {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.7rem;
+  gap: clamp(0.95rem, 1.8vw, 1.25rem);
+  padding-block: clamp(0.35rem, 1vw, 0.55rem) clamp(0.75rem, 1.6vw, 1rem);
 }
 
 .development-step-chip {
   display: grid;
-  gap: 0.28rem;
-  min-height: 4.2rem;
-  align-content: start;
+  gap: 0.42rem;
+  min-height: 5.15rem;
+  align-content: center;
   border-radius: 1.3rem;
   border: 1px solid rgba(148, 163, 184, 0.22);
   background: rgba(255, 255, 255, 0.72);
-  padding: 0.82rem 0.95rem;
+  padding: 1.08rem 1.15rem;
   color: #475569;
   text-align: left;
   transition:
@@ -937,8 +966,8 @@
 }
 
 .development-step-chip small {
-  font-size: 0.76rem;
-  line-height: 1.45;
+  font-size: 0.78rem;
+  line-height: 1.55;
 }
 
 .development-step-chip.is-active {
@@ -1150,6 +1179,66 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.development-wizard-actions {
+  --development-wizard-action-width: 11.75rem;
+  margin-top: 0.15rem;
+  padding-top: 0.95rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.dark .development-wizard-actions {
+  border-top-color: rgba(129, 140, 248, 0.16);
+}
+
+.development-wizard-actions .development-secondary-link--button,
+.development-wizard-actions .development-primary-link--wizard {
+  min-width: var(--development-wizard-action-width);
+  min-height: 3.15rem;
+}
+
+.development-primary-link--wizard {
+  justify-content: center;
+  gap: 0.62rem;
+  padding: 0.82rem 0.86rem 0.82rem 1.05rem;
+}
+
+.development-primary-link__copy {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.development-primary-link__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), background 260ms ease;
+}
+
+.development-primary-link--wizard:hover .development-primary-link__icon,
+.development-primary-link--wizard:focus-visible .development-primary-link__icon {
+  transform: translateX(2px);
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.development-primary-link--wizard[data-action-mode='submit'] {
+  background: linear-gradient(125deg, rgba(37, 99, 235, 0.96), rgba(124, 60, 255, 0.94));
+  box-shadow:
+    0 20px 32px rgba(37, 99, 235, 0.2),
+    0 12px 24px rgba(124, 60, 255, 0.2);
+}
+
+.dark .development-primary-link--wizard[data-action-mode='submit'] {
+  box-shadow:
+    0 20px 34px rgba(2, 6, 23, 0.48),
+    0 12px 24px rgba(56, 189, 248, 0.18);
 }
 
 .development-estimate-breakdown {
@@ -1376,6 +1465,12 @@ html.development-confirm-open [data-site-header] {
     width: 100%;
   }
 
+  .development-form-card--simple .development-primary-link--simple-submit,
+  .development-form-card--simple .development-primary-link--button.development-primary-link--simple-submit {
+    width: auto;
+    min-width: 9.5rem;
+  }
+
   .development-step-grid--two,
   .development-checkbox-grid,
   .development-review-grid,
@@ -1385,10 +1480,32 @@ html.development-confirm-open [data-site-header] {
 
   .development-step-nav {
     grid-auto-flow: column;
-    grid-auto-columns: minmax(9.5rem, 1fr);
+    grid-auto-columns: minmax(10.75rem, 1fr);
     overflow-x: auto;
-    padding-bottom: 0.3rem;
+    padding-block: 0.15rem 0.8rem;
     scrollbar-width: thin;
+    scroll-padding-inline: 0.25rem;
+  }
+
+  .development-wizard-actions {
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+  }
+
+  .development-wizard-actions .development-primary-link,
+  .development-wizard-actions .development-secondary-link,
+  .development-wizard-actions .development-primary-link--button,
+  .development-wizard-actions .development-secondary-link--button {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+  }
+
+  .development-wizard-actions .development-secondary-link--button,
+  .development-wizard-actions .development-primary-link--wizard {
+    min-height: 3.05rem;
   }
 
   .development-wizard-meta {

@@ -78,7 +78,6 @@ export const initProjectRequestWizard = (root: Element) => {
   const successCard = root.querySelector<HTMLElement>('[data-submit-success]');
   const nextButton = root.querySelector<HTMLButtonElement>('[data-next-button]');
   const backButton = root.querySelector<HTMLButtonElement>('[data-back-button]');
-  const submitButton = root.querySelector<HTMLButtonElement>('[data-submit-button]');
   const resetButton = root.querySelector<HTMLButtonElement>('[data-reset-button]');
   const modalBackdrop = root.querySelector<HTMLButtonElement>('[data-confirm-backdrop]');
   const confirmSend = root.querySelector<HTMLButtonElement>('[data-confirm-send]');
@@ -99,7 +98,6 @@ export const initProjectRequestWizard = (root: Element) => {
     !successCard ||
     !nextButton ||
     !backButton ||
-    !submitButton ||
     !resetButton ||
     !modalBackdrop ||
     !confirmSend ||
@@ -145,6 +143,7 @@ export const initProjectRequestWizard = (root: Element) => {
       counterTemplate: wizardCopy.stepCounterTemplate,
       backLabel: wizardCopy.backLabel,
       nextLabel: wizardCopy.nextLabel,
+      finalSubmitLabel: config.finalSubmitLabel,
       isSending,
       currentStep: snapshot.currentStep,
       direction: snapshot.direction,
@@ -154,7 +153,6 @@ export const initProjectRequestWizard = (root: Element) => {
       stepDescription,
       progressFill,
       nextButton,
-      submitButton,
       backButton,
       stepPanels,
       stepChips,
@@ -258,6 +256,48 @@ export const initProjectRequestWizard = (root: Element) => {
     }
   };
 
+  const handlePrimaryAction = () => {
+    if (isSending) return;
+
+    const formData = collectFormData();
+    const snapshot = state.getSnapshot();
+    const isFinalStep = snapshot.currentStep === config.stepTitles.length;
+
+    if (!isFinalStep && snapshot.currentStep === 1) {
+      const errors = handleValidationFailure(formData);
+      if (Object.keys(errors).length) {
+        focusFirstInvalidField(root);
+        return;
+      }
+    }
+
+    if (!isFinalStep) {
+      state.goNext();
+      renderState();
+      persistState();
+      return;
+    }
+
+    const errors = handleValidationFailure(formData);
+
+    if (Object.keys(errors).length) {
+      state.restore(1, state.getSnapshot().furthestStep);
+      renderState();
+      focusFirstInvalidField(root);
+      return;
+    }
+
+    if (!fileValidation.validateAttachment()) {
+      state.restore(config.stepTitles.length, state.getSnapshot().furthestStep);
+      renderState();
+      fileInput.focus();
+      return;
+    }
+
+    updateSummary(formData);
+    modalController.open();
+  };
+
   restoreState();
   fileValidation.renderUploadList();
   renderState();
@@ -300,27 +340,7 @@ export const initProjectRequestWizard = (root: Element) => {
     updateSummary(collectFormData());
   });
 
-  nextButton.addEventListener('click', () => {
-    const formData = collectFormData();
-    const snapshot = state.getSnapshot();
-
-    if (snapshot.currentStep === 1) {
-      const errors = handleValidationFailure(formData);
-      if (Object.keys(errors).length) {
-        focusFirstInvalidField(root);
-        return;
-      }
-    }
-
-    if (snapshot.currentStep === config.stepTitles.length && !fileValidation.validateAttachment()) {
-      fileInput.focus();
-      return;
-    }
-
-    state.goNext();
-    renderState();
-    persistState();
-  });
+  nextButton.addEventListener('click', handlePrimaryAction);
 
   backButton.addEventListener('click', () => {
     if (state.getSnapshot().currentStep === 1 || isSending) return;
@@ -331,25 +351,7 @@ export const initProjectRequestWizard = (root: Element) => {
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const formData = collectFormData();
-    const errors = handleValidationFailure(formData);
-
-    if (Object.keys(errors).length) {
-      state.restore(1, state.getSnapshot().furthestStep);
-      renderState();
-      focusFirstInvalidField(root);
-      return;
-    }
-
-    if (!fileValidation.validateAttachment()) {
-      state.restore(config.stepTitles.length, state.getSnapshot().furthestStep);
-      renderState();
-      fileInput.focus();
-      return;
-    }
-
-    updateSummary(formData);
-    modalController.open();
+    handlePrimaryAction();
   });
 
   document.addEventListener('keydown', (event) => {

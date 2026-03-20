@@ -18,6 +18,7 @@ const formConfig = {
 const cardDescription = applyTemplate(content.form.cardDescription);
 const successDescription = applyTemplate(content.form.successDescription);
 const directEmailLabel = applyTemplate(content.form.directEmailLabel);
+const footerNoteParts = content.footerNote.split(content.emailValue);
 
 const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
 ---
@@ -88,12 +89,23 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
     </div>
 
     <div class="development-form-footer">
-      <button class="development-primary-link development-primary-link--button" type="submit" data-submit-button>
-        <span data-submit-label>{content.submitLabel}</span>
-        <span aria-hidden="true" data-submit-icon>-&gt;</span>
+      <button
+        class="development-primary-link development-primary-link--button development-primary-link--wizard development-primary-link--simple-submit"
+        type="submit"
+        data-submit-button
+        data-action-mode="submit"
+      >
+        <span class="development-primary-link__copy">
+          <span data-submit-label>{content.submitLabel}</span>
+        </span>
+        <span class="development-primary-link__icon" aria-hidden="true" data-submit-icon>-&gt;</span>
       </button>
 
-      <p class="development-footer-note">{content.footerNote}</p>
+      <p class="development-footer-note">
+        {footerNoteParts[0]}
+        <strong>{content.emailValue}</strong>
+        {footerNoteParts[1] ?? ''}
+      </p>
     </div>
   </form>
 

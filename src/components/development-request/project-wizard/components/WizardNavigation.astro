@@ -56,22 +56,16 @@ const {
     </button>
 
     <button
-      class="development-primary-link development-primary-link--button"
+      class="development-primary-link development-primary-link--button development-primary-link--wizard"
       type="button"
       data-next-button
+      data-action-mode="next"
+      data-final-submit-label={finalSubmitLabel}
     >
-      <span>{nextLabel}</span>
-      <span aria-hidden="true">-&gt;</span>
-    </button>
-
-    <button
-      class="development-primary-link development-primary-link--button"
-      type="submit"
-      data-submit-button
-      hidden
-    >
-      <span>{finalSubmitLabel}</span>
-      <span aria-hidden="true">-&gt;</span>
+      <span class="development-primary-link__copy">
+        <span data-next-button-label>{nextLabel}</span>
+      </span>
+      <span class="development-primary-link__icon" aria-hidden="true">-&gt;</span>
     </button>
   </div>
 )}

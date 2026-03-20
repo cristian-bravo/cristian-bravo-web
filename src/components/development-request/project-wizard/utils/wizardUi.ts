@@ -4,6 +4,7 @@ interface RenderWizardStateOptions {
   counterTemplate: string;
   backLabel: string;
   nextLabel: string;
+  finalSubmitLabel: string;
   isSending: boolean;
   currentStep: number;
   direction: 'forward' | 'backward';
@@ -13,7 +14,6 @@ interface RenderWizardStateOptions {
   stepDescription: HTMLElement;
   progressFill: HTMLElement;
   nextButton: HTMLButtonElement;
-  submitButton: HTMLButtonElement;
   backButton: HTMLButtonElement;
   stepPanels: HTMLElement[];
   stepChips: HTMLButtonElement[];
@@ -25,6 +25,7 @@ export const renderWizardState = ({
   counterTemplate,
   backLabel,
   nextLabel,
+  finalSubmitLabel,
   isSending,
   currentStep,
   direction,
@@ -34,23 +35,25 @@ export const renderWizardState = ({
   stepDescription,
   progressFill,
   nextButton,
-  submitButton,
   backButton,
   stepPanels,
   stepChips,
 }: RenderWizardStateOptions) => {
+  const isFinalStep = currentStep >= stepTitles.length;
+  const primaryActionLabel = isFinalStep ? finalSubmitLabel : nextLabel;
+
   stepCounter.textContent = counterTemplate
     .replace('{current}', String(currentStep))
     .replace('{total}', String(stepTitles.length));
   stepTitle.textContent = stepTitles[currentStep - 1] || '';
   stepDescription.textContent = stepDescriptions[currentStep - 1] || '';
   progressFill.style.width = `${Math.round((currentStep / stepTitles.length) * 100)}%`;
-  nextButton.hidden = currentStep >= stepTitles.length;
-  submitButton.hidden = currentStep < stepTitles.length;
   backButton.disabled = currentStep === 1 || isSending;
-  submitButton.disabled = isSending;
+  nextButton.disabled = isSending;
   backButton.textContent = backLabel;
-  nextButton.querySelector('span:not([aria-hidden])')?.replaceChildren(nextLabel);
+  nextButton.dataset.actionMode = isFinalStep ? 'submit' : 'next';
+  nextButton.setAttribute('aria-label', primaryActionLabel);
+  nextButton.querySelector<HTMLElement>('[data-next-button-label]')?.replaceChildren(primaryActionLabel);
 
   stepPanels.forEach((panel) => {
     const panelStep = Number(panel.dataset.stepPanel);
