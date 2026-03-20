@@ -186,21 +186,21 @@ export const profileHeroContent: ProfileHeroContent = {
   },
   quickLinks: [
     {
-      label: 'GitHub',
+      label: 'Ver todos mis proyectos',
       href: 'https://github.com/cristian-bravo',
       icon: 'github',
       position: 'top-left',
       ariaLabel: 'Abrir perfil de GitHub de Cristian Bravo',
     },
     {
-      label: 'Email',
+      label: 'Enviar un correo',
       href: 'mailto:cristianhbravo@outlook.es',
       icon: 'email',
       position: 'bottom-left',
       ariaLabel: 'Enviar correo a Cristian Bravo',
     },
     {
-      label: 'CV',
+      label: 'Descargar mi CV',
       href: '/cv/CV_Cristian_Hernan_Bravo.pdf',
       icon: 'cv',
       position: 'top-right',
@@ -208,7 +208,7 @@ export const profileHeroContent: ProfileHeroContent = {
       download: true,
     },
     {
-      label: 'LinkedIn',
+      label: 'Ver mi perfil',
       href: 'https://www.linkedin.com/in/cristian-bravodev/',
       icon: 'linkedin',
       position: 'bottom-right',
