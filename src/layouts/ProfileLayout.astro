@@ -54,18 +54,100 @@ const {
         };
       };
 
+      const setupProfileQuickLinks = () => {
+        window.__profileQuickLinksCleanup?.();
+
+        const links = Array.from(document.querySelectorAll('[data-profile-quick-link]'));
+        if (!links.length) return;
+
+        const finePointer = window.matchMedia('(pointer: fine)');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (!finePointer.matches || reducedMotion.matches) return;
+
+        let rafId = 0;
+        let nextX = 0;
+        let nextY = 0;
+
+        const surfaces = links
+          .map((link) => {
+            const surface = link.querySelector('.profile-hero-quick-link__surface');
+            if (!(surface instanceof HTMLElement)) return null;
+
+            const depthValue = Number(link.getAttribute('data-profile-quick-link-depth') ?? '1');
+            const depth = 0.12 + depthValue * 0.06;
+            return { surface, depth };
+          })
+          .filter(Boolean);
+
+        if (!surfaces.length) return;
+
+        const applyParallax = () => {
+          rafId = 0;
+          surfaces.forEach(({ surface, depth }) => {
+            surface.style.setProperty('--profile-quick-link-parallax-x', `${(nextX * depth).toFixed(2)}px`);
+            surface.style.setProperty('--profile-quick-link-parallax-y', `${(nextY * depth).toFixed(2)}px`);
+          });
+        };
+
+        const requestApply = () => {
+          if (rafId) return;
+          rafId = window.requestAnimationFrame(applyParallax);
+        };
+
+        const onPointerMove = (event) => {
+          const offsetX = event.clientX / window.innerWidth - 0.5;
+          const offsetY = event.clientY / window.innerHeight - 0.5;
+          nextX = offsetX * 10;
+          nextY = offsetY * 10;
+          requestApply();
+        };
+
+        const resetParallax = () => {
+          nextX = 0;
+          nextY = 0;
+          requestApply();
+        };
+
+        window.addEventListener('pointermove', onPointerMove, { passive: true });
+        window.addEventListener('pointerleave', resetParallax);
+        window.addEventListener('blur', resetParallax);
+        resetParallax();
+
+        window.__profileQuickLinksCleanup = () => {
+          if (rafId) {
+            window.cancelAnimationFrame(rafId);
+            rafId = 0;
+          }
+
+          surfaces.forEach(({ surface }) => {
+            surface.style.removeProperty('--profile-quick-link-parallax-x');
+            surface.style.removeProperty('--profile-quick-link-parallax-y');
+          });
+
+          window.removeEventListener('pointermove', onPointerMove);
+          window.removeEventListener('pointerleave', resetParallax);
+          window.removeEventListener('blur', resetParallax);
+        };
+      };
+
       if (!window.__profileNavbarBound) {
         window.__profileNavbarBound = true;
         window.addEventListener('astro:page-load', setupProfileNavbar);
+        window.addEventListener('astro:page-load', setupProfileQuickLinks);
         window.addEventListener('astro:before-swap', () => {
           window.__profileNavbarCleanup?.();
+          window.__profileQuickLinksCleanup?.();
         });
       }
 
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', setupProfileNavbar, { once: true });
+        document.addEventListener('DOMContentLoaded', () => {
+          setupProfileNavbar();
+          setupProfileQuickLinks();
+        }, { once: true });
       } else {
         setupProfileNavbar();
+        setupProfileQuickLinks();
       }
     })();
   </script>
