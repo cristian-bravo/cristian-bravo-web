@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
+import ProjectFeaturedHero from '../components/projects/sections/ProjectFeaturedHero.astro';
 import { getData } from '../data';
 import '../styles/proyectos-scene.css';
 import '../styles/hero-animations.css';
@@ -122,18 +123,50 @@ const githubMarkPath =
           project.gallery.find((item) => item.variant === 'wide') ??
           project.gallery[0];
         const projectActions = project.actions ?? [];
+        const featuredHero = project.featuredHero;
+        const featuredSceneTone =
+          featuredHero?.variant === 'industrial-corporate'
+            ? 'industrial'
+            : featuredHero?.variant === 'retail-commerce'
+              ? 'retail'
+            : featuredHero?.variant === 'academic-platform'
+              ? 'academic'
+            : featuredHero?.variant === 'confidential-private'
+              ? 'confidential'
+            : featuredHero?.variant === 'edu-saas'
+              ? 'edu'
+              : undefined;
         const hasActionBar = projectActions.length > 0 || Boolean(project.githubUrl);
 
         return (
           <div
-            class="ps-scene ps-scene--project"
+            class:list={[
+              'ps-scene',
+              'ps-scene--project',
+              featuredHero && 'ps-scene--project-featured',
+              featuredSceneTone && `ps-scene--project-featured-${featuredSceneTone}`,
+            ]}
             data-ps-scene
             data-scene-index={stepIndex + 1}
-            data-tone={String(tone)}
+            data-tone={featuredHero ? undefined : String(tone)}
             aria-label={`Proyecto: ${project.title}`}
           >
             <div class="ps-scene__inner">
               <div class="ps-project-shell">
+                {featuredHero ? (
+                  <ProjectFeaturedHero
+                    project={project}
+                    projectActions={projectActions}
+                    featuredHero={featuredHero}
+                    groupTitle={groupTitle}
+                    stepIndex={stepIndex}
+                    totalProjects={totalProjects}
+                    wideItem={wideItem}
+                    squareItem={squareItem}
+                    tallItem={tallItem}
+                  />
+                ) : (
+                  <>
                 <div class:list={['ps-project', isReverse && 'ps-project--reverse']}>
                   <div class="ps-project__left">
                     <div class="ps-project__meta" data-reveal>
@@ -416,6 +449,8 @@ const githubMarkPath =
                     )}
                   </div>
                 </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
