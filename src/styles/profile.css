@@ -104,6 +104,9 @@
   --profile-quick-link-parallax-x: 0px;
   --profile-quick-link-parallax-y: 0px;
   --profile-quick-link-scale: 1;
+  --profile-quick-link-shift-x: 0px;
+  --profile-quick-link-tooltip-offset-y: calc(-100% - 0.2rem);
+  --profile-quick-link-tooltip-hover-offset-y: calc(-100% - 0.45rem);
   position: absolute;
   display: inline-flex;
   align-items: center;
@@ -137,7 +140,6 @@
 }
 
 .profile-hero-quick-link__surface {
-  --profile-quick-link-shift-x: 0px;
   position: relative;
   display: grid;
   place-items: center;
@@ -246,7 +248,7 @@
 
 .profile-hero-quick-link__tooltip {
   position: absolute;
-  left: 50%;
+  left: calc(50% + var(--profile-quick-link-shift-x));
   top: 0;
   padding: 0.7rem 0.95rem;
   border-radius: 999px;
@@ -265,39 +267,23 @@
   transition:
     opacity 180ms ease,
     transform 220ms ease;
+  transform: translate(-50%, var(--profile-quick-link-tooltip-offset-y));
 }
 
-.profile-hero-quick-link.is-top-left .profile-hero-quick-link__surface,
-.profile-hero-quick-link.is-bottom-left .profile-hero-quick-link__surface {
+.profile-hero-quick-link.is-top-left,
+.profile-hero-quick-link.is-bottom-left {
   --profile-quick-link-shift-x: calc(-100% - 40px);
 }
 
-.profile-hero-quick-link.is-top-right .profile-hero-quick-link__surface,
-.profile-hero-quick-link.is-bottom-right .profile-hero-quick-link__surface {
+.profile-hero-quick-link.is-top-right,
+.profile-hero-quick-link.is-bottom-right {
   --profile-quick-link-shift-x: calc(100% + 40px);
-}
-
-.profile-hero-quick-link.is-top-left .profile-hero-quick-link__tooltip,
-.profile-hero-quick-link.is-bottom-left .profile-hero-quick-link__tooltip,
-.profile-hero-quick-link.is-top-right .profile-hero-quick-link__tooltip,
-.profile-hero-quick-link.is-bottom-right .profile-hero-quick-link__tooltip {
-  transform: translate(calc(var(--profile-quick-link-shift-x) - 50%), calc(-100% - 0.2rem));
 }
 
 .profile-hero-quick-link:hover .profile-hero-quick-link__tooltip,
 .profile-hero-quick-link:focus-visible .profile-hero-quick-link__tooltip {
   opacity: 1;
-}
-
-.profile-hero-quick-link.is-top-left:hover .profile-hero-quick-link__tooltip,
-.profile-hero-quick-link.is-bottom-left:focus-visible .profile-hero-quick-link__tooltip,
-.profile-hero-quick-link.is-bottom-left:hover .profile-hero-quick-link__tooltip,
-.profile-hero-quick-link.is-top-left:focus-visible .profile-hero-quick-link__tooltip,
-.profile-hero-quick-link.is-top-right:hover .profile-hero-quick-link__tooltip,
-.profile-hero-quick-link.is-bottom-right:focus-visible .profile-hero-quick-link__tooltip,
-.profile-hero-quick-link.is-bottom-right:hover .profile-hero-quick-link__tooltip,
-.profile-hero-quick-link.is-top-right:focus-visible .profile-hero-quick-link__tooltip {
-  transform: translate(calc(var(--profile-quick-link-shift-x) - 50%), calc(-100% - 0.45rem));
+  transform: translate(-50%, var(--profile-quick-link-tooltip-hover-offset-y));
 }
 
 .profile-hero-quick-link.is-icon-cv .profile-hero-quick-link__icon {
@@ -1890,30 +1876,19 @@
     right: 0;
   }
 
-  .profile-hero-quick-link.is-top-left .profile-hero-quick-link__surface,
-  .profile-hero-quick-link.is-bottom-left .profile-hero-quick-link__surface {
+  .profile-hero-quick-link {
+    --profile-quick-link-tooltip-offset-y: calc(-100% - 0.12rem);
+    --profile-quick-link-tooltip-hover-offset-y: calc(-100% - 0.28rem);
+  }
+
+  .profile-hero-quick-link.is-top-left,
+  .profile-hero-quick-link.is-bottom-left {
     --profile-quick-link-shift-x: calc(-62% - 1.2rem);
   }
 
-  .profile-hero-quick-link.is-top-right .profile-hero-quick-link__surface,
-  .profile-hero-quick-link.is-bottom-right .profile-hero-quick-link__surface {
+  .profile-hero-quick-link.is-top-right,
+  .profile-hero-quick-link.is-bottom-right {
     --profile-quick-link-shift-x: calc(62% + 1.2rem);
-  }
-
-  .profile-hero-quick-link.is-top-left .profile-hero-quick-link__tooltip,
-  .profile-hero-quick-link.is-bottom-left .profile-hero-quick-link__tooltip,
-  .profile-hero-quick-link.is-top-right .profile-hero-quick-link__tooltip,
-  .profile-hero-quick-link.is-bottom-right .profile-hero-quick-link__tooltip {
-    left: 50%;
-    transform: translate(calc(var(--profile-quick-link-shift-x) - 50%), calc(-100% - 0.12rem));
-    top: 0;
-  }
-
-  .profile-hero-quick-link.is-top-left:hover .profile-hero-quick-link__tooltip,
-  .profile-hero-quick-link.is-top-left:focus-visible .profile-hero-quick-link__tooltip,
-  .profile-hero-quick-link.is-bottom-left:hover .profile-hero-quick-link__tooltip,
-  .profile-hero-quick-link.is-bottom-left:focus-visible .profile-hero-quick-link__tooltip {
-    transform: translate(calc(var(--profile-quick-link-shift-x) - 50%), calc(-100% - 0.28rem));
   }
 
   .profile-hero-quick-link.is-icon-cv .profile-hero-quick-link__icon {
