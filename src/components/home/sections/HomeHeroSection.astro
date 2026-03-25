@@ -13,7 +13,21 @@ const { content } = Astro.props;
 >
   <div class="home-hero__media" aria-hidden="true">
     <video
-      class="home-hero__video"
+      class="home-hero__video home-hero__video--light"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster={content.lightImageSrc}
+      disablepictureinpicture
+      disableremoteplayback
+      tabindex="-1"
+    >
+      <source src="/wallpapers/videos/avatar_pets.mp4" type="video/mp4" />
+    </video>
+    <video
+      class="home-hero__video home-hero__video--dark"
       autoplay
       muted
       loop

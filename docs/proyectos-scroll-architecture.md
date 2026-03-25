@@ -1,96 +1,104 @@
-# Arquitectura de Animación por Scroll: Portafolio de Proyectos
+# Scroll Architecture for `/proyectos`
 
-Este documento detalla la refactorización profunda realizada en la página `/proyectos` para transformar la experiencia de usuario (UX) en un formato narrativo inmersivo (Storytelling estilo Anime.js), donde el scroll natural de la ventana se convierte en el control de una "línea de tiempo" de escenas, en lugar de un desplazamiento del documento.
+This document focuses on the low-level scene engine used by the portfolio page.
 
----
+## Core Idea
 
-## 1. El Concepto Funcional
+`/proyectos` is not a long document that naturally scrolls through normal blocks.
+Instead, it behaves like a fixed stage controlled by native window scroll.
 
-En pantallas tradicionales, el usuario hace "*scroll*" para mover una página verticalmente desde su punto inicial al final, pasando por todos sus componentes visuales ordenados en un DOM tradicional (`position: relative`).
+The browser still sees a vertical document because the page injects an invisible spacer, but the visible content stays inside a fixed stage and swaps active scenes.
 
-**El nuevo sistema (Scroll-driven Scenes)** hace lo siguiente:
-- Fija la vista (pantalla completa o viewport) de todo el contenido. El nodo principal nunca se desplaza en Y (`overflow: hidden` o `position: fixed`).
-- Se inserta una "barra espaciadora" o **Spacer** escondido que toma la altura de `N` veces el tamaño de la pantalla. Esto logra engañar al navegador, causando que renderice y active el scrollbar nativo de la ventana, permitiendo la misma usabilidad (scroll wheel de mouse, swipe en móviles, trackpad) sin mover la página visualmente.
-- Se lee el evento `window.onscroll` o directamente el valor de `scrollY` en cada tick, mapeando esta elevación (distancia en píxeles) a un **Índice de Escena** actual del 0 al N.
-- Al cambiar este índice, se le indica por Javascript a un módulo de motor de animación (`Anime.js` en nuestro caso) que expulse la escena anterior con fade-out e introduzca la nueva con `staggering`.
+## Relevant Files
 
----
+- `src/pages/proyectos.astro`
+- `src/scripts/projectsScrollAnimation.ts`
+- `src/styles/proyectos-scene.css`
 
-## 2. Archivos y Estructura Desarrollada
+## Runtime Elements
 
-El desarrollo abarca tres componentes clave:
+The scroll system depends on these markers:
 
-### A. La Página: `src/pages/proyectos.astro`
-El archivo HTML principal. Se destruyeron todos los shells `.project-scroll-step` viejos e innecesarios orientados a *Intersection Observer* en documento abierto, para generar esto:
+- `[data-ps-stage]`
+- `[data-ps-spacer]`
+- `[data-ps-scene]`
+- `[data-ps-dot]`
+- `[data-ps-progress-fill]`
+- `[data-ps-counter-current]`
+- `[data-ps-counter-total]`
 
-```html
-<div class="ps-root">
-  <!-- El separador invisible (Spacer), altura controlada por TS -->
-  <div data-ps-spacer style="height: 100vh;"></div>
+If any of those disappear, the engine will partially or fully stop working.
 
-  <!-- El contenedor principal (Stage), FIJO en el fondo -->
-  <div class="ps-stage" data-ps-stage>
-      
-      <!-- ESCENA 0: Hero -->
-      <div class="ps-scene ps-scene--hero" data-ps-scene data-scene-index="0">...</div>
-      
-      <!-- ESCENA 1 a N: Proyectos Iterados (N-1) -->
-      <div class="ps-scene ps-scene--project" data-ps-scene data-scene-index="1">...</div>
-      <!-- ... -->
-      
-      <!-- ESCENA FINAL: Llamado a la acción -->
-      <div class="ps-scene ps-scene--cta" data-ps-scene data-scene-index="N">...</div>
-      
-  </div>
-</div>
-```
+## Scene Entry and Exit
 
-Elementos como las "Dots" o navegación de bolitas iteran los mismos proyectos basándose en la longitud de `totalScenes`.
+The engine uses `animejs` to control scene transitions.
 
-### B. El Estilo Global: `src/styles/proyectos-scene.css`
-Controla absolutamente todos los detalles fijos y flex, además de pre-esconder todo.
-- `.ps-stage`: Elemento con capa `z-index: 1`, `position: fixed`, `inset: 0` y `overflow: hidden`. Éste previene problemas como scroll rebotando en bordes y cortes de imagen.
-- `.ps-scene`: Elemento con `position: absolute`, que abarca exacto el `inset: 0` del parent y recibe `opacity: 0` junto con `pointer-events: none` por defecto para no tapar los clicks de las escenas visibles, y cuando logran el scope JS reciben una clase `.is-active` para poder realizar hover/click sobre los items interiores.
+### Exit
 
-### C. La Lógica Typescript: `src/scripts/projectsScrollAnimation.ts`
+- opacity fades out
+- scene translates upward
+- scene scales down slightly
 
-El motor lógico central de esta versión.
+### Enter
 
-1. **Inferencia de Sensibilidad:** 
-Originalmente una escena requería todo un `100vh` de *Scroll* para saltar al siguiente cuadro (es decir, el mismo largo exacto de tu ventana en navegador por página equivalente). Esto provocaba la mala experiencia de tener que girar la perilla/scroll demasiado ("doble scrolling").
-**La solución** fue generar una sensibilidad del `45%` por vista. Esto se logra multiplicando una ventana `window.innerHeight * 0.45` en la constante perimetral del iterador en la lectura de `scrollY`:
-```typescript
+- opacity fades in
+- scene translates upward into place
+- scene scales from `0.97` to `1`
+- child nodes with `[data-reveal]` are staggered
+
+## Scroll Distance Model
+
+Each scene does not require a full viewport of scroll.
+
+Current rule:
+
+```ts
 const getScrollDistance = () => window.innerHeight * 0.45;
-
-const updateSpacerHeight = () => {
-    // Spacer Height requiere el padding por transición más tu ventana real actual al final
-    spacer.style.height = `${(totalScenes - 1) * getScrollDistance() + window.innerHeight}px`;
-};
-
-const onScroll = () => {
-    // Calculo rápido, exacto e instantaneo al index de escena:
-    const index = Math.round(window.scrollY / getScrollDistance());
-    goToScene(index);
-};
 ```
 
-2. **Control Anime.js Exclusivo:** 
-El JS detecta cambios (`index !== currentIndex`), y ejecuta en base a funciones:
-   - *exitScene*: Aplica la ruta inversa u oculta escaladas o fades transicionadas:
-     ```javascript
-     animate(el, { opacity: [1, 0], translateY: [0, -48], duration: 440 })
-     ```
-   - *enterScene*: Introduce a la caja padre y además llama a la cascada de **Stagger** (Efecto donde elementos visuales bajan/crecen un milisegundo despues del anterior para sensación dinámica).
-     ```javascript
-     animate(el, { opacity: [0, 1], translateY: [48, 0], duration: 680 })
-     // Elementos interiores hijos [data-reveal]:
-     animate(reveals, { opacity: [0, 1], delay: stagger(70) })
-     ```
+That makes the experience feel more responsive and prevents excessive wheel movement per scene.
 
-## 3. Comportamientos Menores de Calidad (UX / Resistencia a Errores)
+## Spacer Height
 
-1. **Re-calculo de Ventana (Resize Re-Snap):**
-El usuario a veces redimensiona el navegador mientras está en la escena N°5. Esto cambia radicalmente `window.innerHeight` y, peor aun, el estado de tu scroll es en base de Píxeles. El script contiene un `onResize(() => window.scrollTo(.. behavior: instant))` que reescala la "altura" escondida y centra nuevamente la cámara en la escena exacta donde había quedado el usuario tras presionar "refresh" u obtener la respuesta final del Timer debounced (`120ms`) de achicamiento de navegador.
+The spacer is calculated with extra tail room so the last CTA scene remains reachable:
 
-2. **Disminuir el movimiento de OS (`prefers-reduced-motion`):**
-Cualquier evento del sistema operativo enfocado en accesibilidad (por ejemplo en un iPhone: 'General > Accessibility > Reduce Motion = ON') anula toda la librería central `Anime.js` forzando las transiciones a 0px offset de translación de manera instantánea o opácidad instantánea previniendo problemas para visitantes con foto-sensibilidad. Ocurriendo directamente por lectura de un `window.matchMedia`.
+```ts
+spacer.style.height = `${(totalScenes - 1) * getScrollDistance() + window.innerHeight * 2}px`;
+```
+
+## Scene Mapping
+
+The current scene index is derived from `window.scrollY / getScrollDistance()`.
+
+There is a late-stage lock for the last scene:
+
+```ts
+const index = raw >= totalScenes - 1.25 ? totalScenes - 1 : Math.round(raw);
+```
+
+That prevents the CTA from feeling unreachable near the end of the document.
+
+## Reduced Motion
+
+If `prefers-reduced-motion: reduce` is active:
+
+- scene transitions become immediate
+- staggered reveal animations are skipped
+- active scene state is still preserved
+
+## Resize Behavior
+
+On resize, the engine:
+
+1. recalculates spacer height
+2. waits briefly with debounce
+3. scrolls back to the current logical scene
+
+That avoids losing the active scene after viewport height changes.
+
+## Safe Editing Rules
+
+- Do not remove `data-ps-*` attributes casually.
+- Do not change spacer logic without testing the final CTA.
+- Do not add `overflow-y: auto` or conflicting fixed-position containers inside the stage.
+- If you add new animated elements to a scene, prefer `data-reveal` before writing custom timing logic.

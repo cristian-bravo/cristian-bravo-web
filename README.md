@@ -5,138 +5,70 @@
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Sora&weight=700&size=24&duration=2600&pause=900&color=7C3AED&center=true&vCenter=true&width=840&lines=Arquitectura+digital+para+empresas;Interfaces+con+identidad+y+motion;Solicitudes+guiadas+para+nuevos+proyectos" alt="Animated intro" />
-</p>
-
-<p align="center">
-  <a href="https://cystems.ec"><img src="https://img.shields.io/badge/Site-cystems.ec-0F172A?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Site" /></a>
+  <a href="https://cystems.ec"><img src="https://img.shields.io/badge/Production-cystems.ec-0F172A?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Production site" /></a>
+  <a href="https://github.com/cristian-bravo/cristian-bravo-web"><img src="https://img.shields.io/badge/Repo-cristian--bravo--web-111827?style=for-the-badge&logo=github&logoColor=white" alt="Repository" /></a>
   <a href="https://www.linkedin.com/in/cristian-bravodev/"><img src="https://img.shields.io/badge/LinkedIn-Cristian%20Bravo-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Astro-5.x-FF5D01?style=flat-square&logo=astro&logoColor=white" alt="Astro" />
-  <img src="https://img.shields.io/badge/Preact-Islands-673AB8?style=flat-square&logo=preact&logoColor=white" alt="Preact" />
   <img src="https://img.shields.io/badge/TailwindCSS-3.x-38BDF8?style=flat-square&logo=tailwindcss&logoColor=0B1120" alt="TailwindCSS" />
-  <img src="https://img.shields.io/badge/Anime.js-Motion-111827?style=flat-square&logo=javascript&logoColor=F7DF1E" alt="Anime.js" />
-  <img src="https://img.shields.io/badge/Mode-Node%20SSR-111827?style=flat-square&logo=node.js&logoColor=white" alt="Node SSR" />
+  <img src="https://img.shields.io/badge/Anime.js-Scroll%20Motion-111827?style=flat-square&logo=javascript&logoColor=F7DF1E" alt="Anime.js" />
+  <img src="https://img.shields.io/badge/Adapter-Node%20SSR-111827?style=flat-square&logo=node.js&logoColor=white" alt="Node adapter" />
+  <img src="https://img.shields.io/badge/Nodemailer-SMTP-166534?style=flat-square&logo=maildotru&logoColor=white" alt="Nodemailer" />
 </p>
 
-## Vision General
+## Overview
 
-**CYSTEMS Web** es el sitio principal de presentacion de la marca CYSTEMS.  
-No es solo un landing: combina **sitio corporativo**, **portafolio**, **perfil profesional**, **blog base** y un **flujo de conversion** para solicitudes de desarrollo.
+**CYSTEMS Web** is the production website for the CYSTEMS brand and Cristian Bravo's public digital presence.
+It combines:
 
-El proyecto esta construido para comunicar tres ideas con claridad:
+- corporate positioning
+- a motion-first portfolio
+- a professional profile page
+- conversion-oriented project request flows
+- server-side contact and project delivery
 
-- CYSTEMS disena, desarrolla y opera soluciones digitales para empresas.
-- La experiencia visual importa tanto como la arquitectura tecnica.
-- El sitio debe convertirse en una herramienta real de captacion, no solo en una vitrina.
+The project is built as a branded product surface, not as a generic marketing template. Visual identity, conversion flow, data-driven content, and maintainability are all treated as first-class concerns.
 
-## Que Incluye
+## Current Experience
 
-### Experiencia publica del sitio
+### Public pages
 
-- `Home` con narrativa de valor, servicios, metodo y CTA principal.
-- `Servicios` con modales y mensajes orientados a consultoria, plataformas y operacion.
-- `Proyectos` como vitrina con storytelling visual y referencias publicas/privadas.
-- `Perfil` como pagina extendida de Cristian Bravo con foco en criterio tecnico, identidad y acompanamiento.
-- `Blog` preparado para publicaciones tecnicas.
+- `/` presents the main brand narrative with a theme-aware SaaS-style hero.
+- `/servicios` explains the service offering through cards, modal content, and guided messaging.
+- `/proyectos` runs as a scroll-driven portfolio with full-screen scenes and featured project heroes.
+- `/perfil/cristian-bravo` extends the professional story with richer profile media and long-form sections.
+- `/blog` and `/blog/[slug]` provide the content structure for technical posts.
 
-### Conversion y contacto
+### Conversion flows
 
-- Nueva landing de `/empezar-proyecto` con dos rutas de entrada.
-- Flujo rapido en `/empezar-proyecto/simple`.
-- Wizard profesional en `/empezar-proyecto/proyecto`.
-- Validaciones, progreso, persistencia temporal y estimado automatico en el brief largo.
-- La navegacion del sitio ya usa este flujo como punto principal de contacto.
-- Envio server-side con Nodemailer y Outlook SMTP.
+- `/empezar-proyecto` acts as the main commercial entry point.
+- `/empezar-proyecto/simple` captures lightweight requests quickly.
+- `/empezar-proyecto/proyecto` handles structured project intake with a multi-step wizard.
+- `/solicitar-desarrollo`, `/solicitar-desarrollo/simple`, and `/solicitar-desarrollo/proyecto` mirror the same flow for alternate copy/navigation needs.
 
-### Sistema visual
+### Visual system highlights
 
-- Navbar premium con glass UI, dark mode y estados interactivos.
-- Componentes Astro orientados a performance.
-- Islas interactivas con Preact solo donde realmente hacen falta.
-- Motion con `animejs` y animaciones custom en CSS.
-- Contenido centralizado en `src/data` para mantener copy y estructura desacoplados de la vista.
+- Home hero with **theme-specific background video**:
+  - light mode: `/wallpapers/videos/avatar_pets.mp4`
+  - dark mode: `/wallpapers/videos/avatar_clean.mp4`
+- Glass card treatment, blur layering, and responsive motion tuned for a SaaS-like feel.
+- Theme-aware UI across header, sections, portfolio scenes, and profile media.
+- Scroll storytelling driven with `animejs` and scene-based animation primitives.
 
-## Mapa del Proyecto
-
-| Area | Objetivo |
-| --- | --- |
-| `src/pages` | Define rutas publicas del sitio |
-| `src/components` | Construye secciones, cards, modales, formularios y piezas compartidas |
-| `src/data` | Centraliza textos, metadata y configuraciones de las vistas |
-| `src/layouts` | Estructura base, theme handling y comportamiento global |
-| `src/styles` | Sistema visual, motion y estilos especificos por pagina |
-
-## Stack
+## Tech Stack
 
 ```txt
-Astro        -> rendering, routing y performance general
-Preact       -> formularios y UI interactiva
-Tailwind CSS -> utilidades y layout rapido
-Anime.js     -> motion y microinteracciones
-PostCSS      -> pipeline de estilos
-Nodemailer   -> envio server-side de formularios
+Astro        -> routing, SSR, page composition
+Tailwind CSS -> layout utilities and shared tokens
+Anime.js     -> scroll-driven transitions and staged reveals
+Node adapter -> server runtime for Astro
+Nodemailer   -> SMTP delivery for forms
+PostCSS      -> CSS pipeline
 ```
 
-## Flujo de Producto
-
-```mermaid
-flowchart LR
-  A[Descubrimiento] --> B[Servicios y Proyectos]
-  B --> C[Perfil profesional]
-  C --> D[Empezar proyecto]
-  D --> E[Formulario simple]
-  D --> F[Wizard de proyecto]
-  E --> G[Respuesta comercial]
-  F --> G
-```
-
-## Estructura Actual de Rutas
-
-```txt
-/
-/servicios
-/proyectos
-/perfil/cristian-bravo
-/blog
-/blog/[slug]
-/empezar-proyecto
-/empezar-proyecto/simple
-/empezar-proyecto/proyecto
-/contacto
-```
-
-## Principios del Proyecto
-
-- **Contenido guiado por negocio**: cada pagina responde a una etapa del proceso comercial.
-- **Frontend con identidad**: no se busca un look generico de plantilla.
-- **Motion con criterio**: las animaciones apoyan jerarquia, ritmo y conversion.
-- **Arquitectura mantenible**: datos, layouts, paginas y estilos estan separados con intencion.
-- **Responsive real**: los flujos importantes fueron pensados para desktop y mobile.
-
-## Como Ejecutarlo
-
-```bash
-npm install
-npm run dev
-```
-
-Build de produccion:
-
-```bash
-npm run build
-npm run preview
-```
-
-Produccion en Contabo:
-
-```bash
-node ./dist/server/entry.mjs
-```
-
-## Estructura Base
+## Project Structure
 
 ```txt
 src/
@@ -150,20 +82,92 @@ src/
     services/
     shared/
   data/
+    en/
+    es/
   layouts/
+  lib/
   pages/
   scripts/
+  server/
   styles/
+public/
+  projects/
+  wallpapers/
+docs/
 ```
 
-## Lo Mas Importante de Este Repo
+## Important Areas
 
-- Presenta la propuesta general de CYSTEMS.
-- Demuestra criterio de UI, motion y estructura frontend.
-- Funciona como portafolio y como embudo de captacion.
-- Sirve como base para seguir sumando contenido tecnico y nuevas rutas comerciales.
+| Area | Purpose |
+| --- | --- |
+| `src/pages` | Public routes and API endpoints |
+| `src/components` | Page sections, cards, modals, forms, and reusable UI |
+| `src/data` | Structured content for ES and EN datasets |
+| `src/styles` | Global styling, page-specific systems, motion, and scene CSS |
+| `src/scripts` | Client-side animation and interaction logic |
+| `src/server` | Email delivery and server-side helpers |
+| `public/projects` | Portfolio project assets used in `/proyectos` |
+| `public/wallpapers/videos` | Background video assets used by the home hero |
 
-## Contacto
+## Run Locally
+
+```bash
+npm install
+npm run dev
+```
+
+Production build:
+
+```bash
+npm run build
+npm run preview
+```
+
+Node runtime deployment:
+
+```bash
+node ./dist/server/entry.mjs
+```
+
+## Environment Variables
+
+Server-side email delivery uses SMTP and reads:
+
+```env
+EMAIL_USER=your_email@example.com
+EMAIL_PASS=your_smtp_password_or_app_password
+EMAIL_TO=
+SMTP_HOST=
+SMTP_PORT=
+SMTP_SECURE=
+```
+
+Reference: [`docs/email-delivery.md`](./docs/email-delivery.md)
+
+## Documentation Map
+
+- [`docs/README.md`](./docs/README.md): internal documentation index
+- [`docs/home-hero-visual-system.md`](./docs/home-hero-visual-system.md): home hero visual rules, theme behavior, and asset references
+- [`docs/email-delivery.md`](./docs/email-delivery.md): SMTP setup and API delivery flow
+- [`docs/proyectos-modifier-guide.md`](./docs/proyectos-modifier-guide.md): how to add or update portfolio projects
+- [`docs/proyectos-refactor-2026.md`](./docs/proyectos-refactor-2026.md): current `/proyectos` architecture and content model
+- [`docs/proyectos-scroll-architecture.md`](./docs/proyectos-scroll-architecture.md): low-level scene and scroll engine details
+
+## Deployment Notes
+
+- The site is configured for Astro **server output** with `@astrojs/node`.
+- Form endpoints are not prerendered and require a live Node process.
+- Portfolio and hero media live under `public/`, so missing assets will break visual sections at runtime.
+- The current build still emits one known warning for `src/pages/blog/[slug].astro` because `getStaticPaths()` is used without `export const prerender = true;`. This does not block the current Node SSR deployment.
+
+## Why This Repo Matters
+
+- It is the public product surface for CYSTEMS.
+- It demonstrates UI direction, motion design, and technical structure in one place.
+- It supports lead capture with real server-side delivery.
+- It is designed to keep evolving through centralized content and maintainable page systems.
+
+## Contact
 
 - Web: [cystems.ec](https://cystems.ec)
 - LinkedIn: [Cristian Bravo](https://www.linkedin.com/in/cristian-bravodev/)
@@ -172,5 +176,5 @@ src/
 ---
 
 <p align="center">
-  Hecho para mostrar producto, criterio visual y arquitectura en una sola experiencia.
+  Built to present product thinking, visual craft, and maintainable frontend architecture in a single experience.
 </p>

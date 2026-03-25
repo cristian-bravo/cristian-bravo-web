@@ -107,6 +107,18 @@
   filter: saturate(0.98) brightness(0.94) contrast(1.05);
 }
 
+.home-hero__video--dark {
+  display: none;
+}
+
+.dark .home-hero__video--light {
+  display: none;
+}
+
+.dark .home-hero__video--dark {
+  display: block;
+}
+
 .dark .home-hero__video {
   filter: saturate(0.9) brightness(0.84) contrast(1.08);
 }
