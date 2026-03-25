@@ -1,16 +1,16 @@
-# Email Delivery
+# Entrega de correos
 
-This project no longer uses EmailJS. All form delivery is handled server-side through Nodemailer.
+Este proyecto ya no usa EmailJS. Todo el envío de formularios se realiza desde servidor mediante Nodemailer.
 
 ## Runtime
 
-- Astro output mode: `server`
+- Modo de salida de Astro: `server`
 - Adapter: `@astrojs/node`
-- Expected deployment target: a persistent Node process
+- Despliegue esperado: proceso Node persistente
 
-## Environment Variables
+## Variables de entorno
 
-The current server mail layer reads the following private variables:
+La capa actual de correo usa estas variables privadas:
 
 ```env
 EMAIL_USER=your_email@example.com
@@ -21,62 +21,62 @@ SMTP_PORT=
 SMTP_SECURE=
 ```
 
-Reference source:
+Fuentes de referencia:
 
 - `.env.example`
 - `src/server/email/sendEmail.ts`
 
-## Provider Resolution
+## Resolución del proveedor SMTP
 
-SMTP settings are resolved as follows:
+La configuración SMTP se resuelve así:
 
-- If `SMTP_HOST`, `SMTP_PORT`, and `SMTP_SECURE` are provided, those values are used.
-- If `EMAIL_USER` is a Gmail address, the fallback host is `smtp.gmail.com:587`.
-- Otherwise the fallback host is `smtp.office365.com:587`.
+- Si existen `SMTP_HOST`, `SMTP_PORT` y `SMTP_SECURE`, se usan esos valores.
+- Si `EMAIL_USER` pertenece a Gmail, el fallback es `smtp.gmail.com:587`.
+- En cualquier otro caso, el fallback es `smtp.office365.com:587`.
 
-If `EMAIL_TO` is empty, delivery falls back to `EMAIL_USER`.
+Si `EMAIL_TO` está vacío, el destinatario cae en `EMAIL_USER`.
 
-## Active Endpoints
+## Endpoints activos
 
-### Simple contact flow
+### Flujo simple de contacto
 
-- Route: `POST /api/send-contact`
-- File: `src/pages/api/send-contact.ts`
+- Ruta: `POST /api/send-contact`
+- Archivo: `src/pages/api/send-contact.ts`
 - Payload: JSON
-- Delivery function: `sendSimpleEmail()`
+- Función de envío: `sendSimpleEmail()`
 
-### Project request flow
+### Flujo de solicitud de proyecto
 
-- Route: `POST /api/send-project`
-- File: `src/pages/api/send-project.ts`
+- Ruta: `POST /api/send-project`
+- Archivo: `src/pages/api/send-project.ts`
 - Payload: `FormData`
-- Delivery function: `sendProjectEmail()`
-- Supports one validated attachment through `src/lib/projectAttachment.ts`
+- Función de envío: `sendProjectEmail()`
+- Soporta un adjunto validado mediante `src/lib/projectAttachment.ts`
 
-## Shared Mail Layer
+## Capa compartida de correo
 
-All outgoing email passes through:
+Todo el correo saliente pasa por:
 
 - `src/server/email/sendEmail.ts`
 
-That file is responsible for:
+Ese archivo se encarga de:
 
-- transporter creation and caching
-- SMTP provider resolution
-- HTML and plain-text message generation
-- attachment support for project submissions
-- end-user friendly SMTP error messages
+- crear y reutilizar el transporter
+- resolver el proveedor SMTP
+- generar HTML y texto plano
+- adjuntar archivos del formulario de proyectos
+- devolver mensajes de error más claros para fallos de autenticación o configuración
 
-## Operational Notes
+## Notas operativas
 
-- Never expose mail credentials through `PUBLIC_` variables.
-- Gmail passwords are normalized to remove accidental spaces.
-- Outlook tenants may reject SMTP if authenticated SMTP is disabled for the account.
-- Both endpoints are protected by server-side rate limiting.
+- No expongas credenciales de correo mediante variables `PUBLIC_`.
+- Las contraseñas de Gmail se normalizan para eliminar espacios accidentales.
+- Algunos tenants de Outlook bloquean SMTP si `Authenticated SMTP` está deshabilitado.
+- Ambos endpoints están protegidos por rate limiting server-side.
 
-## Deployment Checklist
+## Checklist de despliegue
 
-1. Confirm `EMAIL_USER` and `EMAIL_PASS` are valid in production.
-2. Set `EMAIL_TO` if delivery should go to a shared inbox.
-3. Verify attachment limits if the project form is accepting files.
-4. Test both `/api/send-contact` and `/api/send-project` after deploy.
+1. Confirma que `EMAIL_USER` y `EMAIL_PASS` sean válidos en producción.
+2. Define `EMAIL_TO` si el correo debe llegar a una bandeja distinta.
+3. Verifica límites de adjuntos si el formulario largo está aceptando archivos.
+4. Prueba manualmente `/api/send-contact` y `/api/send-project` después del deploy.

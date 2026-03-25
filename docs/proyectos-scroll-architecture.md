@@ -1,23 +1,23 @@
-# Scroll Architecture for `/proyectos`
+# Arquitectura de scroll para `/proyectos`
 
-This document focuses on the low-level scene engine used by the portfolio page.
+Este documento describe el motor de escenas que usa actualmente la página del portafolio.
 
-## Core Idea
+## Idea central
 
-`/proyectos` is not a long document that naturally scrolls through normal blocks.
-Instead, it behaves like a fixed stage controlled by native window scroll.
+`/proyectos` no funciona como un documento largo que se recorre con scroll tradicional.
+Visualmente se comporta como un escenario fijo controlado por el scroll nativo de la ventana.
 
-The browser still sees a vertical document because the page injects an invisible spacer, but the visible content stays inside a fixed stage and swaps active scenes.
+El navegador sigue viendo un documento vertical porque la página inyecta un spacer invisible, pero el contenido visible permanece dentro de un stage fijo y solo cambia la escena activa.
 
-## Relevant Files
+## Archivos relevantes
 
 - `src/pages/proyectos.astro`
 - `src/scripts/projectsScrollAnimation.ts`
 - `src/styles/proyectos-scene.css`
 
-## Runtime Elements
+## Elementos de runtime
 
-The scroll system depends on these markers:
+El sistema depende de estos marcadores:
 
 - `[data-ps-stage]`
 - `[data-ps-spacer]`
@@ -27,78 +27,78 @@ The scroll system depends on these markers:
 - `[data-ps-counter-current]`
 - `[data-ps-counter-total]`
 
-If any of those disappear, the engine will partially or fully stop working.
+Si alguno desaparece, el motor puede dejar de funcionar parcial o totalmente.
 
-## Scene Entry and Exit
+## Entrada y salida de escenas
 
-The engine uses `animejs` to control scene transitions.
+El motor usa `animejs` para controlar las transiciones.
 
-### Exit
+### Salida
 
-- opacity fades out
-- scene translates upward
-- scene scales down slightly
+- la opacidad baja
+- la escena se desplaza hacia arriba
+- la escena se reduce ligeramente
 
-### Enter
+### Entrada
 
-- opacity fades in
-- scene translates upward into place
-- scene scales from `0.97` to `1`
-- child nodes with `[data-reveal]` are staggered
+- la opacidad sube
+- la escena entra desde abajo hacia su posición final
+- la escala pasa de `0.97` a `1`
+- los nodos hijos con `[data-reveal]` aparecen con stagger
 
-## Scroll Distance Model
+## Modelo de distancia de scroll
 
-Each scene does not require a full viewport of scroll.
+Cada escena no exige un viewport completo de scroll.
 
-Current rule:
+Regla actual:
 
 ```ts
 const getScrollDistance = () => window.innerHeight * 0.45;
 ```
 
-That makes the experience feel more responsive and prevents excessive wheel movement per scene.
+Eso hace que la experiencia se sienta más ágil y evita exigir demasiado desplazamiento por escena.
 
-## Spacer Height
+## Altura del spacer
 
-The spacer is calculated with extra tail room so the last CTA scene remains reachable:
+El spacer se calcula con cola extra para asegurar que la última escena sea alcanzable:
 
 ```ts
 spacer.style.height = `${(totalScenes - 1) * getScrollDistance() + window.innerHeight * 2}px`;
 ```
 
-## Scene Mapping
+## Mapeo entre scroll y escena
 
-The current scene index is derived from `window.scrollY / getScrollDistance()`.
+El índice actual se deriva de `window.scrollY / getScrollDistance()`.
 
-There is a late-stage lock for the last scene:
+Además existe un bloqueo tardío para la última escena:
 
 ```ts
 const index = raw >= totalScenes - 1.25 ? totalScenes - 1 : Math.round(raw);
 ```
 
-That prevents the CTA from feeling unreachable near the end of the document.
+Eso evita que el CTA final se sienta inalcanzable en el tramo final.
 
-## Reduced Motion
+## Reduced motion
 
-If `prefers-reduced-motion: reduce` is active:
+Si `prefers-reduced-motion: reduce` está activo:
 
-- scene transitions become immediate
-- staggered reveal animations are skipped
-- active scene state is still preserved
+- las transiciones pasan a ser inmediatas
+- se omite el stagger de elementos internos
+- la escena activa sigue manteniendo su estado visual
 
-## Resize Behavior
+## Comportamiento al redimensionar
 
-On resize, the engine:
+Cuando cambia el tamaño de la ventana, el motor:
 
-1. recalculates spacer height
-2. waits briefly with debounce
-3. scrolls back to the current logical scene
+1. recalcula la altura del spacer
+2. espera con un debounce breve
+3. reposiciona el scroll sobre la escena lógica actual
 
-That avoids losing the active scene after viewport height changes.
+Eso evita perder la escena activa después de un resize.
 
-## Safe Editing Rules
+## Reglas seguras de edición
 
-- Do not remove `data-ps-*` attributes casually.
-- Do not change spacer logic without testing the final CTA.
-- Do not add `overflow-y: auto` or conflicting fixed-position containers inside the stage.
-- If you add new animated elements to a scene, prefer `data-reveal` before writing custom timing logic.
+- No elimines atributos `data-ps-*` sin revisar el motor.
+- No cambies la lógica del spacer sin probar la escena final.
+- No añadas `overflow-y: auto` ni contenedores fijos en conflicto dentro del stage.
+- Si agregas elementos animados en una escena, prioriza `data-reveal` antes de introducir tiempos custom.

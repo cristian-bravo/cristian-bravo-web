@@ -1,116 +1,116 @@
-# Projects Refactor 2026
+# Refactor 2026 de `/proyectos`
 
-This document describes the current architecture of `/proyectos` after the 2026 portfolio refactor.
+Este documento describe la arquitectura actual de `/proyectos` después del refactor del portafolio en 2026.
 
-## High-Level Structure
+## Estructura general
 
-The portfolio page is rendered from:
+La página principal del portafolio se renderiza desde:
 
 - `src/pages/proyectos.astro`
 
-It is built as a scene-based experience composed of:
+Está construida como una experiencia por escenas:
 
-1. a hero scene
-2. one scene per project
-3. a final CTA scene
+1. escena hero
+2. una escena por proyecto
+3. una escena final de CTA
 
-The page calculates:
+La página calcula de forma dinámica:
 
 - `allProjects`
 - `totalProjects`
 - `totalScenes`
 
-directly from the structured dataset in `src/data/es/projects.ts`.
+todo a partir del dataset estructurado en `src/data/es/projects.ts`.
 
-## Main Building Blocks
+## Bloques principales
 
-### Data
+### Datos
 
 - `src/data/es/projects.ts`
 
-Provides the full content model for:
+Define el modelo completo de contenido para:
 
-- hero copy
-- hero avatar
-- project groups
-- project references
-- final CTA
+- intro del portafolio
+- avatar del hero
+- grupos de proyectos
+- proyectos individuales
+- CTA final
 
-### Page
+### Página
 
 - `src/pages/proyectos.astro`
 
-Responsible for:
+Se encarga de:
 
-- flattening project groups into a linear scene sequence
-- assigning scene indexes
-- mapping tone variations
-- choosing between standard scenes and `featuredHero` scenes
-- rendering progress, dots, counters, and CTA
+- aplanar los grupos en una secuencia lineal de escenas
+- asignar índices de escena
+- aplicar tonos cíclicos
+- decidir entre escena estándar y escena destacada con `featuredHero`
+- renderizar progreso, dots, contadores y CTA
 
-### Featured project renderer
+### Renderizador de proyectos destacados
 
 - `src/components/projects/sections/ProjectFeaturedHero.astro`
 
-Used when a project defines `featuredHero`.
+Se usa cuando un proyecto define `featuredHero`.
 
-### Scroll engine
+### Motor de scroll
 
 - `src/scripts/projectsScrollAnimation.ts`
 
-Controls:
+Controla:
 
-- spacer height
-- scene activation
-- progress fill
-- dot navigation
-- reduced-motion fallbacks
-- resize resnapping
+- altura del spacer
+- activación de escenas
+- progreso visual
+- navegación por dots
+- fallback para `prefers-reduced-motion`
+- resnap al redimensionar
 
-### Styling
+### Estilos
 
 - `src/styles/proyectos-scene.css`
-- `src/styles/hero-animations.css` for the CTA motion background treatment
+- `src/styles/hero-animations.css` para el tratamiento visual del CTA
 
-## Current Scene Model
+## Modelo actual de escenas
 
-The current page uses:
+La página usa:
 
-- scene `0`: portfolio hero
-- scenes `1..N`: project scenes
-- last scene: final CTA
+- escena `0`: hero del portafolio
+- escenas `1..N`: proyectos
+- última escena: CTA final
 
-Each scene is marked with:
+Cada escena se identifica con:
 
 - `data-ps-scene`
 - `data-scene-index`
 
-The fixed rendering stage uses:
+El escenario fijo usa:
 
 - `data-ps-stage`
 
-The invisible scroll driver uses:
+El conductor invisible del scroll usa:
 
 - `data-ps-spacer`
 
-## Standard Project Scene
+## Escena estándar de proyecto
 
-A standard project scene includes:
+Una escena estándar incluye:
 
-- project metadata row
-- title and description
-- tag list
-- optional confidentiality label
-- gallery slots
-- action bar
+- fila de metadata
+- título y descripción
+- lista de tags
+- etiqueta de confidencialidad opcional
+- slots de galería
+- barra de acciones
 
-Scene layout and variants are controlled in `src/pages/proyectos.astro` and styled in `src/styles/proyectos-scene.css`.
+El layout y las variantes se controlan desde `src/pages/proyectos.astro` y se estilizan en `src/styles/proyectos-scene.css`.
 
-## Featured Project Scene
+## Escena destacada de proyecto
 
-If a project includes `featuredHero`, the page renders the premium version instead of the standard gallery shell.
+Si un proyecto define `featuredHero`, la página renderiza la versión premium en lugar de la galería estándar.
 
-Current supported featured variants:
+Variantes soportadas actualmente:
 
 - `edu-saas`
 - `industrial-corporate`
@@ -118,17 +118,17 @@ Current supported featured variants:
 - `academic-platform`
 - `confidential-private`
 
-These variants influence tone, panel composition, decorative media, and CTA presentation.
+Estas variantes influyen en tono, composición, media decorativa y presentación de acciones.
 
-## Content Rules
+## Reglas actuales de contenido
 
-- Public projects can include screenshots, live links, and GitHub links.
-- Confidential projects can omit image sources and still render correctly.
-- Decorative media for featured heroes should come from `public/projects/...`.
+- Los proyectos públicos pueden incluir capturas, links productivos y GitHub.
+- Los proyectos confidenciales pueden omitir imágenes públicas y seguir renderizando correctamente.
+- La media decorativa de proyectos destacados debe vivir en `public/projects/...`.
 
-## Why This Refactor Matters
+## Por qué importa este refactor
 
-- Projects can be added by editing data, not page structure.
-- Scene count, progress, and navigation scale automatically.
-- The page supports both high-visibility public work and confidential mentions.
-- Styling and motion remain centralized instead of duplicated per project.
+- Los proyectos se agregan desde datos, no desde HTML duplicado.
+- El conteo de escenas, el progreso y la navegación escalan automáticamente.
+- La página soporta trabajo público y referencias confidenciales en la misma arquitectura.
+- Motion y estilos quedan centralizados en lugar de repartidos entre componentes ad hoc.

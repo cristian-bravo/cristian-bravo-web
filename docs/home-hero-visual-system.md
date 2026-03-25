@@ -1,50 +1,50 @@
-# Home Hero Visual System
+# Sistema visual del hero del home
 
-This document explains how the current home hero works and where to change it safely.
+Este documento explica cómo funciona el hero principal del home y qué debes tocar para modificarlo sin romper su coherencia visual.
 
-## Source Files
+## Archivos fuente
 
 - `src/components/home/sections/HomeHeroSection.astro`
 - `src/styles/home.css`
 
-## Theme-Aware Video Mapping
+## Asignación de videos por tema
 
-The hero currently uses two background videos:
+El hero actual utiliza dos videos de fondo:
 
-- light mode: `/wallpapers/videos/avatar_pets.mp4`
-- dark mode: `/wallpapers/videos/avatar_clean.mp4`
+- modo claro: `/wallpapers/videos/avatar_pets.mp4`
+- modo oscuro: `/wallpapers/videos/avatar_clean.mp4`
 
-Both videos are mounted in the same media layer and toggled through theme-aware CSS classes:
+Ambos videos viven dentro de la misma capa visual y se activan por tema mediante clases CSS:
 
 - `.home-hero__video--light`
 - `.home-hero__video--dark`
 
-## Visual Layers
+## Capas visuales
 
-The hero is composed of four depth layers:
+El hero está construido con cuatro niveles de profundidad:
 
-1. background video
-2. overlay stack
-3. layout halo behind the card
-4. glass content card
+1. video de fondo
+2. stack de overlays
+3. halo posterior del layout
+4. glass card del contenido
 
-### Overlay stack
+### Stack de overlays
 
-The overlay uses three variables:
+El oscurecimiento y la profundidad del fondo se controlan con estas variables:
 
 - `--home-hero-overlay-accent`
 - `--home-hero-overlay-main`
 - `--home-hero-overlay-secondary`
 
-These control:
+Estas capas resuelven:
 
-- global darkening
-- edge-to-center legibility
-- subtle depth accenting
+- legibilidad general
+- separación entre texto y fondo
+- profundidad sutil sin ensuciar la imagen
 
-### Card separation
+### Separación de la glass card
 
-The card uses:
+La tarjeta principal usa estas variables:
 
 - `--home-hero-panel-bg`
 - `--home-hero-panel-border`
@@ -52,19 +52,19 @@ The card uses:
 - `--home-hero-panel-sheen`
 - `--home-hero-card-halo`
 
-Those values are tuned separately for light and dark mode.
+Cada una tiene una versión ajustada para modo claro y modo oscuro.
 
-## Content Zones
+## Zonas de contenido
 
-The current card contains:
+La glass card contiene:
 
-- eyebrow / kicker
-- main title
-- supporting subtitle
-- primary and secondary actions
-- two metadata blocks
+- kicker superior
+- título principal
+- subtítulo
+- acciones principales
+- bloque de metadata
 
-Relevant classes:
+Clases relevantes:
 
 - `.home-hero__eyebrow`
 - `.home-hero__title`
@@ -72,32 +72,32 @@ Relevant classes:
 - `.home-hero__actions`
 - `.home-hero__meta`
 
-## Responsive Behavior
+## Comportamiento responsive
 
 ### Mobile
 
-- the hero stays tall enough to preserve the video impact
-- the content card expands to full width
-- CTA buttons stack vertically
-- the background video shifts to `object-position: 56% center`
+- el hero conserva suficiente altura para que el video siga teniendo impacto
+- la tarjeta ocupa el ancho completo disponible
+- los botones se apilan verticalmente
+- el video se reposiciona con `object-position: 56% center`
 
 ### Tablet
 
-- the content card narrows slightly
-- the video shifts to `object-position: 54% center`
+- la tarjeta reduce un poco su ancho máximo
+- el video se ajusta con `object-position: 54% center`
 
-## Safe Editing Rules
+## Reglas seguras de edición
 
-- Keep hero videos under `public/wallpapers/videos/`.
-- If you change a hero video filename, update both the Astro component and deployment assets.
-- Change overlay values before increasing text opacity aggressively.
-- Change card separation through shadow, border, and halo first; avoid heavy blur or artificial glow.
-- Re-test both theme modes after any visual adjustment.
+- Mantén los videos del hero dentro de `public/wallpapers/videos/`.
+- Si cambias el nombre de un video, actualiza tanto el componente Astro como el asset de producción.
+- Antes de subir más opacidad al texto, ajusta primero overlays y contraste del fondo.
+- Para reforzar profundidad, prioriza halo, borde, sombra y blur antes que efectos agresivos.
+- Revisa siempre modo claro, modo oscuro, desktop y mobile después de cualquier ajuste.
 
-## Recommended Workflow
+## Flujo recomendado de trabajo
 
-1. Update media assets if needed.
-2. Adjust `HomeHeroSection.astro` only if structure or asset mapping changes.
-3. Adjust `src/styles/home.css` for visual tuning.
-4. Run `npm run build`.
-5. Verify the hero in light mode, dark mode, mobile, and desktop.
+1. Actualiza los assets si hace falta.
+2. Modifica `HomeHeroSection.astro` solo si cambia la estructura o el mapeo de videos.
+3. Ajusta `src/styles/home.css` para el refinamiento visual.
+4. Ejecuta `npm run build`.
+5. Verifica el hero en ambos temas y en distintos tamaños de pantalla.

@@ -1,25 +1,25 @@
-# Portfolio Modifier Guide
+# Guía para modificar el portafolio
 
-This is the practical guide for editing the `/proyectos` experience without reverse-engineering the whole page.
+Esta es la guía práctica para editar `/proyectos` sin tener que reconstruir mentalmente toda la página.
 
-## Main Content Source
+## Fuente principal de contenido
 
-Most portfolio content is defined in:
+La mayor parte del contenido del portafolio vive en:
 
 - `src/data/es/projects.ts`
 
-The page reads from `projectsPortfolioContent`, which contains:
+La página consume `projectsPortfolioContent`, que contiene:
 
 - `intro`
 - `heroAvatar`
 - `groups`
 - `finalCta`
 
-Each project lives inside `groups[].references[]`.
+Cada proyecto se define dentro de `groups[].references[]`.
 
-## Project Shape
+## Estructura actual de un proyecto
 
-The current project interface supports the following fields:
+La interfaz soporta actualmente estos campos:
 
 ```ts
 {
@@ -61,82 +61,82 @@ The current project interface supports the following fields:
 }
 ```
 
-## Where Assets Live
+## Dónde viven los assets
 
-Public portfolio media should be stored under:
+Los assets públicos del portafolio deben guardarse en:
 
-- `public/projects/<ProjectName>/`
+- `public/projects/<NombreDelProyecto>/`
 
-Example used today:
+Ejemplos actuales:
 
 - `public/projects/NY-Campus-Virtual/`
 - `public/projects/Fualtec/`
 - `public/projects/Alkosto/`
 - `public/projects/Education/`
 
-Use those public paths directly in `src/data/es/projects.ts`.
+Usa esas rutas públicas directamente dentro de `src/data/es/projects.ts`.
 
-## How To Update an Existing Project
+## Cómo actualizar un proyecto existente
 
-1. Open `src/data/es/projects.ts`.
-2. Locate the project inside `projectsPortfolioContent.groups`.
-3. Update text fields like `title`, `description`, `visibility`, and `tags`.
-4. Update `gallery` items if screenshots changed.
-5. Update `actions` if public URLs changed.
-6. Update `featuredHero` if the project uses the featured layout variant.
+1. Abre `src/data/es/projects.ts`.
+2. Localiza el proyecto dentro de `projectsPortfolioContent.groups`.
+3. Modifica campos como `title`, `description`, `visibility` y `tags`.
+4. Actualiza `gallery` si cambiaron las capturas.
+5. Ajusta `actions` si cambiaron las URLs públicas.
+6. Ajusta `featuredHero` si el proyecto usa la variante destacada.
 
-## How To Add a New Project
+## Cómo añadir un proyecto nuevo
 
-1. Create an asset folder under `public/projects/<ProjectName>/`.
-2. Add the required images.
-3. Append a new object inside the correct `groups[].references[]` array.
-4. Provide at least one `gallery` item.
-5. Add `featuredHero` only if the project should use the premium featured scene layout.
+1. Crea una carpeta de assets en `public/projects/<NombreDelProyecto>/`.
+2. Añade las imágenes necesarias.
+3. Inserta un nuevo objeto dentro del array `groups[].references[]` correspondiente.
+4. Añade al menos un item en `gallery`.
+5. Usa `featuredHero` solo si el proyecto necesita la escena premium.
 
-No additional JavaScript changes are required for the page to render a new scene.
+No hace falta tocar JavaScript adicional para que aparezca una escena nueva.
 
-## Gallery Rules
+## Reglas de la galería
 
-The page expects up to three visual slots:
+La página está pensada para hasta tres slots visuales:
 
 - `wide`
 - `square`
 - `tall`
 
-You do not need to provide every variant, but the layout looks best when all three exist.
+No es obligatorio usar las tres variantes, pero la composición se ve mejor cuando existen todas.
 
-## Public vs Confidential Projects
+## Proyectos públicos y confidenciales
 
-Use these fields for confidential references:
+Para proyectos confidenciales usa:
 
 - `isConfidential: true`
 - `confidentialLabel`
-- gallery items without public `src` values if visual assets cannot be shown
+- items de `gallery` sin `src` si no se pueden publicar capturas
 
-The page will render confidentiality styling and restricted placeholders automatically.
+La página ya renderiza placeholders y estilos de confidencialidad automáticamente.
 
-## Featured Hero Projects
+## Featured hero de proyecto
 
-Projects with `featuredHero` use the richer visual scene rendered by:
+Si un proyecto incluye `featuredHero`, la página usa:
 
 - `src/components/projects/sections/ProjectFeaturedHero.astro`
 
-These scenes support:
+Esa variante soporta:
 
-- decorative background media
-- alternate visual themes by project type
-- optional status pills
-- optional custom tag sets
+- media decorativa
+- tonos visuales distintos por tipo de proyecto
+- status pills opcionales
+- sets de tags personalizados
 
-## Files You Will Usually Touch
+## Archivos que normalmente tocarás
 
 - `src/data/es/projects.ts`
-- `public/projects/<ProjectName>/...`
-- `src/styles/proyectos-scene.css` only if layout or presentation needs to change
+- `public/projects/<NombreDelProyecto>/...`
+- `src/styles/proyectos-scene.css` solo si necesitas cambiar layout o presentación
 
-## Safe Workflow
+## Flujo seguro de trabajo
 
-1. Update assets.
-2. Update `src/data/es/projects.ts`.
-3. Run `npm run build`.
-4. Verify `/proyectos` in both light and dark mode.
+1. Actualiza o añade assets.
+2. Modifica `src/data/es/projects.ts`.
+3. Ejecuta `npm run build`.
+4. Verifica `/proyectos` en modo claro y modo oscuro.

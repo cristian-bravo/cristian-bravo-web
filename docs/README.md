@@ -1,24 +1,24 @@
-# Documentation Index
+# Índice de documentación
 
-This folder contains the internal reference material for the main site systems.
+Esta carpeta reúne la documentación técnica e interna de los sistemas principales del sitio.
 
-## Available Guides
+## Guías disponibles
 
 - `email-delivery.md`
-  - SMTP configuration, API endpoints, and server-side email behavior.
+  - Configuración SMTP, endpoints API y flujo de envío server-side.
 - `home-hero-visual-system.md`
-  - Theme-aware home hero rules, video asset mapping, overlays, glass card treatment, and responsive notes.
+  - Reglas visuales del hero principal, videos por tema, overlays, glass card y responsividad.
 - `proyectos-modifier-guide.md`
-  - Practical guide for adding or editing projects in `/proyectos`.
+  - Guía práctica para añadir o editar proyectos dentro de `/proyectos`.
 - `proyectos-refactor-2026.md`
-  - Current architecture overview for the portfolio page after the 2026 refactor.
+  - Visión general de la arquitectura actual del portafolio tras el refactor de 2026.
 - `proyectos-scroll-architecture.md`
-  - Low-level behavior of the scroll-driven scene engine.
+  - Detalle del motor de escenas y del sistema de scroll guiado.
 
-## Recommended Reading Order
+## Orden recomendado de lectura
 
-1. Read `proyectos-refactor-2026.md` if you need a high-level mental model of `/proyectos`.
-2. Use `proyectos-modifier-guide.md` when you only need to change content or assets.
-3. Use `proyectos-scroll-architecture.md` if you are touching scroll logic, spacer math, or scene transitions.
-4. Use `home-hero-visual-system.md` before changing hero media, theme behavior, or the home glass card.
-5. Use `email-delivery.md` before changing SMTP settings or form delivery.
+1. Lee `proyectos-refactor-2026.md` si necesitas entender la estructura general de `/proyectos`.
+2. Usa `proyectos-modifier-guide.md` si solo vas a tocar contenido o assets.
+3. Consulta `proyectos-scroll-architecture.md` si vas a modificar la lógica de escenas o el comportamiento del scroll.
+4. Revisa `home-hero-visual-system.md` antes de tocar el hero, los videos o el sistema visual del home.
+5. Usa `email-delivery.md` antes de modificar SMTP, formularios o entrega de correos.
