@@ -146,19 +146,19 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
           tags: ['Aula virtual', 'Escalabilidad', 'Roles y permisos'],
           gallery: [
             {
-              src: '/NY-Campus-Virtual/ny-campus-virtual-1.webp',
+              src: '/projects/NY-Campus-Virtual/ny-campus-virtual-1.webp',
               alt: 'Vista principal institucional de NY Campus Virtual',
               caption: 'Portada institucional',
               variant: 'wide',
             },
             {
-              src: '/NY-Campus-Virtual/ny-campus-virtual-2.webp',
+              src: '/projects/NY-Campus-Virtual/ny-campus-virtual-2.webp',
               alt: 'Panel administrativo con roles y niveles de acceso',
               caption: 'Roles y accesos',
               variant: 'square',
             },
             {
-              src: '/NY-Campus-Virtual/ny-campus-virtual-3.webp',
+              src: '/projects/NY-Campus-Virtual/ny-campus-virtual-3.webp',
               alt: 'Aula virtual con contenido y progreso del estudiante',
               caption: 'Experiencia academica',
               variant: 'tall',
@@ -176,7 +176,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
             badge: 'EdTech / Instituto',
             shortDescription:
               'Campus virtual para gestion academica, aulas online y operacion institucional.\nDisenado para multiples roles, alta concurrencia y crecimiento sostenido.',
-            decorativeSrc: '/NY-Campus-Virtual/ny-campus-virtual-fondo.webp',
+            decorativeSrc: '/projects/NY-Campus-Virtual/ny-campus-virtual-fondo.webp',
             decorativePlacement: 'top-right',
             forceDark: true,
           },

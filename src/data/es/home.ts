@@ -53,9 +53,9 @@ export const homePageMeta: PageMetadata = {
 
 export const homeHeroContent: HomeHeroContent = {
   kicker: 'CYSTEMS - Ingeniería digital',
-  title: 'Arquitectura de software para empresas',
+  title: 'Software diseñado para crecer contigo',
   subtitle:
-    'Diseñamos y desarrollamos plataformas que optimizan procesos, centralizan información y escalan con tu empresa.',
+    'Diseñamos plataformas que optimizan procesos y centralizan tu información para impulsar tu negocio.',
   primaryAction: {
     label: 'Empezar proyecto',
     href: '/empezar-proyecto',
@@ -67,7 +67,7 @@ export const homeHeroContent: HomeHeroContent = {
   focusLabel: 'Enfoque',
   focusValue: 'Soluciones pensadas para tu modelo de negocio',
   deliveryLabel: 'Entrega',
-  deliveryValue: 'Sistemas listos para crecer contigo',
+  deliveryValue: 'Sistemas robustos y escalables',
   lightImageSrc: '/hero/yuki-light.png',
   lightImageAlt: 'Vista principal de plataforma digital en modo claro',
   darkImageSrc: '/hero/yuki-dark.png',
