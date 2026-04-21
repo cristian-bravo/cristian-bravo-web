@@ -70,8 +70,10 @@ export interface ProfileHeroContent {
   videoTitle: string;
   videoDescription: string;
   videoTags: string[];
-  videoSrc: string;
-  videoPoster: string;
+  lightMediaSrc: string;
+  lightMediaPoster: string;
+  darkMediaSrc: string;
+  darkMediaPoster: string;
 }
 
 export interface ProfileAvatarContent {
@@ -246,8 +248,10 @@ export const profileHeroContent: ProfileHeroContent = {
   videoDescription:
     'El wallpaper marca el tono de esta pagina: tecnologia que comunica, frontend que se siente vivo y una estetica que no depende de plantillas genericas.',
   videoTags: ['Loop visual', 'Motion', 'UI expresiva', 'Frontend craft'],
-  videoSrc: '/wallpapers/sakura/saved_resource.html',
-  videoPoster: '/wallpapers/sakura/preview.jpg',
+  lightMediaSrc: '/wallpapers/videos/avatar_pets.mp4',
+  lightMediaPoster: '/hero/yuki-light.png',
+  darkMediaSrc: '/wallpapers/videos/avatar_clean.mp4',
+  darkMediaPoster: '/hero/yuki-dark.png',
 };
 
 export const profileAvatarContent: ProfileAvatarContent = {

@@ -6,40 +6,53 @@ interface Props {
 }
 
 const { content } = Astro.props;
+const backgroundMediaType = content.backgroundMediaSrc.endsWith('.html')
+  ? 'html'
+  : /\.(mp4|webm|ogg)$/i.test(content.backgroundMediaSrc)
+    ? 'video'
+    : 'image';
 ---
 <section
   id="home-hero"
   class="home-hero-section hero-motion-root relative -mt-32 overflow-hidden pb-14 pt-[15rem] sm:pb-16 sm:pt-[16rem] lg:pb-20 lg:pt-[17rem]"
 >
   <div class="home-hero__media" aria-hidden="true">
-    <video
-      class="home-hero__video home-hero__video--light"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="metadata"
-      poster={content.lightImageSrc}
-      disablepictureinpicture
-      disableremoteplayback
-      tabindex="-1"
-    >
-      <source src="/wallpapers/videos/avatar_pets.mp4" type="video/mp4" />
-    </video>
-    <video
-      class="home-hero__video home-hero__video--dark"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="metadata"
-      poster={content.darkImageSrc}
-      disablepictureinpicture
-      disableremoteplayback
-      tabindex="-1"
-    >
-      <source src="/wallpapers/videos/avatar_clean.mp4" type="video/mp4" />
-    </video>
+    {backgroundMediaType === 'html' ? (
+      <iframe
+        class:list={['home-hero__background', 'home-hero__background--embed']}
+        src={content.backgroundMediaSrc}
+        title="Fondo visual de home"
+        loading="eager"
+        tabindex="-1"
+        aria-hidden="true"
+      ></iframe>
+    ) : backgroundMediaType === 'image' ? (
+      <img
+        class:list={['home-hero__background', 'home-hero__background--image']}
+        src={content.backgroundMediaSrc}
+        alt=""
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+        aria-hidden="true"
+      />
+    ) : (
+      <video
+        class:list={['home-hero__background', 'home-hero__background--video']}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster={content.backgroundMediaPoster}
+        disablepictureinpicture
+        disableremoteplayback
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        <source src={content.backgroundMediaSrc} type="video/mp4" />
+      </video>
+    )}
     <div class="home-hero__overlay"></div>
   </div>
   <div class="hero-motion-shell mx-auto w-full max-w-[1120px] px-4 sm:px-6">

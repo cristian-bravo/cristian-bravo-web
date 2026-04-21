@@ -6,9 +6,14 @@ interface Props {
 }
 
 const { content } = Astro.props;
-const mediaType = content.videoSrc.endsWith('.html')
+const lightMediaType = content.lightMediaSrc.endsWith('.html')
   ? 'html'
-  : /\.(mp4|webm|ogg)$/i.test(content.videoSrc)
+  : /\.(mp4|webm|ogg)$/i.test(content.lightMediaSrc)
+    ? 'video'
+    : 'image';
+const darkMediaType = content.darkMediaSrc.endsWith('.html')
+  ? 'html'
+  : /\.(mp4|webm|ogg)$/i.test(content.darkMediaSrc)
     ? 'video'
     : 'image';
 const isExternalLink = (href: string) => /^https?:\/\//i.test(href);
@@ -30,19 +35,19 @@ const getQuickLinkIcon = (icon: 'github' | 'linkedin' | 'email' | 'cv') => {
 ---
 <section class="profile-hero-section" data-profile-hero>
   <div class="profile-hero-layout">
-    {mediaType === 'html' ? (
+    {lightMediaType === 'html' ? (
       <iframe
-        class:list={['profile-hero-video', 'is-embed']}
-        src={content.videoSrc}
-        title={content.videoTitle}
+        class:list={['profile-hero-background', 'profile-hero-background--light', 'is-embed']}
+        src={content.lightMediaSrc}
+        title={`${content.videoTitle} claro`}
         loading="eager"
         tabindex="-1"
         aria-hidden="true"
       ></iframe>
-    ) : mediaType === 'image' ? (
+    ) : lightMediaType === 'image' ? (
       <img
-        class:list={['profile-hero-video', 'is-image']}
-        src={content.videoSrc}
+        class:list={['profile-hero-background', 'profile-hero-background--light', 'is-image']}
+        src={content.lightMediaSrc}
         alt=""
         loading="eager"
         decoding="async"
@@ -51,16 +56,49 @@ const getQuickLinkIcon = (icon: 'github' | 'linkedin' | 'email' | 'cv') => {
       />
     ) : (
       <video
-        class:list={['profile-hero-video', 'is-video']}
+        class:list={['profile-hero-background', 'profile-hero-background--light', 'is-video']}
         autoplay
         muted
         loop
         playsinline
         preload="metadata"
-        poster={content.videoPoster}
+        poster={content.lightMediaPoster}
         aria-hidden="true"
       >
-        <source src={content.videoSrc} type="video/mp4" />
+        <source src={content.lightMediaSrc} type="video/mp4" />
+      </video>
+    )}
+    {darkMediaType === 'html' ? (
+      <iframe
+        class:list={['profile-hero-background', 'profile-hero-background--dark', 'is-embed']}
+        src={content.darkMediaSrc}
+        title={`${content.videoTitle} oscuro`}
+        loading="eager"
+        tabindex="-1"
+        aria-hidden="true"
+      ></iframe>
+    ) : darkMediaType === 'image' ? (
+      <img
+        class:list={['profile-hero-background', 'profile-hero-background--dark', 'is-image']}
+        src={content.darkMediaSrc}
+        alt=""
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+        aria-hidden="true"
+      />
+    ) : (
+      <video
+        class:list={['profile-hero-background', 'profile-hero-background--dark', 'is-video']}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster={content.darkMediaPoster}
+        aria-hidden="true"
+      >
+        <source src={content.darkMediaSrc} type="video/mp4" />
       </video>
     )}
     <div class="profile-hero-layout-overlay" aria-hidden="true"></div>

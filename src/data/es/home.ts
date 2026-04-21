@@ -10,6 +10,8 @@ export interface HomeHeroContent {
   focusValue: string;
   deliveryLabel: string;
   deliveryValue: string;
+  backgroundMediaSrc: string;
+  backgroundMediaPoster?: string;
   lightImageSrc: string;
   lightImageAlt: string;
   darkImageSrc: string;
@@ -68,6 +70,8 @@ export const homeHeroContent: HomeHeroContent = {
   focusValue: 'Soluciones pensadas para tu modelo de negocio',
   deliveryLabel: 'Entrega',
   deliveryValue: 'Sistemas robustos y escalables',
+  backgroundMediaSrc: '/wallpapers/sakura/saved_resource.html',
+  backgroundMediaPoster: '/wallpapers/sakura/preview.jpg',
   lightImageSrc: '/hero/yuki-light.png',
   lightImageAlt: 'Vista principal de plataforma digital en modo claro',
   darkImageSrc: '/hero/yuki-dark.png',
