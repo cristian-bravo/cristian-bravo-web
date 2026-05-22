@@ -28,6 +28,8 @@ export const sendProjectRequest = async (
     payload.append(attachmentField, attachment, attachment.name);
   }
 
+  payload.append('lang', document.documentElement.lang === 'en' ? 'en' : 'es');
+
   const response = await fetch('/api/send-project', {
     method: 'POST',
     body: payload,

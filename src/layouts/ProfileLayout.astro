@@ -2,15 +2,23 @@
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import type { Lang } from '../data';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: Lang;
+}
 
 const {
   title = 'Perfil | Cristian Bravo',
   description = 'Perfil profesional, experiencia y enfoque técnico en CYSTEMS.',
+  lang = 'es',
 } = Astro.props;
 ---
-<BaseLayout title={title} description={description}>
-  <Header transparent />
-  <main class="min-h-[60vh]">
+<BaseLayout title={title} description={description} lang={lang}>
+  <Header transparent lang={lang} />
+  <main id="main-content" class="min-h-[60vh]">
     <slot />
   </main>
   <script is:inline>
@@ -151,5 +159,5 @@ const {
       }
     })();
   </script>
-  <Footer />
+  <Footer lang={lang} />
 </BaseLayout>

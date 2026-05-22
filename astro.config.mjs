@@ -5,6 +5,7 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://cystems.ec',
   output: 'server',
   adapter: node({
     mode: 'standalone',

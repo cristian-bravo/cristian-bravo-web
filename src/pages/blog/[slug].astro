@@ -4,14 +4,17 @@ import BlogPlaceholderSection from '../../components/blog/sections/BlogPlacehold
 import { getData } from '../../data';
 import '../../styles/blog.css';
 
-const { blog } = getData('es');
+const lang = Astro.props.lang === 'en' ? 'en' : 'es';
+const { blog } = getData(lang);
 const { blogPlaceholderContent, blogSlugPageMeta } = blog;
+
+export const prerender = true;
 
 export function getStaticPaths() {
   // The blog is disabled for now, so no detail pages are generated.
   return [];
 }
 ---
-<CystemsLayout title={blogSlugPageMeta.title} description={blogSlugPageMeta.description}>
+<CystemsLayout title={blogSlugPageMeta.title} description={blogSlugPageMeta.description} lang={lang}>
   <BlogPlaceholderSection content={blogPlaceholderContent} />
 </CystemsLayout>

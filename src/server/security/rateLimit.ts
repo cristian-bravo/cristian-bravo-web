@@ -40,7 +40,7 @@ export const checkRateLimit = ({ request, clientAddress }: Pick<APIContext, 'req
     return new Response(
       JSON.stringify({
         success: false,
-        error: RATE_LIMIT_ERROR,
+        message: RATE_LIMIT_ERROR,
       }),
       {
         status: 429,

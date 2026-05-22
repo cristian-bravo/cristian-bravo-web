@@ -1,8 +1,12 @@
 ---
+import type { Lang } from '../data';
+import { getAlternateLangPath, getUiCopy, localizePath } from '../lib/i18n';
+
 type NavLink = { href: string; label: string };
 
 interface Props {
   transparent?: boolean;
+  lang?: Lang;
 }
 
 const cleanPath = (value: string | null | undefined): string => {
@@ -12,13 +16,15 @@ const cleanPath = (value: string | null | undefined): string => {
 };
 
 const pathname = cleanPath(Astro.url.pathname);
-const { transparent = false } = Astro.props;
-const navLinks: NavLink[] = [
-  { href: '/', label: 'Inicio' },
-  { href: '/servicios', label: 'Servicios' },
-  { href: '/proyectos', label: 'Proyectos' },
-  { href: '/perfil/cristian-bravo', label: 'Sobre mí' },
-];
+const { transparent = false, lang = 'es' } = Astro.props;
+const copy = getUiCopy(lang);
+const navLinks: NavLink[] = copy.nav.map((item) => ({
+  href: localizePath(item.href, lang),
+  label: item.label,
+}));
+const projectStartHref = localizePath('/empezar-proyecto', lang);
+const alternateLang = lang === 'es' ? 'en' : 'es';
+const alternateHref = getAlternateLangPath(pathname, alternateLang);
 
 const isActivePath = (href: string): boolean => {
   const target = cleanPath(href);
@@ -31,7 +37,7 @@ const navItems = navLinks.map((item) => ({
   isActive: isActivePath(item.href),
 }));
 
-const isDevelopmentActive = isActivePath('/empezar-proyecto');
+const isDevelopmentActive = isActivePath(projectStartHref);
 const mobilePanelId = 'site-mobile-menu';
 ---
 
@@ -39,6 +45,8 @@ const mobilePanelId = 'site-mobile-menu';
   class:list={['header-shell', 'sticky top-0 z-40', transparent && 'is-transparent']}
   data-site-header
   data-profile-navbar={transparent ? 'true' : undefined}
+  data-menu-open-label={copy.menuOpenLabel}
+  data-menu-close-label={copy.menuCloseLabel}
 >
   <div class="header-container mx-auto w-full max-w-[1120px] px-4 sm:px-6">
     <div class="header-row">
@@ -46,7 +54,7 @@ const mobilePanelId = 'site-mobile-menu';
 
       <div class="header-frame">
         <div class="header-brand">
-          <a class="brand-logo-link group" href="/" aria-label="Inicio CYSTEMS">
+            <a class="brand-logo-link group" href={localizePath('/', lang)} aria-label="CYSTEMS">
             <span class="brand-logo-aura" aria-hidden="true"></span>
             <img
               src="/logos/logo-header-black.webp"
@@ -70,7 +78,7 @@ const mobilePanelId = 'site-mobile-menu';
         </div>
 
         <div class="header-center">
-          <nav class="header-nav" aria-label="Principal" data-header-nav>
+          <nav class="header-nav" aria-label={copy.navLabel} data-header-nav>
             <span class="header-nav-indicator" data-header-nav-indicator aria-hidden="true"></span>
             {navItems.map((item) => (
               <a
@@ -88,12 +96,16 @@ const mobilePanelId = 'site-mobile-menu';
         <div class="header-actions">
           <a
             class:list={['header-cta', 'header-primary-cta', isDevelopmentActive && 'is-active']}
-            href="/empezar-proyecto"
+            href={projectStartHref}
             aria-current={isDevelopmentActive ? 'page' : undefined}
-            aria-label="Empezar proyecto"
+            aria-label={copy.headerCta}
           >
-            <span class="header-cta-label">Empezar proyecto</span>
-            <span class="header-cta-label-short">Empezar</span>
+            <span class="header-cta-label">{copy.headerCta}</span>
+            <span class="header-cta-label-short">{copy.headerCtaShort}</span>
+          </a>
+
+          <a class="header-lang-toggle" href={alternateHref} hreflang={alternateLang} aria-label={copy.languageToggleLabel}>
+            <span aria-hidden="true">{alternateLang.toUpperCase()}</span>
           </a>
 
           <button
@@ -102,7 +114,7 @@ const mobilePanelId = 'site-mobile-menu';
             data-header-menu-toggle
             aria-expanded="false"
             aria-controls={mobilePanelId}
-            aria-label="Abrir menu principal"
+            aria-label={copy.menuOpenLabel}
           >
             <span class="header-menu-toggle-line" aria-hidden="true"></span>
             <span class="header-menu-toggle-line" aria-hidden="true"></span>
@@ -116,11 +128,11 @@ const mobilePanelId = 'site-mobile-menu';
         data-theme-toggle
         type="button"
         class="theme-toggle-btn header-theme-toggle"
-        aria-label="Activar modo oscuro"
+        aria-label={copy.themeDarkLabel}
         aria-pressed="false"
-        title="Cambiar tema"
+        title={copy.themeTitleDark}
       >
-        <span class="sr-only">Cambiar tema</span>
+        <span class="sr-only">{copy.themeDarkLabel}</span>
         <span class="theme-toggle-orbit" aria-hidden="true"></span>
         <span class="theme-toggle-icon theme-toggle-sun" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -142,7 +154,7 @@ const mobilePanelId = 'site-mobile-menu';
     </div>
 
     <div class="header-mobile-panel" id={mobilePanelId} data-header-mobile-panel aria-hidden="true">
-      <nav class="header-mobile-nav" aria-label="Navegacion movil">
+      <nav class="header-mobile-nav" aria-label={copy.mobileNavLabel}>
         {navItems.map((item) => (
           <a
             class:list={['header-mobile-link', item.isActive && 'is-active']}
@@ -153,6 +165,36 @@ const mobilePanelId = 'site-mobile-menu';
             <span>{item.label}</span>
           </a>
         ))}
+        <a
+          class:list={['header-mobile-link', 'header-mobile-link--cta', isDevelopmentActive && 'is-active']}
+          href={projectStartHref}
+          aria-current={isDevelopmentActive ? 'page' : undefined}
+          data-header-mobile-link
+        >
+          <span>{copy.headerCta}</span>
+        </a>
+        <a
+          class="header-mobile-link"
+          href={alternateHref}
+          hreflang={alternateLang}
+          aria-label={copy.languageToggleLabel}
+          data-header-mobile-link
+        >
+          <span>{copy.alternateLanguageName}</span>
+          <span>{alternateLang.toUpperCase()}</span>
+        </a>
+        <button
+          type="button"
+          class="header-mobile-link header-mobile-link--theme"
+          data-theme-toggle
+          data-header-mobile-link
+          aria-label={copy.themeDarkLabel}
+          aria-pressed="false"
+          title={copy.themeTitleDark}
+        >
+          <span>{copy.themeToggleText}</span>
+          <span class="header-mobile-theme-dot" aria-hidden="true"></span>
+        </button>
       </nav>
     </div>
   </div>
@@ -174,6 +216,8 @@ const mobilePanelId = 'site-mobile-menu';
     const mobilePanel = header.querySelector('[data-header-mobile-panel]');
     const mobileLinks = Array.from(header.querySelectorAll('[data-header-mobile-link]'));
     const desktopQuery = window.matchMedia('(min-width: 768px)');
+    const openLabel = header.getAttribute('data-menu-open-label') || 'Open main menu';
+    const closeLabel = header.getAttribute('data-menu-close-label') || 'Close main menu';
 
     const activeLink =
       navLinks.find((link) => link.getAttribute('aria-current') === 'page') ?? navLinks[0] ?? null;
@@ -204,7 +248,7 @@ const mobilePanelId = 'site-mobile-menu';
       header.classList.remove('is-menu-open');
       if (menuToggle instanceof HTMLButtonElement) {
         menuToggle.setAttribute('aria-expanded', 'false');
-        menuToggle.setAttribute('aria-label', 'Abrir menu principal');
+        menuToggle.setAttribute('aria-label', openLabel);
       }
       if (mobilePanel instanceof HTMLElement) {
         mobilePanel.setAttribute('aria-hidden', 'true');
@@ -217,7 +261,7 @@ const mobilePanelId = 'site-mobile-menu';
 
       if (menuToggle instanceof HTMLButtonElement) {
         menuToggle.setAttribute('aria-expanded', String(nextIsOpen));
-        menuToggle.setAttribute('aria-label', nextIsOpen ? 'Cerrar menu principal' : 'Abrir menu principal');
+        menuToggle.setAttribute('aria-label', nextIsOpen ? closeLabel : openLabel);
       }
 
       if (mobilePanel instanceof HTMLElement) {
@@ -671,6 +715,42 @@ const mobilePanelId = 'site-mobile-menu';
     display: none;
   }
 
+  [data-site-header] .header-lang-toggle {
+    position: relative;
+    display: inline-grid;
+    width: 2.72rem;
+    height: 2.72rem;
+    place-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--header-nav-text-active);
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    box-shadow:
+      0 10px 24px rgba(15, 23, 42, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition:
+      transform 220ms ease,
+      background 220ms ease,
+      border-color 220ms ease;
+  }
+
+  .dark [data-site-header] .header-lang-toggle {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  [data-site-header] .header-lang-toggle:hover,
+  [data-site-header] .header-lang-toggle:focus-visible {
+    transform: translateY(-1px);
+    border-color: rgba(124, 58, 237, 0.28);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(59, 130, 246, 0.1));
+    outline: none;
+  }
+
   [data-site-header] .header-theme-toggle,
   [data-site-header].header-shell.is-transparent .header-theme-toggle,
   [data-site-header].header-shell.is-transparent.is-scrolled .header-theme-toggle {
@@ -771,6 +851,7 @@ const mobilePanelId = 'site-mobile-menu';
 
   [data-site-header] .header-mobile-link {
     display: flex;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
     min-height: 3rem;
@@ -779,8 +860,11 @@ const mobilePanelId = 'site-mobile-menu';
     border: 1px solid rgba(148, 163, 184, 0.16);
     background: rgba(255, 255, 255, 0.12);
     color: var(--header-nav-text-active);
+    cursor: pointer;
+    font-family: inherit;
     font-size: 0.94rem;
     font-weight: 650;
+    text-align: left;
     text-decoration: none;
     transition:
       transform 220ms ease,
@@ -797,13 +881,39 @@ const mobilePanelId = 'site-mobile-menu';
     outline: none;
   }
 
+  [data-site-header] .header-mobile-link--cta {
+    justify-content: center;
+    border-color: rgba(124, 58, 237, 0.28);
+    background: linear-gradient(125deg, #7c3aed, #3b82f6);
+    color: #ffffff;
+    box-shadow: 0 14px 28px rgba(59, 130, 246, 0.18);
+  }
+
+  [data-site-header] .header-mobile-link--theme {
+    color: var(--header-nav-text-active);
+  }
+
+  [data-site-header] .header-mobile-theme-dot {
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #facc15, #38bdf8);
+    box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.1);
+  }
+
   @media (max-width: 767px) {
     [data-site-header].header-shell {
       padding-top: 0.54rem;
     }
 
+    [data-site-header] .header-container {
+      padding-inline: 0.75rem;
+    }
+
     [data-site-header] .header-row {
-      gap: 0.58rem;
+      position: relative;
+      width: 100%;
+      gap: 0.36rem;
     }
 
     [data-site-header] .header-toggle-spacer {
@@ -811,16 +921,17 @@ const mobilePanelId = 'site-mobile-menu';
     }
 
     [data-site-header] .header-frame {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      grid-template-areas: 'brand actions';
-      gap: 0.9rem;
-      padding: 0.62rem 0.85rem;
-      border-radius: 24px;
+      display: block;
+      width: 100%;
+      min-width: 0;
+      min-height: 3.42rem;
+      padding: 0.5rem 3.35rem 0.5rem 0.5rem;
+      border-radius: 20px;
+      position: static;
     }
 
     [data-site-header] .header-brand {
-      grid-area: brand;
+      min-width: 0;
     }
 
     [data-site-header] .header-center {
@@ -828,21 +939,37 @@ const mobilePanelId = 'site-mobile-menu';
     }
 
     [data-site-header] .header-actions {
-      grid-area: actions;
+      position: absolute;
+      top: 50%;
+      right: 0.5rem;
+      min-width: max-content;
       margin-left: 0;
-      gap: 0.58rem;
+      gap: 0.32rem;
+      transform: translateY(-50%);
+      z-index: 2;
     }
 
     [data-site-header] .brand-logo-link {
-      max-width: 8.4rem;
+      width: min(7.8rem, 38vw);
+      max-width: none;
+      min-height: 2.42rem;
+      padding: 0.3rem 0.42rem;
+      border-radius: 16px;
     }
 
     [data-site-header] .brand-logo-img {
       width: 100%;
+      max-width: none;
       height: auto;
     }
 
+    [data-site-header] .brand-logo-dark {
+      left: 0.42rem;
+      width: calc(100% - 0.84rem);
+    }
+
     [data-site-header] .header-cta {
+      display: none;
       min-height: 2.65rem;
       padding: 0 0.92rem;
       font-size: 0.76rem;
@@ -863,10 +990,21 @@ const mobilePanelId = 'site-mobile-menu';
       display: inline-flex;
     }
 
-    [data-site-header] .header-theme-toggle,
     [data-site-header] .header-menu-toggle {
-      width: 2.72rem;
-      height: 2.72rem;
+      width: 2.36rem;
+      height: 2.36rem;
+    }
+
+    [data-site-header] .header-theme-toggle {
+      display: none;
+    }
+
+    [data-site-header] .header-lang-toggle {
+      display: none;
+    }
+
+    [data-site-header] .header-lang-toggle {
+      font-size: 0.68rem;
     }
 
     [data-site-header] .header-mobile-panel {
@@ -885,7 +1023,7 @@ const mobilePanelId = 'site-mobile-menu';
     }
 
     [data-site-header].is-menu-open .header-mobile-panel {
-      max-height: 22rem;
+      max-height: 28rem;
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
@@ -917,6 +1055,7 @@ const mobilePanelId = 'site-mobile-menu';
     [data-site-header] .header-nav-link,
     [data-site-header] .header-cta,
     [data-site-header] .header-cta::before,
+    [data-site-header] .header-lang-toggle,
     [data-site-header] .header-menu-toggle,
     [data-site-header] .header-menu-toggle-line,
     [data-site-header] .header-mobile-panel,

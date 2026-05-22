@@ -274,7 +274,10 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            ...formData,
+            lang: document.documentElement.lang === 'en' ? 'en' : 'es',
+          }),
         });
 
         const result = await response.json().catch(() => null);

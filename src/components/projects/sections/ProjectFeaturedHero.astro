@@ -5,6 +5,7 @@ import type {
   ProjectGalleryItemContent,
   ProjectReferenceContent,
 } from '../../../data/es/projects';
+import type { Lang } from '../../../data';
 
 interface Props {
   project: ProjectReferenceContent;
@@ -16,6 +17,7 @@ interface Props {
   wideItem?: ProjectGalleryItemContent;
   squareItem?: ProjectGalleryItemContent;
   tallItem?: ProjectGalleryItemContent;
+  lang?: Lang;
 }
 
 const {
@@ -28,6 +30,7 @@ const {
   wideItem,
   squareItem,
   tallItem,
+  lang = 'es',
 } = Astro.props;
 
 const featuredDescriptionLines = featuredHero.shortDescription
@@ -53,39 +56,76 @@ const featureTheme =
       : 'edu';
 
 const isConfidentialFeature = featureTheme === 'confidential';
+const actionOfLabel = lang === 'en' ? 'for' : 'de';
+const heroLabel = lang === 'en' ? `Project hero ${project.title}` : `Hero del proyecto ${project.title}`;
+const repositoryLabel = lang === 'en' ? 'Repository' : 'Repositorio';
+const openRepositoryLabel = lang === 'en' ? `Open repository for ${project.title}` : `Abrir repositorio de ${project.title}`;
+const capabilitiesLabel = lang === 'en' ? `Capabilities for ${project.title}` : `Capacidades de ${project.title}`;
 const confidentialFeatureToneClass =
   isConfidentialFeature && featuredHero.visualTone === 'violet'
     ? 'ps-project-feature--tone-violet'
     : undefined;
 const visualsLabel = isConfidentialFeature
-  ? `Representacion confidencial de ${project.title}`
-  : `Galeria de ${project.title}`;
-const confidentialHeroPanels = {
-  lead: {
-    chip: 'NDA',
-    primaryLabel: 'Canal seguro',
-    primaryValue: 'API / Sync',
-    secondaryLabel: 'Estado',
-    secondaryValue: 'Interno',
-    meta: 'Acceso restringido',
-  },
-  square: {
-    chip: 'SYNC',
-    primaryLabel: 'Integridad',
-    primaryValue: 'Cifrado',
-    secondaryLabel: 'Trama',
-    secondaryValue: 'Privada',
-    meta: 'Integridad protegida',
-  },
-  tall: {
-    chip: 'OPS',
-    primaryLabel: 'Ambiente',
-    primaryValue: 'Interno',
-    secondaryLabel: 'Control',
-    secondaryValue: 'Auditado',
-    meta: 'Sistema interno',
-  },
-};
+  ? lang === 'en'
+    ? `Confidential representation of ${project.title}`
+    : `Representacion confidencial de ${project.title}`
+  : lang === 'en'
+    ? `${project.title} gallery`
+    : `Galeria de ${project.title}`;
+const confidentialHeroPanels =
+  lang === 'en'
+    ? {
+        lead: {
+          chip: 'NDA',
+          primaryLabel: 'Secure channel',
+          primaryValue: 'API / Sync',
+          secondaryLabel: 'Status',
+          secondaryValue: 'Internal',
+          meta: 'Restricted access',
+        },
+        square: {
+          chip: 'SYNC',
+          primaryLabel: 'Integrity',
+          primaryValue: 'Encrypted',
+          secondaryLabel: 'Flow',
+          secondaryValue: 'Private',
+          meta: 'Protected integrity',
+        },
+        tall: {
+          chip: 'OPS',
+          primaryLabel: 'Environment',
+          primaryValue: 'Internal',
+          secondaryLabel: 'Control',
+          secondaryValue: 'Audited',
+          meta: 'Internal system',
+        },
+      }
+    : {
+        lead: {
+          chip: 'NDA',
+          primaryLabel: 'Canal seguro',
+          primaryValue: 'API / Sync',
+          secondaryLabel: 'Estado',
+          secondaryValue: 'Interno',
+          meta: 'Acceso restringido',
+        },
+        square: {
+          chip: 'SYNC',
+          primaryLabel: 'Integridad',
+          primaryValue: 'Cifrado',
+          secondaryLabel: 'Trama',
+          secondaryValue: 'Privada',
+          meta: 'Integridad protegida',
+        },
+        tall: {
+          chip: 'OPS',
+          primaryLabel: 'Ambiente',
+          primaryValue: 'Interno',
+          secondaryLabel: 'Control',
+          secondaryValue: 'Auditado',
+          meta: 'Sistema interno',
+        },
+      };
 ---
 
 <section
@@ -94,7 +134,7 @@ const confidentialHeroPanels = {
     `ps-project-feature--${featureTheme}`,
     confidentialFeatureToneClass,
   ]}
-  aria-label={`Hero del proyecto ${project.title}`}
+  aria-label={heroLabel}
 >
   <div class="ps-project-feature__surface">
     {featuredHero.decorativeSrc && featuredHero.decorativePlacement && (
@@ -171,7 +211,7 @@ const confidentialHeroPanels = {
               ]}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${action.label} de ${project.title}`}
+              aria-label={`${action.label} ${actionOfLabel} ${project.title}`}
             >
               {action.label}
             </a>
@@ -187,7 +227,7 @@ const confidentialHeroPanels = {
               ]}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Abrir repositorio de ${project.title}`}
+              aria-label={openRepositoryLabel}
             >
               <svg
                 width="16"
@@ -199,13 +239,13 @@ const confidentialHeroPanels = {
               >
                 <path d={githubMarkPath} />
               </svg>
-              Repositorio
+              {repositoryLabel}
             </a>
           )}
         </div>
       )}
 
-      <ul class="ps-project-feature__tags" data-reveal aria-label={`Capacidades de ${project.title}`}>
+      <ul class="ps-project-feature__tags" data-reveal aria-label={capabilitiesLabel}>
         {featuredTags.map((tag) => (
           <li class="ps-project-feature__tag">{tag}</li>
         ))}

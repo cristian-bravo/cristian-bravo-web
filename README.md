@@ -23,7 +23,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Astro-5.x-FF5D01?style=flat-square&logo=astro&logoColor=white" alt="Astro" />
   <img src="https://img.shields.io/badge/TailwindCSS-3.x-38BDF8?style=flat-square&logo=tailwindcss&logoColor=0B1120" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/Anime.js-Motion-111827?style=flat-square&logo=javascript&logoColor=F7DF1E" alt="Anime.js" />
+  <img src="https://img.shields.io/badge/CSS%20Motion-Optimized-111827?style=flat-square&logo=css3&logoColor=38BDF8" alt="CSS Motion" />
   <img src="https://img.shields.io/badge/Node-SSR-111827?style=flat-square&logo=node.js&logoColor=white" alt="Node SSR" />
   <img src="https://img.shields.io/badge/Nodemailer-SMTP-166534?style=flat-square&logo=maildotru&logoColor=white" alt="Nodemailer" />
 </p>
@@ -68,7 +68,7 @@ No está planteado como un landing genérico. La identidad visual, la claridad d
   - modo oscuro: `/wallpapers/videos/avatar_clean.mp4`
 - Glass card, blur y overlays calibrados para priorizar legibilidad sin perder profundidad.
 - Header, portfolio y perfil con comportamiento coherente en light/dark.
-- Motion guiado con `animejs` y capas CSS propias.
+- Motion guiado con CSS y controladores ligeros de scroll.
 
 ## Stack técnico
 

@@ -4,10 +4,11 @@ import BlogPlaceholderSection from '../../components/blog/sections/BlogPlacehold
 import { getData } from '../../data';
 import '../../styles/blog.css';
 
-const { blog } = getData('es');
+const lang = Astro.props.lang === 'en' ? 'en' : 'es';
+const { blog } = getData(lang);
 const { blogIndexPageMeta, blogPlaceholderContent } = blog;
 ---
-<CystemsLayout title={blogIndexPageMeta.title} description={blogIndexPageMeta.description}>
+<CystemsLayout title={blogIndexPageMeta.title} description={blogIndexPageMeta.description} lang={lang}>
   <BlogPlaceholderSection content={blogPlaceholderContent} />
 </CystemsLayout>
 

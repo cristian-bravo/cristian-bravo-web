@@ -48,14 +48,20 @@ const parseBoolean = (value: string | undefined, fallback: boolean) => {
   return ['1', 'true', 'yes', 'on'].includes(value.trim().toLowerCase());
 };
 
+const getTrimmedEnv = (key: string) => {
+  const value = (import.meta.env as Record<string, string | undefined>)[key];
+  return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+};
+
 const getSmtpSettings = (user: string) => {
-  const host = import.meta.env.SMTP_HOST ?? (isGmailUser(user) ? 'smtp.gmail.com' : 'smtp.office365.com');
-  const port = Number(import.meta.env.SMTP_PORT ?? 587);
-  const secure = parseBoolean(import.meta.env.SMTP_SECURE, false);
+  const host = getTrimmedEnv('SMTP_HOST') ?? (isGmailUser(user) ? 'smtp.gmail.com' : 'smtp.office365.com');
+  const rawPort = getTrimmedEnv('SMTP_PORT');
+  const port = rawPort ? Number(rawPort) : 587;
+  const secure = parseBoolean(getTrimmedEnv('SMTP_SECURE'), port === 465);
 
   return {
     host,
-    port,
+    port: Number.isFinite(port) && port > 0 ? port : 587,
     secure,
   };
 };
@@ -85,9 +91,15 @@ const getTransporter = () => {
     host,
     port,
     secure,
+    connectionTimeout: 12000,
+    greetingTimeout: 12000,
+    socketTimeout: 20000,
     auth: {
       user,
       pass,
+    },
+    tls: {
+      servername: host,
     },
   });
 
@@ -384,6 +396,10 @@ export const getSmtpErrorMessage = (error: unknown) => {
 
     if (code === 'EAUTH') {
       return `${providerName} rechazo la autenticacion SMTP. Revisa EMAIL_USER y EMAIL_PASS.`;
+    }
+
+    if (['ECONNECTION', 'ETIMEDOUT', 'ESOCKET', 'ENOTFOUND'].includes(code)) {
+      return `No pudimos conectar con el servidor SMTP (${host}). Revisa SMTP_HOST, SMTP_PORT, firewall y salida SMTP del servidor.`;
     }
   }
 

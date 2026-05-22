@@ -2,16 +2,24 @@
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import type { Lang } from '../data';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: Lang;
+}
 
 const {
   title = 'CYSTEMS | Tecnología para negocios',
   description = 'Transforma ideas en tecnología con plataformas modernas y escalables.',
+  lang = 'es',
 } = Astro.props;
 ---
-<BaseLayout title={title} description={description}>
-  <Header />
-  <main class="min-h-[60vh]">
+<BaseLayout title={title} description={description} lang={lang}>
+  <Header lang={lang} />
+  <main id="main-content" class="min-h-[60vh]">
     <slot />
   </main>
-  <Footer />
+  <Footer lang={lang} />
 </BaseLayout>

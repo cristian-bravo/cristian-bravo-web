@@ -7,7 +7,8 @@ import HomeNextStepSection from '../components/home/sections/HomeNextStepSection
 import { getData } from '../data';
 import '../styles/home.css';
 
-const { home } = getData('es');
+const lang = Astro.props.lang === 'en' ? 'en' : 'es';
+const { home } = getData(lang);
 const {
   homeHeroContent,
   homeMethodContent,
@@ -16,7 +17,7 @@ const {
   homeServicesPreviewContent,
 } = home;
 ---
-<CystemsLayout title={homePageMeta.title} description={homePageMeta.description}>
+<CystemsLayout title={homePageMeta.title} description={homePageMeta.description} lang={lang}>
   <HomeHeroSection content={homeHeroContent} />
   <HomeServicesPreviewSection content={homeServicesPreviewContent} />
   <HomeMethodSection content={homeMethodContent} />

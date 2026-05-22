@@ -7,9 +7,7 @@ import { checkRateLimit } from '../../server/security/rateLimit';
 export const prerender = false;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const { developmentRequest } = getData('es');
 const apiCopy = developmentRequestApiContent;
-const wizardCopy = developmentRequest.ui;
 
 const json = (body: Record<string, unknown>, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -30,7 +28,12 @@ const buildScopeSummary = (
   projectLevel: string,
   pageRange: string,
   designLevel: string,
-  featureCount: number
+  featureCount: number,
+  summaryFallbacks: {
+    featureCountSingular: string;
+    featureCountPlural: string;
+    scopeDescription: string;
+  }
 ) => {
   const parts = [projectType, projectLevel, pageRange, designLevel].filter(Boolean);
 
@@ -38,13 +41,13 @@ const buildScopeSummary = (
     parts.push(
       `${featureCount} ${
         featureCount === 1
-          ? wizardCopy.summaryFallbacks.featureCountSingular
-          : wizardCopy.summaryFallbacks.featureCountPlural
+          ? summaryFallbacks.featureCountSingular
+          : summaryFallbacks.featureCountPlural
       }`
     );
   }
 
-  return parts.length ? parts.join(' / ') : wizardCopy.summaryFallbacks.scopeDescription;
+  return parts.length ? parts.join(' / ') : summaryFallbacks.scopeDescription;
 };
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
@@ -79,6 +82,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const references = getString(payload.get('references'));
   const projectDescription = getString(payload.get('projectDescription'));
   const specialRequirements = getString(payload.get('specialRequirements'));
+  const lang = getString(payload.get('lang')) === 'en' ? 'en' : 'es';
+  const { developmentRequest } = getData(lang);
+  const wizardCopy = developmentRequest.developmentRequestProjectContent.ui;
+  const notSpecified = lang === 'en' ? 'Not specified' : 'No especificado';
   const fileValue = payload.get(PROJECT_ATTACHMENT_FIELD);
   const attachment =
     typeof File !== 'undefined' && fileValue instanceof File && fileValue.size > 0 ? fileValue : null;
@@ -113,7 +120,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     return json({ success: false, message: wizardCopy.validation.projectDescriptionRequired }, 400);
   }
 
-  const scope = buildScopeSummary(projectType, projectLevel, pageRange, designLevel, features.length);
+  const scope = buildScopeSummary(projectType, projectLevel, pageRange, designLevel, features.length, wizardCopy.summaryFallbacks);
 
   try {
     const emailAttachment = attachment
@@ -127,13 +134,13 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     await sendProjectEmail({
       fullName,
       email,
-      company: company || 'No especificado',
-      phone: phone || 'No especificado',
-      country: country || 'No especificado',
-      projectType: projectType || 'No especificado',
-      projectLevel: projectLevel || 'No especificado',
-      pageRange: pageRange || 'No especificado',
-      designLevel: designLevel || 'No especificado',
+      company: company || notSpecified,
+      phone: phone || notSpecified,
+      country: country || notSpecified,
+      projectType: projectType || notSpecified,
+      projectLevel: projectLevel || notSpecified,
+      pageRange: pageRange || notSpecified,
+      designLevel: designLevel || notSpecified,
       scope,
       features: joinOrFallback(features, wizardCopy.summaryFallbacks.features),
       integrations: joinOrFallback(integrations, wizardCopy.summaryFallbacks.integrations),
@@ -142,9 +149,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       contentPlan: contentPlan || 'No especificado',
       timeline: timeline || 'No especificado',
       references: references || wizardCopy.summaryFallbacks.references,
-      uploadedFiles: joinOrFallback(uploadedFiles, 'Sin archivos listados'),
+      uploadedFiles: joinOrFallback(uploadedFiles, lang === 'en' ? 'No listed files' : 'Sin archivos listados'),
       brief: projectDescription,
-      specialRequirements: specialRequirements || 'Sin requerimientos especiales',
+      specialRequirements: specialRequirements || (lang === 'en' ? 'No special requirements' : 'Sin requerimientos especiales'),
       attachment: emailAttachment,
     });
 

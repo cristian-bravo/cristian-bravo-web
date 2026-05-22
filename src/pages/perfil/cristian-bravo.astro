@@ -10,7 +10,8 @@ import ProfileVisionSection from '../../components/profile/sections/ProfileVisio
 import { getData } from '../../data';
 import '../../styles/profile.css';
 
-const { profile } = getData('es');
+const lang = Astro.props.lang === 'en' ? 'en' : 'es';
+const { profile } = getData(lang);
 const {
   profileAvatarContent,
   profileExpertiseContent,
@@ -21,7 +22,7 @@ const {
   profileVisionContent,
 } = profile;
 ---
-<ProfileLayout title={profilePageMeta.title} description={profilePageMeta.description}>
+<ProfileLayout title={profilePageMeta.title} description={profilePageMeta.description} lang={lang}>
   <div class="profile-page">
     <div class="profile-hero-stack">
       <ProfileHeroSection content={profileHeroContent}>

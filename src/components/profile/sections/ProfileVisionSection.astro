@@ -8,6 +8,20 @@ interface Props {
 
 const { content } = Astro.props;
 const columns = [content.phraseColumn, content.dreamsColumn, content.goalsColumn];
+const isEnglish = content.header.kicker === 'Vision';
+const labels = isEnglish
+  ? {
+      manifesto: 'Manifesto',
+      before: 'Before you continue',
+      thanks: 'If you made it this far, thank you for taking the time.',
+      next: 'Next step',
+    }
+  : {
+      manifesto: 'Manifiesto',
+      before: 'Antes de seguir',
+      thanks: 'Si llegaste hasta aquí, gracias por tomarte el tiempo.',
+      next: 'Siguiente paso',
+    };
 ---
 <section class="profile-vision-section pb-20 pt-16 sm:pb-24 sm:pt-20 lg:pb-28 lg:pt-24">
   <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
@@ -21,7 +35,7 @@ const columns = [content.phraseColumn, content.dreamsColumn, content.goalsColumn
 
     <div class="profile-vision-motto">
       <div class="grid gap-3">
-        <p class="profile-story-label">Manifiesto</p>
+        <p class="profile-story-label">{labels.manifesto}</p>
         <h3 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
           {content.motto}
         </h3>
@@ -65,13 +79,13 @@ const columns = [content.phraseColumn, content.dreamsColumn, content.goalsColumn
     </div>
 
     <div class="profile-vision-thanks">
-      <p class="profile-story-label">Antes de seguir</p>
-      <p class="profile-vision-thanks-copy">Si llegaste hasta aqui, gracias por tomarte el tiempo.</p>
+      <p class="profile-story-label">{labels.before}</p>
+      <p class="profile-vision-thanks-copy">{labels.thanks}</p>
     </div>
 
     <div class="profile-vision-cta">
       <div class="grid gap-3">
-        <p class="profile-story-label">Siguiente paso</p>
+        <p class="profile-story-label">{labels.next}</p>
         <h3 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
           {content.ctaTitle}
         </h3>

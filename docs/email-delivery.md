@@ -33,6 +33,7 @@ La configuración SMTP se resuelve así:
 - Si existen `SMTP_HOST`, `SMTP_PORT` y `SMTP_SECURE`, se usan esos valores.
 - Si `EMAIL_USER` pertenece a Gmail, el fallback es `smtp.gmail.com:587`.
 - En cualquier otro caso, el fallback es `smtp.office365.com:587`.
+- Las variables SMTP vacías se ignoran para evitar que paneles de servidor envíen `SMTP_HOST=""` o `SMTP_PORT=""` y rompan el transporte.
 
 Si `EMAIL_TO` está vacío, el destinatario cae en `EMAIL_USER`.
 

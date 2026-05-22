@@ -217,7 +217,7 @@ export interface DevelopmentProjectContent {
 
 export const developmentRequestLandingPageMeta: PageMetadata = {
   title: 'Empezar proyecto | CYSTEMS',
-  description: 'Elige el flujo adecuado para iniciar tu desarrollo con CYSTEMS.',
+  description: 'Inicia una consulta o solicita una propuesta de desarrollo de software con CYSTEMS.',
 };
 
 export const developmentRequestSimplePageMeta: PageMetadata = {
@@ -239,18 +239,18 @@ export const developmentRequestApiContent: DevelopmentRequestApiContent = {
 export const developmentRequestLandingContent: DevelopmentRequestLandingContent = {
   header: {
     kicker: 'Empieza aquí',
-    title: 'Cuéntame tu idea',
+    title: 'Solicita una solución digital',
     description:
-      'Elige cómo quieres empezar. Puedes hacerlo rápido o completar una solicitud más detallada.',
+      'Elige el flujo adecuado según tu etapa: una consulta rápida o un brief completo para estimar mejor alcance, prioridad y siguientes pasos.',
   },
   cards: [
     {
       kicker: 'Opción 1',
       title: 'Consulta rápida',
-      description: 'Para ideas simples o dudas.',
+      description: 'Para validar una idea o resolver dudas iniciales.',
       detail:
-        'Si tienes algo claro y quieres avanzar rápido, este es el camino más directo.',
-      bullets: ['Rápido y sencillo', 'Ideal para empezar', 'Respuesta rápida'],
+        'Ideal si necesitas una primera orientación técnica o quieres saber si tu idea es viable.',
+      bullets: ['Respuesta directa', 'Diagnóstico inicial', 'Sin fricción'],
       action: {
         label: 'Empezar',
         href: '/empezar-proyecto/simple',
@@ -260,10 +260,10 @@ export const developmentRequestLandingContent: DevelopmentRequestLandingContent 
     {
       kicker: 'Opción 2',
       title: 'Proyecto completo',
-      description: 'Para algo más grande o detallado.',
+      description: 'Para una propuesta con más contexto técnico y comercial.',
       detail:
-        'Si quieres explicar mejor tu idea y recibir una propuesta más clara.',
-      bullets: ['Paso a paso', 'Más detallado', 'Mejor planificación'],
+        'Recomendado cuando necesitas estimar alcance, funcionalidades, integraciones y tiempos.',
+      bullets: ['Brief estructurado', 'Mejor estimación', 'Planificación clara'],
       action: {
         label: 'Crear solicitud',
         href: '/empezar-proyecto/proyecto',
@@ -271,11 +271,11 @@ export const developmentRequestLandingContent: DevelopmentRequestLandingContent 
       rotation: '1.5deg',
     },
   ],
-  supportKicker: 'Fácil y claro',
-  supportTitle: 'Todo empieza simple',
+  supportKicker: 'Proceso comercial',
+  supportTitle: 'Más claridad desde el primer contacto',
   supportDescription:
-    'Te guiamos para entender tu idea y darte una mejor respuesta desde el inicio.',
-  supportChips: ['Fácil de usar', 'Claro', 'Rápido', 'Sin complicaciones', 'Mejor respuesta'],
+    'La información correcta permite responder con una ruta de trabajo más precisa y realista.',
+  supportChips: ['Discovery', 'Alcance', 'Prioridades', 'Riesgos', 'Siguientes pasos'],
 };
 
 export const developmentRequestSimpleContent: DevelopmentSimpleContent = {

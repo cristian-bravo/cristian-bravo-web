@@ -124,7 +124,7 @@ export const projectsPageMeta: PageMetadata = {
 export const projectsPortfolioContent: ProjectsPortfolioContent = {
   intro: {
     kicker: 'Portafolio',
-    title: 'Proyectos desarrollados',
+    title: 'Proyectos digitales',
     description:
       'Desarrollo plataformas web empresariales, educativas y de comercio electrónico, orientadas a resolver necesidades reales de operación y gestión.',
   },

@@ -7,9 +7,7 @@ export const prerender = false;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DIGITS_PATTERN = /^[0-9]+$/;
-const { developmentRequest } = getData('es');
 const apiCopy = developmentRequestApiContent;
-const validationCopy = developmentRequest.form.validation;
 
 const json = (body: Record<string, unknown>, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -40,6 +38,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const company = getString(payload.company);
   const consultationType = getString(payload.consultationType);
   const message = getString(payload.message);
+  const lang = getString(payload.lang) === 'en' ? 'en' : 'es';
+  const { developmentRequest } = getData(lang);
+  const validationCopy = developmentRequest.developmentRequestSimpleContent.form.validation;
 
   if (!name) {
     return json({ success: false, message: validationCopy.nameRequired }, 400);
@@ -72,7 +73,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       subject: `Solicitud simple - ${consultationType}`,
       message,
       consultationType,
-      contact: company || 'No especificado',
+      contact: company || (lang === 'en' ? 'Not specified' : 'No especificado'),
     });
 
     return json({ success: true });

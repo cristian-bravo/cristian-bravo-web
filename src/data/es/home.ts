@@ -49,15 +49,15 @@ export interface HomeNextStepContent {
 }
 
 export const homePageMeta: PageMetadata = {
-  title: 'CYSTEMS | Transforma ideas en tecnología',
-  description: 'Estrategia, arquitectura y operación para construir plataformas digitales escalables.',
+  title: 'CYSTEMS | Desarrollo de software y plataformas empresariales',
+  description: 'Desarrollo web, arquitectura de software y sistemas a medida para empresas que necesitan crecer con tecnología confiable.',
 };
 
 export const homeHeroContent: HomeHeroContent = {
-  kicker: 'CYSTEMS - Ingeniería digital',
-  title: 'Software diseñado para crecer contigo',
+  kicker: 'CYSTEMS - Cristian Bravo',
+  title: 'Software profesional para operar y vender mejor',
   subtitle:
-    'Diseñamos plataformas que optimizan procesos y centralizan tu información para impulsar tu negocio.',
+    'Diseño y desarrollo plataformas web, APIs y sistemas internos con foco en negocio, rendimiento y escalabilidad.',
   primaryAction: {
     label: 'Empezar proyecto',
     href: '/empezar-proyecto',
@@ -67,25 +67,25 @@ export const homeHeroContent: HomeHeroContent = {
     href: '/proyectos',
   },
   focusLabel: 'Enfoque',
-  focusValue: 'Soluciones pensadas para tu modelo de negocio',
+  focusValue: 'Arquitectura, producto y automatización conectados a tus objetivos',
   deliveryLabel: 'Entrega',
-  deliveryValue: 'Sistemas robustos y escalables',
-  backgroundMediaSrc: '/wallpapers/sakura/saved_resource.html',
+  deliveryValue: 'Implementación clara, soporte y evolución continua',
+  backgroundMediaSrc: '/logos/logo-header-ligth.webp',
   backgroundMediaPoster: '/wallpapers/sakura/preview.jpg',
   lightImageSrc: '/hero/yuki-light.png',
   lightImageAlt: 'Vista principal de plataforma digital en modo claro',
   darkImageSrc: '/hero/yuki-dark.png',
-  visualKicker: 'Capacidades clave',
-  visualTitle: 'Arquitectura + Producto + Operación',
-  visualTags: ['Arquitectura', 'Integraciones', 'Escalabilidad'],
+  visualKicker: 'Marca + ingeniería',
+  visualTitle: 'CYSTEMS como aliado técnico para tu empresa',
+  visualTags: ['Software a medida', 'Integraciones', 'Operación estable'],
 };
 
 export const homeServicesPreviewContent: HomeServicesPreviewContent = {
   header: {
     kicker: 'Servicios',
-    title: 'Soluciones digitales para empresas en crecimiento',
+    title: 'Servicios para convertir procesos en plataformas confiables',
     description:
-      'Diseñamos, construimos y operamos plataformas digitales alineadas a objetivos de negocio.',
+      'Desde una web comercial hasta un sistema interno, el objetivo es entregar tecnología clara, medible y preparada para vender.',
   },
   cards: [
     {
@@ -111,8 +111,8 @@ export const homeServicesPreviewContent: HomeServicesPreviewContent = {
 export const homeMethodContent: HomeMethodContent = {
   header: {
     kicker: 'Método',
-    title: 'El método CYSTEMS',
-    description: 'Estrategia, arquitectura y operación alineadas para entregar resultados reales.',
+    title: 'Un proceso serio para construir sin improvisar',
+    description: 'Discovery, arquitectura, desarrollo y operación continua para reducir riesgos y acelerar resultados.',
   },
   steps: [
     {
@@ -133,8 +133,8 @@ export const homeMethodContent: HomeMethodContent = {
 export const homeNextStepContent: HomeNextStepContent = {
   header: {
     kicker: 'Siguiente paso',
-    title: 'Hablemos de la arquitectura que tu empresa necesita',
-    description: 'Agenda una cita y construyamos tu roadmap tecnológico.',
+    title: 'Hablemos de la solución que tu empresa necesita',
+    description: 'Cuéntame tu contexto y te responderé con una ruta clara para avanzar.',
   },
   primaryAction: {
     label: 'Empezar proyecto',

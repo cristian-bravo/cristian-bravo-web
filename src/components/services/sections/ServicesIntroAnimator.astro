@@ -8,21 +8,6 @@ const { targetId } = Astro.props;
 <div data-services-intro-animator data-target-id={targetId}></div>
 
 <script>
-  import { animate, remove, set, stagger } from 'animejs';
-
-  const INTRO_REVEAL_OFFSET = 24;
-  const INTRO_TEXT_DURATION = 560;
-  const INTRO_CARDS_DURATION = 620;
-  const INTRO_CARDS_DELAY = 220;
-
-  const clearRevealInlineStyles = (elements) => {
-    elements.forEach((element) => {
-      element.style.opacity = '';
-      element.style.transform = '';
-      element.style.willChange = '';
-    });
-  };
-
   const initServicesIntroAnimator = (node) => {
     if (!(node instanceof HTMLElement) || node.dataset.initialized === 'true') return;
     node.dataset.initialized = 'true';
@@ -33,77 +18,32 @@ const { targetId } = Astro.props;
     const section = document.getElementById(targetId);
     if (!section) return;
 
-    const runAnimation = () => {
-      if (section.dataset.introAnimated === 'true') return;
-
-      const revealElements = Array.from(section.querySelectorAll('[data-intro-reveal]'));
-      if (!revealElements.length) return;
-
-      const cardElements = revealElements.filter((element) => element.dataset.introReveal === 'card');
-      const textElements = revealElements.filter((element) => element.dataset.introReveal !== 'card');
-      const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-      const markReady = () => {
-        section.classList.add('services-intro--ready');
-        section.classList.remove('services-intro--prepared');
-        section.dataset.introAnimated = 'true';
-        clearRevealInlineStyles(revealElements);
-      };
-
-      if (motionQuery.matches) {
-        markReady();
-        return;
+    const revealElements = Array.from(section.querySelectorAll('[data-intro-reveal]'));
+    revealElements.forEach((element, index) => {
+      if (element instanceof HTMLElement) {
+        element.style.setProperty('--services-reveal-index', String(index));
       }
+    });
 
-      section.classList.add('services-intro--prepared');
-      revealElements.forEach((element) => {
-        element.style.willChange = 'transform, opacity';
-      });
-
-      set(revealElements, {
-        opacity: 0,
-        y: INTRO_REVEAL_OFFSET,
-      });
-
-      animate(textElements, {
-        opacity: 1,
-        y: 0,
-        duration: INTRO_TEXT_DURATION,
-        delay: stagger(70),
-        ease: 'outExpo',
-      });
-
-      animate(cardElements, {
-        opacity: 1,
-        y: 0,
-        duration: INTRO_CARDS_DURATION,
-        delay: stagger(90, { start: INTRO_CARDS_DELAY }),
-        ease: 'outExpo',
-      });
-
-      const finalizeTimer = window.setTimeout(markReady, 980);
-
-      const onMotionChange = (event) => {
-        if (!event.matches) return;
-        window.clearTimeout(finalizeTimer);
-        remove(revealElements);
-        markReady();
-      };
-
-      motionQuery.addEventListener?.('change', onMotionChange);
+    const markReady = () => {
+      section.classList.add('services-intro--ready');
+      section.classList.remove('services-intro--prepared');
+      section.dataset.introAnimated = 'true';
     };
 
-    if (!('IntersectionObserver' in window)) {
-      runAnimation();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+      markReady();
       return;
     }
+
+    section.classList.add('services-intro--prepared');
 
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
         if (!entry?.isIntersecting) return;
         observer.disconnect();
-        runAnimation();
+        markReady();
       },
       {
         rootMargin: '0px 0px -12% 0px',

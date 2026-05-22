@@ -31,7 +31,7 @@ Si alguno desaparece, el motor puede dejar de funcionar parcial o totalmente.
 
 ## Entrada y salida de escenas
 
-El motor usa `animejs` para controlar las transiciones.
+El motor usa transiciones CSS y un controlador de scroll mínimo para controlar las escenas.
 
 ### Salida
 

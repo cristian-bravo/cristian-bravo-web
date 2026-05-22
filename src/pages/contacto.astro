@@ -4,10 +4,11 @@ import ContactOverviewSection from '../components/contact/sections/ContactOvervi
 import { getData } from '../data';
 import '../styles/contact.css';
 
-const { contact } = getData('es');
+const lang = Astro.props.lang === 'en' ? 'en' : 'es';
+const { contact } = getData(lang);
 const { contactOverviewContent, contactPageMeta } = contact;
 ---
-<CystemsLayout title={contactPageMeta.title} description={contactPageMeta.description}>
+<CystemsLayout title={contactPageMeta.title} description={contactPageMeta.description} lang={lang}>
   <ContactOverviewSection content={contactOverviewContent} />
 </CystemsLayout>
 

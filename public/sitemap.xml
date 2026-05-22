@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://cystems.ec/</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cystems.ec/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cystems.ec/en" />
+  </url>
+  <url>
+    <loc>https://cystems.ec/servicios</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cystems.ec/servicios" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cystems.ec/en/servicios" />
+  </url>
+  <url>
+    <loc>https://cystems.ec/proyectos</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cystems.ec/proyectos" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cystems.ec/en/proyectos" />
+  </url>
+  <url>
+    <loc>https://cystems.ec/perfil/cristian-bravo</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cystems.ec/perfil/cristian-bravo" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cystems.ec/en/perfil/cristian-bravo" />
+  </url>
+  <url>
+    <loc>https://cystems.ec/contacto</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cystems.ec/contacto" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cystems.ec/en/contacto" />
+  </url>
+  <url>
+    <loc>https://cystems.ec/empezar-proyecto</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cystems.ec/empezar-proyecto" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cystems.ec/en/empezar-proyecto" />
+  </url>
+  <url>
+    <loc>https://cystems.ec/empezar-proyecto/simple</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cystems.ec/empezar-proyecto/simple" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cystems.ec/en/empezar-proyecto/simple" />
+  </url>
+  <url>
+    <loc>https://cystems.ec/empezar-proyecto/proyecto</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://cystems.ec/empezar-proyecto/proyecto" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cystems.ec/en/empezar-proyecto/proyecto" />
+  </url>
+</urlset>

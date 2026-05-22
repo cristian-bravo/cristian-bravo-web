@@ -1,14 +1,58 @@
 ﻿---
 import '../styles/global.css';
 import '../styles/final-tech-background.css';
+import type { Lang } from '../data';
+import { getAlternateLangPath, getUiCopy, localizePath, stripLangPrefix } from '../lib/i18n';
 
-const { title = 'CYSTEMS', description = 'Soluciones tecnológicas modernas' } = Astro.props;
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: Lang;
+  image?: string;
+  canonicalPath?: string;
+}
+
+const {
+  title = 'CYSTEMS',
+  description = 'Soluciones tecnológicas modernas',
+  lang = 'es',
+  image = '/logos/logo-header-black.webp',
+  canonicalPath,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://cystems.ec');
+const copy = getUiCopy(lang);
+const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, site).toString();
+const alternateEsUrl = new URL(localizePath(stripLangPrefix(Astro.url.pathname), 'es'), site).toString();
+const alternateEnUrl = new URL(localizePath(stripLangPrefix(Astro.url.pathname), 'en'), site).toString();
+const ogImageUrl = new URL(image, site).toString();
+const themeLabels = {
+  light: copy.themeLightLabel,
+  dark: copy.themeDarkLabel,
+  titleLight: copy.themeTitleLight,
+  titleDark: copy.themeTitleDark,
+};
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'CYSTEMS',
+  url: new URL('/', site).toString(),
+  image: ogImageUrl,
+  founder: {
+    '@type': 'Person',
+    name: 'Cristian Bravo',
+    jobTitle: 'Full-stack developer and software architect',
+    url: new URL(getAlternateLangPath('/perfil/cristian-bravo', lang), site).toString(),
+  },
+  areaServed: ['Ecuador', 'Latam', 'Remote'],
+  serviceType: ['Software development', 'Web platforms', 'Systems architecture', 'Automation'],
+};
 ---
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
-    <script is:inline>
+    <script is:inline define:vars={{ themeLabels }}>
       const storageKey = 'theme';
       const root = document.documentElement;
       const toggleSelector = '[data-theme-toggle]';
@@ -33,14 +77,17 @@ const { title = 'CYSTEMS', description = 'Soluciones tecnológicas modernas' } =
       const normalizeTheme = (value) => (value === 'dark' ? 'dark' : 'light');
       const getPreferredTheme = () =>
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const getToggles = () => Array.from(document.querySelectorAll(toggleSelector));
       const setToggleState = (theme) => {
-        const toggle = document.querySelector(toggleSelector);
-        if (!toggle) return;
+        const toggles = getToggles();
+        if (!toggles.length) return;
         const isDark = theme === 'dark';
-        toggle.setAttribute('data-theme', theme);
-        toggle.setAttribute('aria-pressed', String(isDark));
-        toggle.setAttribute('aria-label', isDark ? 'Activar modo claro' : 'Activar modo oscuro');
-        toggle.setAttribute('title', isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+        toggles.forEach((toggle) => {
+          toggle.setAttribute('data-theme', theme);
+          toggle.setAttribute('aria-pressed', String(isDark));
+          toggle.setAttribute('aria-label', isDark ? themeLabels.light : themeLabels.dark);
+          toggle.setAttribute('title', isDark ? themeLabels.titleLight : themeLabels.titleDark);
+        });
       };
 
       const applyTheme = (value, persist) => {
@@ -58,13 +105,16 @@ const { title = 'CYSTEMS', description = 'Soluciones tecnológicas modernas' } =
       applyTheme(initialTheme, false);
 
       const bindToggle = () => {
-        const toggle = document.querySelector(toggleSelector);
-        if (!toggle || toggle.dataset.themeBound === 'true') return;
-        toggle.dataset.themeBound = 'true';
+        const toggles = getToggles();
+        if (!toggles.length) return;
         setToggleState(root.classList.contains('dark') ? 'dark' : 'light');
-        toggle.addEventListener('click', () => {
-          const isDark = root.classList.contains('dark');
-          applyTheme(isDark ? 'light' : 'dark', true);
+        toggles.forEach((toggle) => {
+          if (toggle.dataset.themeBound === 'true') return;
+          toggle.dataset.themeBound = 'true';
+          toggle.addEventListener('click', () => {
+            const isDark = root.classList.contains('dark');
+            applyTheme(isDark ? 'light' : 'dark', true);
+          });
         });
       };
 
@@ -93,6 +143,29 @@ const { title = 'CYSTEMS', description = 'Soluciones tecnológicas modernas' } =
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="author" content="Cristian Bravo, CYSTEMS" />
+    <meta
+      name="keywords"
+      content="CYSTEMS, Cristian Bravo, desarrollo web, software a medida, arquitectura de software, sistemas empresariales, automatización, Ecuador"
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="es" href={alternateEsUrl} />
+    <link rel="alternate" hreflang="en" href={alternateEnUrl} />
+    <link rel="alternate" hreflang="x-default" href={alternateEsUrl} />
+    <meta property="og:site_name" content="CYSTEMS" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={copy.locale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content="CYSTEMS - Cristian Bravo" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
     <title>{title}</title>
     <link rel="icon" href="/favicon-new.ico" sizes="any" />
     <link rel="shortcut icon" href="/favicon-new.ico" type="image/x-icon" />
@@ -102,6 +175,7 @@ const { title = 'CYSTEMS', description = 'Soluciones tecnológicas modernas' } =
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
   </head>
   <body
     class="min-h-screen bg-tech font-sans text-slate-900 antialiased leading-relaxed transition-colors duration-300 selection:bg-brand-purple/40 selection:text-white dark:text-brand-text"
