@@ -63,6 +63,7 @@ Todo el correo saliente pasa por:
 Ese archivo se encarga de:
 
 - crear y reutilizar el transporter
+- leer variables privadas desde `process.env` en runtime para evitar incrustar secretos en `dist`
 - resolver el proveedor SMTP
 - generar HTML y texto plano
 - adjuntar archivos del formulario de proyectos

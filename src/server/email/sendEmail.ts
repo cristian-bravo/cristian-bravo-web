@@ -48,8 +48,13 @@ const parseBoolean = (value: string | undefined, fallback: boolean) => {
   return ['1', 'true', 'yes', 'on'].includes(value.trim().toLowerCase());
 };
 
+const getRuntimeEnv = (key: string) => {
+  const value = process.env[key];
+  return typeof value === 'string' ? value : undefined;
+};
+
 const getTrimmedEnv = (key: string) => {
-  const value = (import.meta.env as Record<string, string | undefined>)[key];
+  const value = getRuntimeEnv(key);
   return typeof value === 'string' && value.trim() ? value.trim() : undefined;
 };
 
@@ -67,8 +72,8 @@ const getSmtpSettings = (user: string) => {
 };
 
 const getSmtpCredentials = () => {
-  const user = import.meta.env.EMAIL_USER ?? '';
-  const rawPass = import.meta.env.EMAIL_PASS ?? '';
+  const user = getTrimmedEnv('EMAIL_USER') ?? '';
+  const rawPass = getRuntimeEnv('EMAIL_PASS') ?? '';
 
   if (!user || !rawPass) {
     throw new Error(SMTP_CONFIG_ERROR);
@@ -79,7 +84,7 @@ const getSmtpCredentials = () => {
   return { user, pass };
 };
 
-const getRecipientEmail = () => import.meta.env.EMAIL_TO?.trim() || import.meta.env.EMAIL_USER?.trim() || 'cristianhbravo@outlook.es';
+const getRecipientEmail = () => getTrimmedEnv('EMAIL_TO') || getTrimmedEnv('EMAIL_USER') || 'cristianhbravo@outlook.es';
 
 const getTransporter = () => {
   if (transporter) return transporter;
@@ -378,7 +383,7 @@ const buildProjectEmailHtml = (data: ProjectEmailData, recipientEmail: string) =
 export const isSmtpConfigError = (error: unknown) => error instanceof Error && error.message === SMTP_CONFIG_ERROR;
 
 export const getSmtpErrorMessage = (error: unknown) => {
-  const user = import.meta.env.EMAIL_USER ?? '';
+  const user = getTrimmedEnv('EMAIL_USER') ?? '';
   const { host } = getSmtpSettings(user);
   const providerName = isGmailUser(user) || host.includes('gmail') ? 'Gmail' : 'Outlook';
 
