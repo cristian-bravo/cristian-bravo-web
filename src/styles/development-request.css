@@ -1299,7 +1299,16 @@
 
 
 .development-confirm-layer {
+  --development-confirm-viewport-padding: clamp(0.9rem, 2vw, 1.4rem);
   z-index: 220;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: var(--development-confirm-viewport-padding);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: auto;
 }
 
 
@@ -1307,9 +1316,14 @@
   position: relative;
   z-index: 2;
   width: min(41rem, calc(100vw - 1.1rem));
+  max-height: calc(100dvh - var(--development-confirm-viewport-padding) - var(--development-confirm-viewport-padding));
   display: grid;
   gap: 0.95rem;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform-origin: center center;
+  scrollbar-gutter: stable;
 }
 
 .development-confirm-summary {
@@ -1536,7 +1550,9 @@ html.development-confirm-open [data-site-header] {
     padding: 0.95rem;
   }
 
-  .development-confirm-modal {
+  .development-confirm-modal,
+  .development-confirm-layer {
+    --development-confirm-viewport-padding: 0.7rem;
     padding: 0.7rem;
   }
 

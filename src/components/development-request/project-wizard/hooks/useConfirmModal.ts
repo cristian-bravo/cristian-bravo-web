@@ -10,6 +10,13 @@ interface ConfirmModalOptions {
 export const useConfirmModal = ({ modal, modalPanel, cancelButton, isSending }: ConfirmModalOptions) => {
   let modalScrollY = 0;
   let lastFocusedElement: HTMLElement | null = null;
+  const originalParent = modal.parentNode;
+  const originalNextSibling = modal.nextSibling;
+
+  const restoreModalPosition = () => {
+    if (!originalParent || modal.parentNode === originalParent) return;
+    originalParent.insertBefore(modal, originalNextSibling?.parentNode === originalParent ? originalNextSibling : null);
+  };
 
   const close = (force = false) => {
     if (isSending() && !force) return;
@@ -25,6 +32,7 @@ export const useConfirmModal = ({ modal, modalPanel, cancelButton, isSending }: 
     document.body.style.left = '';
     document.body.style.right = '';
     document.body.style.width = '';
+    restoreModalPosition();
     window.scrollTo(0, modalScrollY);
     lastFocusedElement?.focus();
   };
@@ -42,6 +50,10 @@ export const useConfirmModal = ({ modal, modalPanel, cancelButton, isSending }: 
     document.body.style.left = '0';
     document.body.style.right = '0';
     document.body.style.width = '100%';
+
+    if (modal.parentElement !== document.body) {
+      document.body.appendChild(modal);
+    }
 
     modal.hidden = false;
     modal.classList.add('is-open');
