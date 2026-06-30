@@ -46,12 +46,22 @@ const { content } = Astro.props;
           <div class="home-hero__brand-ring" aria-hidden="true"></div>
           <div class="home-hero__brand-mark">
             <img
-              src="/logos/logo-header-ligth.webp"
+              class="home-hero__brand-logo home-hero__brand-logo--light"
+              src="/logos/logo-header-black.webp"
               alt="CYSTEMS"
               width="440"
               height="88"
               decoding="async"
               fetchpriority="high"
+            />
+            <img
+              class="home-hero__brand-logo home-hero__brand-logo--dark"
+              src="/logos/logo-header-ligth.webp"
+              alt=""
+              aria-hidden="true"
+              width="440"
+              height="88"
+              decoding="async"
             />
           </div>
           <div class="home-hero__brand-caption">
