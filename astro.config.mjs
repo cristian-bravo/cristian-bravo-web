@@ -7,8 +7,16 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   site: 'https://cystems.ec',
   output: 'server',
+  security: {
+    checkOrigin: false,
+  },
   adapter: node({
     mode: 'standalone',
   }),
   integrations: [tailwind()],
+  vite: {
+    ssr: {
+      noExternal: ['nodemailer'],
+    },
+  },
 });

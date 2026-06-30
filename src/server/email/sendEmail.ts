@@ -1,4 +1,7 @@
-import nodemailer from 'nodemailer';
+import type { Transporter } from 'nodemailer';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const SMTP_CONFIG_ERROR = 'SMTP_NOT_CONFIGURED';
 
@@ -39,7 +42,8 @@ interface ProjectEmailData {
   };
 }
 
-let transporter: nodemailer.Transporter | null = null;
+let transporter: Transporter | null = null;
+let runtimeEnvLoaded = false;
 
 const isGmailUser = (user: string) => /@(gmail|googlemail)\.com$/i.test(user.trim());
 
@@ -48,7 +52,65 @@ const parseBoolean = (value: string | undefined, fallback: boolean) => {
   return ['1', 'true', 'yes', 'on'].includes(value.trim().toLowerCase());
 };
 
+const parseEnvValue = (value: string) => {
+  const trimmed = value.trim();
+  const quote = trimmed[0];
+
+  if ((quote === '"' || quote === "'") && trimmed.endsWith(quote)) {
+    return trimmed.slice(1, -1);
+  }
+
+  return trimmed;
+};
+
+const getCandidateEnvDirectories = () => {
+  const moduleDir = dirname(fileURLToPath(import.meta.url));
+  const roots = [moduleDir, process.cwd()];
+  const directories = new Set<string>();
+
+  roots.forEach((root) => {
+    let current = resolve(root);
+    const ancestors: string[] = [];
+
+    for (let depth = 0; depth < 6; depth += 1) {
+      ancestors.push(current);
+      const parent = dirname(current);
+      if (parent === current) break;
+      current = parent;
+    }
+
+    ancestors.reverse().forEach((directory) => directories.add(directory));
+  });
+
+  return [...directories];
+};
+
+const loadRuntimeEnvFiles = () => {
+  if (runtimeEnvLoaded) return;
+  runtimeEnvLoaded = true;
+
+  const externalEnvKeys = new Set(Object.keys(process.env));
+  const envFiles = getCandidateEnvDirectories().flatMap((directory) => [
+    join(directory, '.env'),
+    join(directory, '.env.local'),
+  ]);
+
+  envFiles.forEach((envFile) => {
+    if (!existsSync(envFile)) return;
+
+    readFileSync(envFile, 'utf8')
+      .split(/\r?\n/)
+      .forEach((line) => {
+        const match = line.match(/^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
+        if (!match || externalEnvKeys.has(match[1])) return;
+
+        process.env[match[1]] = parseEnvValue(match[2]);
+      });
+  });
+};
+
 const getRuntimeEnv = (key: string) => {
+  loadRuntimeEnvFiles();
   const value = process.env[key];
   return typeof value === 'string' ? value : undefined;
 };
@@ -86,11 +148,12 @@ const getSmtpCredentials = () => {
 
 const getRecipientEmail = () => getTrimmedEnv('EMAIL_TO') || getTrimmedEnv('EMAIL_USER') || 'cristianhbravo@outlook.es';
 
-const getTransporter = () => {
+const getTransporter = async () => {
   if (transporter) return transporter;
 
   const { user, pass } = getSmtpCredentials();
   const { host, port, secure } = getSmtpSettings(user);
+  const { default: nodemailer } = await import('nodemailer');
 
   transporter = nodemailer.createTransport({
     host,
@@ -415,7 +478,7 @@ export async function sendSimpleEmail(data: SimpleEmailData) {
   const { user } = getSmtpCredentials();
   const recipientEmail = getRecipientEmail();
 
-  return getTransporter().sendMail({
+  return (await getTransporter()).sendMail({
     from: `"${buildSenderLabel(data.from_name, 'Formulario simple')}" <${user}>`,
     to: recipientEmail,
     replyTo: data.reply_to,
@@ -439,7 +502,7 @@ export async function sendProjectEmail(data: ProjectEmailData) {
   const { user } = getSmtpCredentials();
   const recipientEmail = getRecipientEmail();
 
-  return getTransporter().sendMail({
+  return (await getTransporter()).sendMail({
     from: `"${buildSenderLabel(data.fullName, 'Solicitud de proyecto')}" <${user}>`,
     to: recipientEmail,
     replyTo: data.email,

@@ -64,6 +64,7 @@ Ese archivo se encarga de:
 
 - crear y reutilizar el transporter
 - leer variables privadas desde `process.env` en runtime para evitar incrustar secretos en `dist`
+- cargar `.env` / `.env.local` como fallback runtime en despliegues Node si el proceso no recibio esas variables
 - resolver el proveedor SMTP
 - generar HTML y texto plano
 - adjuntar archivos del formulario de proyectos
