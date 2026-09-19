@@ -62,7 +62,7 @@ export const uiCopy = {
       { href: '/', label: 'Inicio' },
       { href: '/servicios', label: 'Servicios' },
       { href: '/proyectos', label: 'Proyectos' },
-      { href: '/contacto', label: 'Contacto' },
+      { href: '/perfil/cristian-bravo', label: 'Sobre mí' },
     ],
     footer: {
       tagline: 'Transforma ideas en tecnología',
@@ -112,7 +112,7 @@ export const uiCopy = {
       { href: '/', label: 'Home' },
       { href: '/servicios', label: 'Services' },
       { href: '/proyectos', label: 'Projects' },
-      { href: '/contacto', label: 'Contact' },
+      { href: '/perfil/cristian-bravo', label: 'About me' },
     ],
     footer: {
       tagline: 'Turn ideas into reliable software',

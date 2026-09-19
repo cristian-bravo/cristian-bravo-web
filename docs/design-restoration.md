@@ -8,6 +8,7 @@ El propietario rechazó el rediseño editorial publicado en `ae7aa75` y pidió r
 
 - Inicio original: logo, órbitas, flotación, fondos animados, servicios, método y llamada final.
 - Tipografías Manrope/Sora, paleta original, header transparente, tarjetas, bordes y sombras originales.
+- Menú principal con «Sobre mí» / «About me», enlazado a `/perfil/cristian-bravo` en escritorio y móvil. Vídeos claro/oscuro, stickers, avatar y enlaces flotantes del perfil conservados.
 - Portafolio por escenas en escritorio; lectura continua en móvil o con movimiento reducido. Se corrigió el estado accesible al cambiar de pantalla y se añadieron limpieza de listeners y escenas inactivas inertes.
 - Servicios y contenidos ES/EN originales; entrada de proyecto con las dos tarjetas originales (consulta rápida y proyecto completo).
 - Se retiraron los componentes y hojas de estilo del rediseño rechazado. Sus versiones anteriores siguen recuperables en Git.

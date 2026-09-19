@@ -42,9 +42,7 @@ for (const prefix of ['', '/en']) {
     await expect
       .poll(() => signals.filter((item) => item.event === 'hero_cta').length)
       .toBe(1);
-    await page
-      .locator('[data-header-nav] [data-analytics-event="contact_click"]')
-      .click();
+    await page.locator('footer [data-analytics-event="contact_click"]').click();
     await expect
       .poll(
         () => signals.filter((item) => item.event === 'contact_click').length,

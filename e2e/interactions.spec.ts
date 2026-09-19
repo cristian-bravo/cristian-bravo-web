@@ -91,6 +91,36 @@ test('Yuki handles safe rendering, history opt-in and keyboard dismissal', async
 });
 
 for (const prefix of ['', '/en']) {
+  for (const width of [390, 1440]) {
+    test(`about navigation opens the original profile ${prefix || 'es'} at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(prefix || '/');
+      const mobile = width < 768;
+      const nav = page.locator(
+        mobile ? '[data-header-mobile-panel]' : '[data-header-nav]',
+      );
+      const profilePath = `${prefix}/perfil/cristian-bravo`;
+      if (mobile) await page.locator('[data-header-menu-toggle]').click();
+      const link = nav.getByRole('link', {
+        name: prefix ? 'About me' : 'Sobre mí',
+        exact: true,
+      });
+      await expect(link).toHaveAttribute('href', profilePath);
+      await expect(nav.locator(`a[href="${prefix}/contacto"]`)).toHaveCount(0);
+      await link.click();
+      await expect(page).toHaveURL(new RegExp(`${profilePath}$`));
+      await expect(page.locator('[data-profile-hero]')).toBeVisible();
+      if (mobile) await page.locator('[data-header-menu-toggle]').click();
+      await expect(nav.locator('[aria-current="page"]')).toHaveCount(1);
+      await expect(nav.locator('[aria-current="page"]')).toHaveAttribute(
+        'href',
+        profilePath,
+      );
+    });
+  }
+
   test(`navigation only marks the current destination ${prefix || 'es'}`, async ({
     page,
   }) => {

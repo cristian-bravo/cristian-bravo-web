@@ -1,5 +1,7 @@
 # QA de CYSTEMS
 
+> La evidencia del rediseño descrita más abajo es histórica. El propietario solicitó restaurar el diseño original; la verificación vigente de estructura, animaciones reales, perfil y despliegue se encuentra en [design-restoration.md](design-restoration.md). Las protecciones y pruebas de seguridad se conservan.
+
 Fecha: 19 de septiembre de 2026. Entorno: Windows, Node 22.23.1, build Astro de producción y servidor standalone local.
 
 ## Cobertura automatizada
