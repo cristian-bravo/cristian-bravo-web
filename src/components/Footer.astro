@@ -12,9 +12,10 @@ const year = new Date().getFullYear();
 const linkClass =
   'transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:hover:text-brand-text dark:focus-visible:ring-offset-brand-bg';
 ---
+
 <footer class="border-t border-slate-200/70 bg-slate-50/70 backdrop-blur dark:border-brand-purple/15 dark:bg-brand-bg/85">
   <div class="mx-auto w-full max-w-[1120px] px-4 py-16 sm:px-6">
-    <div class="grid gap-10 lg:grid-cols-[1.2fr,1fr]">
+    <div class="grid gap-10 lg:grid-cols-[1.2fr_1fr]">
       <div class="grid gap-3">
         <p class="font-display text-sm font-semibold uppercase tracking-[0.3em] text-slate-900 dark:text-brand-text">
           CYSTEMS
@@ -29,7 +30,9 @@ const linkClass =
 
       <div class="grid gap-8 sm:grid-cols-2">
         <div>
-          <p class="mb-3 text-sm font-semibold text-slate-900 dark:text-brand-text">{copy.navigationTitle}</p>
+          <p class="mb-3 text-sm font-semibold text-slate-900 dark:text-brand-text">
+            {copy.navigationTitle}
+          </p>
           <div class="grid gap-2 text-sm text-slate-600 dark:text-brand-muted">
             <a class={linkClass} href={localizePath('/servicios', lang)}>
               {copy.services}
@@ -41,13 +44,26 @@ const linkClass =
         </div>
 
         <div>
-          <p class="mb-3 text-sm font-semibold text-slate-900 dark:text-brand-text">{copy.nextStepTitle}</p>
+          <p class="mb-3 text-sm font-semibold text-slate-900 dark:text-brand-text">
+            {copy.nextStepTitle}
+          </p>
           <div class="grid gap-2 text-sm text-slate-600 dark:text-brand-muted">
             <a class={linkClass} href={localizePath('/empezar-proyecto', lang)}>
               {copy.startProject}
             </a>
-            <a class={linkClass} href={localizePath('/perfil/cristian-bravo', lang)}>
+            <a
+              class={linkClass}
+              href={localizePath('/perfil/cristian-bravo', lang)}
+            >
               {copy.profile}
+            </a>
+            <a
+              class={linkClass}
+              href={localizePath('/contacto', lang)}
+              data-analytics-event="contact_click"
+              data-analytics-location="footer"
+            >
+              {lang === 'en' ? 'Contact' : 'Contacto'}
             </a>
           </div>
         </div>

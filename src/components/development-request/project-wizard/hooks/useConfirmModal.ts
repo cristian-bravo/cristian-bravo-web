@@ -37,8 +37,8 @@ export const useConfirmModal = ({ modal, modalPanel, cancelButton, isSending }: 
     lastFocusedElement?.focus();
   };
 
-  const open = () => {
-    lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  const open = (trigger?: HTMLElement) => {
+    lastFocusedElement = trigger ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
     modalScrollY = window.scrollY;
 
     document.documentElement.classList.add('development-confirm-open', 'services-modal-open');

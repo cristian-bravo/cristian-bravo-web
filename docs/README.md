@@ -1,24 +1,17 @@
-# Índice de documentación
+# Documentación CYSTEMS
 
-Esta carpeta reúne la documentación técnica e interna de los sistemas principales del sitio.
+## Guías vigentes
 
-## Guías disponibles
+- [Handoff técnico](ai-handoff-cystems.md): arquitectura y decisiones actuales; consultar primero la sección de septiembre de 2026.
+- [QA](qa-report.md): cobertura, resultados reproducibles y limitaciones de las pruebas.
+- [Correo](email-delivery.md): configuración SMTP, seguridad y pruebas de entrega.
+- [Yuki](yuki-integration.md): arquitectura, arranque conectado, configuración y estado real de la integración.
+- La integración pública de Yuki se documenta en `../yuki-bot/docs/integrations/SITE_CHAT.md` (repositorio hermano). No colocar sus credenciales en variables públicas ni en JavaScript del navegador.
 
-- `email-delivery.md`
-  - Configuración SMTP, endpoints API y flujo de envío server-side.
-- `home-hero-visual-system.md`
-  - Reglas visuales del hero principal, videos por tema, overlays, glass card y responsividad.
-- `proyectos-modifier-guide.md`
-  - Guía práctica para añadir o editar proyectos dentro de `/proyectos`.
-- `proyectos-refactor-2026.md`
-  - Visión general de la arquitectura actual del portafolio tras el refactor de 2026.
-- `proyectos-scroll-architecture.md`
-  - Detalle del motor de escenas y del sistema de scroll guiado.
+Home usa `StudioHome.astro`; proyectos usa `ProjectsGallery.astro`. El contenido sigue separado del renderizado y mantiene ES/EN. La skill de diseño está en `.agents/skills/product-frontend-design`.
 
-## Orden recomendado de lectura
+## Referencias históricas
 
-1. Lee `proyectos-refactor-2026.md` si necesitas entender la estructura general de `/proyectos`.
-2. Usa `proyectos-modifier-guide.md` si solo vas a tocar contenido o assets.
-3. Consulta `proyectos-scroll-architecture.md` si vas a modificar la lógica de escenas o el comportamiento del scroll.
-4. Revisa `home-hero-visual-system.md` antes de tocar el hero, los videos o el sistema visual del home.
-5. Usa `email-delivery.md` antes de modificar SMTP, formularios o entrega de correos.
+`home-hero-visual-system.md`, `proyectos-modifier-guide.md`, `proyectos-refactor-2026.md` y `proyectos-scroll-architecture.md` describen implementaciones anteriores. El motor de escenas y el hero de vídeo ya no se cargan en las rutas actuales. No aplicar sus instrucciones como si fueran el sistema vigente.
+
+`NEWPLAN.md` conserva el plan editorial original como referencia de intención.

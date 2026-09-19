@@ -38,13 +38,13 @@ const { content } = Astro.props;
         <div class="profile-avatar-showcase">
           <div class="profile-avatar-copy">
             <p class="profile-story-label">{content.kicker}</p>
-            <h2 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text sm:text-3xl">
+            <h1 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-brand-text sm:text-3xl">
               {content.title}
-            </h2>
+            </h1>
             <p class="profile-story-copy">{content.description}</p>
           </div>
 
-          <div class="profile-avatar-collage">
+          <div class="profile-avatar-collage" aria-hidden="true">
             {content.stickers.map((sticker, index) => (
               <figure class="profile-avatar-sticker-tile" style={`--profile-sticker-delay: ${index * -0.55}s;`}>
                 <img

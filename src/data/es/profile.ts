@@ -168,8 +168,8 @@ export interface ProfileVisionContent {
 }
 
 export const profilePageMeta: PageMetadata = {
-  title: 'Sobre mi | Cristian',
-  description: 'Perfil profesional, enfoque tecnico y mundo creativo de Cristian Bravo en CYSTEMS.',
+  title: 'Cristian Bravo, fundador y desarrollador | CYSTEMS',
+  description: 'Conoce a Cristian Bravo, fundador de CYSTEMS y desarrollador Full Stack en Ecuador. Experiencia en plataformas, arquitectura de software e integraciones.',
 };
 
 export const profileHeroContent: ProfileHeroContent = {

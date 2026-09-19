@@ -24,11 +24,18 @@ const navLinks: NavLink[] = copy.nav.map((item) => ({
 }));
 const projectStartHref = localizePath('/empezar-proyecto', lang);
 const alternateLang = lang === 'es' ? 'en' : 'es';
-const alternateHref = getAlternateLangPath(pathname, alternateLang);
+const projectIntent = Astro.url.searchParams.get('intent');
+const intentQuery =
+  pathname.endsWith('/empezar-proyecto/simple') &&
+  projectIntent &&
+  ['new', 'improve', 'rescue'].includes(projectIntent)
+    ? `?intent=${projectIntent}`
+    : '';
+const alternateHref = `${getAlternateLangPath(pathname, alternateLang)}${intentQuery}`;
 
 const isActivePath = (href: string): boolean => {
   const target = cleanPath(href);
-  if (target === '/') return pathname === '/';
+  if (target === '/' || target === '/en') return pathname === target;
   return pathname === target || pathname.startsWith(`${target}/`);
 };
 
@@ -42,7 +49,11 @@ const mobilePanelId = 'site-mobile-menu';
 ---
 
 <header
-  class:list={['header-shell', 'sticky top-0 z-40', transparent && 'is-transparent']}
+  class:list={[
+    'header-shell',
+    'sticky top-0 z-40',
+    transparent && 'is-transparent',
+  ]}
   data-site-header
   data-profile-navbar={transparent ? 'true' : undefined}
   data-menu-open-label={copy.menuOpenLabel}
@@ -54,7 +65,11 @@ const mobilePanelId = 'site-mobile-menu';
 
       <div class="header-frame">
         <div class="header-brand">
-            <a class="brand-logo-link group" href={localizePath('/', lang)} aria-label="CYSTEMS">
+          <a
+            class="brand-logo-link group"
+            href={localizePath('/', lang)}
+            aria-label="CYSTEMS"
+          >
             <span class="brand-logo-aura" aria-hidden="true"></span>
             <img
               src="/logos/logo-header-black.webp"
@@ -79,13 +94,27 @@ const mobilePanelId = 'site-mobile-menu';
 
         <div class="header-center">
           <nav class="header-nav" aria-label={copy.navLabel} data-header-nav>
-            <span class="header-nav-indicator" data-header-nav-indicator aria-hidden="true"></span>
+            <span
+              class="header-nav-indicator"
+              data-header-nav-indicator
+              aria-hidden="true"
+            ></span>
             {navItems.map((item) => (
               <a
                 class:list={['header-nav-link', item.isActive && 'is-active']}
                 href={item.href}
                 aria-current={item.isActive ? 'page' : undefined}
                 data-header-nav-link
+                data-analytics-event={
+                  item.href === localizePath('/contacto', lang)
+                    ? 'contact_click'
+                    : undefined
+                }
+                data-analytics-location={
+                  item.href === localizePath('/contacto', lang)
+                    ? 'header'
+                    : undefined
+                }
               >
                 <span>{item.label}</span>
               </a>
@@ -95,7 +124,11 @@ const mobilePanelId = 'site-mobile-menu';
 
         <div class="header-actions">
           <a
-            class:list={['header-cta', 'header-primary-cta', isDevelopmentActive && 'is-active']}
+            class:list={[
+              'header-cta',
+              'header-primary-cta',
+              isDevelopmentActive && 'is-active',
+            ]}
             href={projectStartHref}
             aria-current={isDevelopmentActive ? 'page' : undefined}
             aria-label={copy.headerCta}
@@ -104,7 +137,12 @@ const mobilePanelId = 'site-mobile-menu';
             <span class="header-cta-label-short">{copy.headerCtaShort}</span>
           </a>
 
-          <a class="header-lang-toggle" href={alternateHref} hreflang={alternateLang} aria-label={copy.languageToggleLabel}>
+          <a
+            class="header-lang-toggle"
+            href={alternateHref}
+            hreflang={alternateLang}
+            aria-label={copy.languageToggleLabel}
+          >
             <span aria-hidden="true">{alternateLang.toUpperCase()}</span>
           </a>
 
@@ -135,7 +173,12 @@ const mobilePanelId = 'site-mobile-menu';
         <span class="sr-only">{copy.themeDarkLabel}</span>
         <span class="theme-toggle-orbit" aria-hidden="true"></span>
         <span class="theme-toggle-icon theme-toggle-sun" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
             <circle cx="12" cy="12" r="4.1" />
             <path
               stroke-linecap="round"
@@ -144,16 +187,37 @@ const mobilePanelId = 'site-mobile-menu';
           </svg>
         </span>
         <span class="theme-toggle-icon theme-toggle-moon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M20.8 14.1a8.9 8.9 0 1 1-10.9-10.9 7.2 7.2 0 0 0 10.9 10.9Z" />
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M20.8 14.1a8.9 8.9 0 1 1-10.9-10.9 7.2 7.2 0 0 0 10.9 10.9Z"
+            />
           </svg>
         </span>
-        <span class="theme-toggle-star theme-toggle-star-a" aria-hidden="true"></span>
-        <span class="theme-toggle-star theme-toggle-star-b" aria-hidden="true"></span>
+        <span
+          class="theme-toggle-star theme-toggle-star-a"
+          aria-hidden="true"
+        ></span>
+        <span
+          class="theme-toggle-star theme-toggle-star-b"
+          aria-hidden="true"
+        ></span>
       </button>
     </div>
 
-    <div class="header-mobile-panel" id={mobilePanelId} data-header-mobile-panel aria-hidden="true">
+    <div
+      class="header-mobile-panel"
+      id={mobilePanelId}
+      data-header-mobile-panel
+      aria-hidden="true"
+      inert
+    >
       <nav class="header-mobile-nav" aria-label={copy.mobileNavLabel}>
         {navItems.map((item) => (
           <a
@@ -161,12 +225,26 @@ const mobilePanelId = 'site-mobile-menu';
             href={item.href}
             aria-current={item.isActive ? 'page' : undefined}
             data-header-mobile-link
+            data-analytics-event={
+              item.href === localizePath('/contacto', lang)
+                ? 'contact_click'
+                : undefined
+            }
+            data-analytics-location={
+              item.href === localizePath('/contacto', lang)
+                ? 'header'
+                : undefined
+            }
           >
             <span>{item.label}</span>
           </a>
         ))}
         <a
-          class:list={['header-mobile-link', 'header-mobile-link--cta', isDevelopmentActive && 'is-active']}
+          class:list={[
+            'header-mobile-link',
+            'header-mobile-link--cta',
+            isDevelopmentActive && 'is-active',
+          ]}
           href={projectStartHref}
           aria-current={isDevelopmentActive ? 'page' : undefined}
           data-header-mobile-link
@@ -209,21 +287,34 @@ const mobilePanelId = 'site-mobile-menu';
     const header = document.querySelector('[data-site-header]');
     if (!header) return;
 
-    const nav = header.querySelector('[data-header-nav]');
-    const indicator = header.querySelector('[data-header-nav-indicator]');
-    const navLinks = Array.from(header.querySelectorAll('[data-header-nav-link]'));
+    const nav = header.querySelector<HTMLElement>('[data-header-nav]');
+    const indicator = header.querySelector<HTMLElement>(
+      '[data-header-nav-indicator]',
+    );
+    const navLinks = Array.from(
+      header.querySelectorAll('[data-header-nav-link]'),
+    );
     const menuToggle = header.querySelector('[data-header-menu-toggle]');
     const mobilePanel = header.querySelector('[data-header-mobile-panel]');
-    const mobileLinks = Array.from(header.querySelectorAll('[data-header-mobile-link]'));
+    const mobileLinks = Array.from(
+      header.querySelectorAll('[data-header-mobile-link]'),
+    );
     const desktopQuery = window.matchMedia('(min-width: 768px)');
-    const openLabel = header.getAttribute('data-menu-open-label') || 'Open main menu';
-    const closeLabel = header.getAttribute('data-menu-close-label') || 'Close main menu';
+    const openLabel =
+      header.getAttribute('data-menu-open-label') || 'Open main menu';
+    const closeLabel =
+      header.getAttribute('data-menu-close-label') || 'Close main menu';
 
     const activeLink =
-      navLinks.find((link) => link.getAttribute('aria-current') === 'page') ?? navLinks[0] ?? null;
+      navLinks.find((link) => link.getAttribute('aria-current') === 'page') ??
+      null;
 
-    const positionIndicator = (link) => {
-      if (!nav || !indicator || !link) return;
+    const positionIndicator = (link: Element | null) => {
+      if (!nav || !indicator) return;
+      if (!link) {
+        indicator.dataset.ready = 'false';
+        return;
+      }
 
       const navRect = nav.getBoundingClientRect();
       const linkRect = link.getBoundingClientRect();
@@ -244,7 +335,7 @@ const mobilePanelId = 'site-mobile-menu';
       syncIndicator();
     };
 
-    const closeMenu = () => {
+    const closeMenu = ({ restoreFocus = false } = {}) => {
       header.classList.remove('is-menu-open');
       if (menuToggle instanceof HTMLButtonElement) {
         menuToggle.setAttribute('aria-expanded', 'false');
@@ -252,6 +343,10 @@ const mobilePanelId = 'site-mobile-menu';
       }
       if (mobilePanel instanceof HTMLElement) {
         mobilePanel.setAttribute('aria-hidden', 'true');
+        mobilePanel.toggleAttribute('inert', true);
+      }
+      if (restoreFocus && menuToggle instanceof HTMLButtonElement) {
+        menuToggle.focus();
       }
     };
 
@@ -261,15 +356,19 @@ const mobilePanelId = 'site-mobile-menu';
 
       if (menuToggle instanceof HTMLButtonElement) {
         menuToggle.setAttribute('aria-expanded', String(nextIsOpen));
-        menuToggle.setAttribute('aria-label', nextIsOpen ? closeLabel : openLabel);
+        menuToggle.setAttribute(
+          'aria-label',
+          nextIsOpen ? closeLabel : openLabel,
+        );
       }
 
       if (mobilePanel instanceof HTMLElement) {
         mobilePanel.setAttribute('aria-hidden', String(!nextIsOpen));
+        mobilePanel.toggleAttribute('inert', !nextIsOpen);
       }
     };
 
-    const handleDocumentClick = (event) => {
+    const handleDocumentClick = (event: Event) => {
       if (!header.classList.contains('is-menu-open')) return;
       const target = event.target;
       if (target instanceof Node && !header.contains(target)) {
@@ -277,13 +376,13 @@ const mobilePanelId = 'site-mobile-menu';
       }
     };
 
-    const handleKeydown = (event) => {
-      if (event.key === 'Escape') {
-        closeMenu();
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && header.classList.contains('is-menu-open')) {
+        closeMenu({ restoreFocus: true });
       }
     };
 
-    const handleDesktopChange = (event) => {
+    const handleDesktopChange = (event: MediaQueryListEvent) => {
       if (event.matches) {
         closeMenu();
         syncIndicator();
@@ -298,7 +397,8 @@ const mobilePanelId = 'site-mobile-menu';
 
     nav?.addEventListener('mouseleave', syncIndicator);
     nav?.addEventListener('focusout', (event) => {
-      const nextTarget = event.relatedTarget;
+      const nextTarget =
+        event instanceof FocusEvent ? event.relatedTarget : null;
       if (!(nextTarget instanceof Node) || !nav.contains(nextTarget)) {
         syncIndicator();
       }
@@ -306,7 +406,7 @@ const mobilePanelId = 'site-mobile-menu';
 
     menuToggle?.addEventListener('click', toggleMenu);
     mobileLinks.forEach((link) => {
-      link.addEventListener('click', closeMenu);
+      link.addEventListener('click', () => closeMenu());
     });
 
     window.addEventListener('scroll', updateScrolledState, { passive: true });
@@ -342,7 +442,7 @@ const mobilePanelId = 'site-mobile-menu';
     () => {
       cleanupHeader();
     },
-    { once: true }
+    { once: true },
   );
 </script>
 
@@ -352,7 +452,11 @@ const mobilePanelId = 'site-mobile-menu';
     --header-bar-bg: rgba(255, 255, 255, 0.66);
     --header-bar-border: rgba(148, 163, 184, 0.18);
     --header-bar-shadow: 0 18px 44px rgba(15, 23, 42, 0.14);
-    --header-nav-pill: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(59, 130, 246, 0.16));
+    --header-nav-pill: linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.2),
+      rgba(59, 130, 246, 0.16)
+    );
     --header-nav-pill-border: rgba(255, 255, 255, 0.52);
     --header-nav-text: #475569;
     --header-nav-text-active: #0f172a;
@@ -378,7 +482,11 @@ const mobilePanelId = 'site-mobile-menu';
     --header-bar-bg: rgba(10, 15, 30, 0.68);
     --header-bar-border: rgba(255, 255, 255, 0.08);
     --header-bar-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
-    --header-nav-pill: linear-gradient(135deg, rgba(124, 58, 237, 0.34), rgba(59, 130, 246, 0.22));
+    --header-nav-pill: linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.34),
+      rgba(59, 130, 246, 0.22)
+    );
     --header-nav-pill-border: rgba(191, 219, 254, 0.16);
     --header-nav-text: rgba(226, 232, 240, 0.78);
     --header-nav-text-active: #ffffff;
@@ -446,7 +554,9 @@ const mobilePanelId = 'site-mobile-menu';
   [data-site-header].header-shell.is-transparent .header-frame,
   [data-site-header].header-shell.is-transparent.is-scrolled .header-frame,
   .dark [data-site-header].header-shell.is-transparent .header-frame,
-  .dark [data-site-header].header-shell.is-transparent.is-scrolled .header-frame {
+  .dark
+    [data-site-header].header-shell.is-transparent.is-scrolled
+    .header-frame {
     background: var(--header-bar-bg);
     border-color: var(--header-bar-border);
     box-shadow: var(--header-bar-shadow);
@@ -510,9 +620,12 @@ const mobilePanelId = 'site-mobile-menu';
   }
 
   [data-site-header].header-shell.is-transparent .brand-logo-link::before,
-  [data-site-header].header-shell.is-transparent.is-scrolled .brand-logo-link::before,
+  [data-site-header].header-shell.is-transparent.is-scrolled
+    .brand-logo-link::before,
   .dark [data-site-header].header-shell.is-transparent .brand-logo-link::before,
-  .dark [data-site-header].header-shell.is-transparent.is-scrolled .brand-logo-link::before {
+  .dark
+    [data-site-header].header-shell.is-transparent.is-scrolled
+    .brand-logo-link::before {
     border-color: transparent;
     background: transparent;
     box-shadow: none;
@@ -529,7 +642,9 @@ const mobilePanelId = 'site-mobile-menu';
 
   [data-site-header] .brand-logo-aura {
     opacity: 0.42;
-    transition: opacity 240ms ease, transform 240ms ease;
+    transition:
+      opacity 240ms ease,
+      transform 240ms ease;
   }
 
   [data-site-header] .brand-logo-link:hover .brand-logo-aura {
@@ -620,7 +735,9 @@ const mobilePanelId = 'site-mobile-menu';
   [data-site-header].header-shell.is-transparent .header-nav-link,
   [data-site-header].header-shell.is-transparent.is-scrolled .header-nav-link,
   .dark [data-site-header].header-shell.is-transparent .header-nav-link,
-  .dark [data-site-header].header-shell.is-transparent.is-scrolled .header-nav-link {
+  .dark
+    [data-site-header].header-shell.is-transparent.is-scrolled
+    .header-nav-link {
     color: var(--header-nav-text);
     text-shadow: none;
   }
@@ -654,7 +771,11 @@ const mobilePanelId = 'site-mobile-menu';
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.16);
     background:
-      linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 45%),
+      linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.18),
+        rgba(255, 255, 255, 0) 45%
+      ),
       linear-gradient(125deg, #7c3aed, #3b82f6);
     color: #ffffff;
     text-decoration: none;
@@ -675,7 +796,12 @@ const mobilePanelId = 'site-mobile-menu';
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(105deg, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0.26) 50%, rgba(255, 255, 255, 0) 80%);
+    background: linear-gradient(
+      105deg,
+      rgba(255, 255, 255, 0) 20%,
+      rgba(255, 255, 255, 0.26) 50%,
+      rgba(255, 255, 255, 0) 80%
+    );
     transform: translateX(-120%);
     transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -747,13 +873,18 @@ const mobilePanelId = 'site-mobile-menu';
   [data-site-header] .header-lang-toggle:focus-visible {
     transform: translateY(-1px);
     border-color: rgba(124, 58, 237, 0.28);
-    background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(59, 130, 246, 0.1));
+    background: linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.12),
+      rgba(59, 130, 246, 0.1)
+    );
     outline: none;
   }
 
   [data-site-header] .header-theme-toggle,
   [data-site-header].header-shell.is-transparent .header-theme-toggle,
-  [data-site-header].header-shell.is-transparent.is-scrolled .header-theme-toggle {
+  [data-site-header].header-shell.is-transparent.is-scrolled
+    .header-theme-toggle {
     flex: 0 0 auto;
     border-color: rgba(148, 163, 184, 0.22);
     background: rgba(255, 255, 255, 0.14);
@@ -766,7 +897,9 @@ const mobilePanelId = 'site-mobile-menu';
 
   .dark [data-site-header] .header-theme-toggle,
   .dark [data-site-header].header-shell.is-transparent .header-theme-toggle,
-  .dark [data-site-header].header-shell.is-transparent.is-scrolled .header-theme-toggle {
+  .dark
+    [data-site-header].header-shell.is-transparent.is-scrolled
+    .header-theme-toggle {
     border-color: rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.04);
     box-shadow:
@@ -877,7 +1010,11 @@ const mobilePanelId = 'site-mobile-menu';
   [data-site-header] .header-mobile-link.is-active {
     transform: translateX(4px);
     border-color: rgba(124, 58, 237, 0.22);
-    background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(59, 130, 246, 0.08));
+    background: linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.12),
+      rgba(59, 130, 246, 0.08)
+    );
     outline: none;
   }
 

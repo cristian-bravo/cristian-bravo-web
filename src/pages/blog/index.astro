@@ -8,7 +8,7 @@ const lang = Astro.props.lang === 'en' ? 'en' : 'es';
 const { blog } = getData(lang);
 const { blogIndexPageMeta, blogPlaceholderContent } = blog;
 ---
-<CystemsLayout title={blogIndexPageMeta.title} description={blogIndexPageMeta.description} lang={lang}>
+<CystemsLayout title={blogIndexPageMeta.title} description={blogIndexPageMeta.description} lang={lang} noindex>
   <BlogPlaceholderSection content={blogPlaceholderContent} />
 </CystemsLayout>
 

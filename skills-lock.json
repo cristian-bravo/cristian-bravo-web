@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "product-frontend-design": {
+      "source": "mosif16/codex-skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "a72a449f53d2a73d61d99c12a2e27908bcde844485edbb42e4d752ed978c0388"
+    }
+  }
+}

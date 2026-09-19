@@ -4,6 +4,7 @@ import type { DevelopmentProjectReviewStepContent } from '../../../../data';
 
 interface Props {
   panelId: string;
+  tabId: string;
   copy: DevelopmentProjectReviewStepContent;
   featureOptions: string[];
   integrationOptions: string[];
@@ -18,6 +19,7 @@ interface Props {
 
 const {
   panelId,
+  tabId,
   copy,
   featureOptions,
   integrationOptions,
@@ -30,7 +32,7 @@ const {
   attachmentAccept,
 } = Astro.props;
 ---
-<section id={panelId} class="development-step-panel" data-step-panel="3" hidden>
+<section id={panelId} class="development-step-panel" data-step-panel="3" role="tabpanel" aria-labelledby={tabId} hidden>
   <div class="development-step-stack">
     <section class="development-step-group">
       <div class="development-step-group-head">
@@ -77,7 +79,7 @@ const {
               <option value={option}>{option}</option>
             ))}
           </select>
-          <span class="development-field-error" data-error-for="hosting" hidden></span>
+          <span class="development-field-error" data-error-for="hosting" role="alert" hidden></span>
         </label>
 
         <label class="development-field">
@@ -88,7 +90,7 @@ const {
               <option value={option}>{option}</option>
             ))}
           </select>
-          <span class="development-field-error" data-error-for="branding" hidden></span>
+          <span class="development-field-error" data-error-for="branding" role="alert" hidden></span>
         </label>
 
         <label class="development-field">
@@ -99,7 +101,7 @@ const {
               <option value={option}>{option}</option>
             ))}
           </select>
-          <span class="development-field-error" data-error-for="contentPlan" hidden></span>
+          <span class="development-field-error" data-error-for="contentPlan" role="alert" hidden></span>
         </label>
 
         <label class="development-field">
@@ -110,7 +112,7 @@ const {
               <option value={option}>{option}</option>
             ))}
           </select>
-          <span class="development-field-error" data-error-for="timeline" hidden></span>
+          <span class="development-field-error" data-error-for="timeline" role="alert" hidden></span>
         </label>
 
         <label class="development-field">
@@ -119,30 +121,34 @@ const {
             class="development-input"
             type="text"
             name="references"
+            maxlength="2000"
             data-field="references"
             placeholder={copy.fields.references.placeholder}
           />
-          <span class="development-field-error" data-error-for="references" hidden></span>
+          <span class="development-field-error" data-error-for="references" role="alert" hidden></span>
         </label>
 
         <FileUploadField
           uploadHints={uploadHints}
           fieldName={attachmentField}
+          inputId={`${panelId}-uploaded-files`}
+          errorId={`${panelId}-uploaded-files-error`}
           accept={attachmentAccept}
           label={copy.fields.attachment.label}
-          placeholder={copy.fields.attachment.placeholder}
+          placeholder={copy.fields.attachment.placeholder ?? ''}
         />
 
         <label class="development-field development-field--full">
           <span>{copy.fields.specialRequirements.label}</span>
           <textarea
             class="development-textarea"
-            name="specialRequirements"
+          name="specialRequirements"
+          maxlength="4000"
             rows={6}
             data-field="specialRequirements"
             placeholder={copy.fields.specialRequirements.placeholder}
           ></textarea>
-          <span class="development-field-error" data-error-for="specialRequirements" hidden></span>
+          <span class="development-field-error" data-error-for="specialRequirements" role="alert" hidden></span>
         </label>
       </div>
     </section>

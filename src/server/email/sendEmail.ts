@@ -1,14 +1,16 @@
 import type { Transporter } from 'nodemailer';
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 const SMTP_CONFIG_ERROR = 'SMTP_NOT_CONFIGURED';
+const INVALID_MAIL_DATA_ERROR = 'INVALID_MAIL_DATA';
+const TEST_TRANSPORT_ENV = 'EMAIL_TEST_TRANSPORT';
+const EMAIL_ADDRESS_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const UNSAFE_HEADER_CHARACTERS = /[\r\n\u0000-\u001f\u007f]/;
 
 interface SimpleEmailData {
   from_name: string;
   reply_to: string;
-  subject: string;
   message: string;
   consultationType: string;
   contact: string;
@@ -49,7 +51,11 @@ const isGmailUser = (user: string) => /@(gmail|googlemail)\.com$/i.test(user.tri
 
 const parseBoolean = (value: string | undefined, fallback: boolean) => {
   if (typeof value !== 'string' || !value.trim()) return fallback;
-  return ['1', 'true', 'yes', 'on'].includes(value.trim().toLowerCase());
+
+  const normalized = value.trim().toLowerCase();
+  if (['1', 'true', 'yes', 'on'].includes(normalized)) return true;
+  if (['0', 'false', 'no', 'off'].includes(normalized)) return false;
+  return null;
 };
 
 const parseEnvValue = (value: string) => {
@@ -63,37 +69,12 @@ const parseEnvValue = (value: string) => {
   return trimmed;
 };
 
-const getCandidateEnvDirectories = () => {
-  const moduleDir = dirname(fileURLToPath(import.meta.url));
-  const roots = [moduleDir, process.cwd()];
-  const directories = new Set<string>();
-
-  roots.forEach((root) => {
-    let current = resolve(root);
-    const ancestors: string[] = [];
-
-    for (let depth = 0; depth < 6; depth += 1) {
-      ancestors.push(current);
-      const parent = dirname(current);
-      if (parent === current) break;
-      current = parent;
-    }
-
-    ancestors.reverse().forEach((directory) => directories.add(directory));
-  });
-
-  return [...directories];
-};
-
 const loadRuntimeEnvFiles = () => {
   if (runtimeEnvLoaded) return;
   runtimeEnvLoaded = true;
 
   const externalEnvKeys = new Set(Object.keys(process.env));
-  const envFiles = getCandidateEnvDirectories().flatMap((directory) => [
-    join(directory, '.env'),
-    join(directory, '.env.local'),
-  ]);
+  const envFiles = [join(process.cwd(), '.env'), join(process.cwd(), '.env.local')];
 
   envFiles.forEach((envFile) => {
     if (!existsSync(envFile)) return;
@@ -120,15 +101,27 @@ const getTrimmedEnv = (key: string) => {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined;
 };
 
+const isSafeEmailAddress = (value: string) =>
+  !UNSAFE_HEADER_CHARACTERS.test(value) && value.length <= 254 && EMAIL_ADDRESS_PATTERN.test(value);
+
+const isSafeSmtpHost = (value: string) =>
+  value.length <= 253 && /^[a-z0-9.-]+$/i.test(value) && !value.startsWith('.') && !value.endsWith('.') && !value.includes('..');
+
 const getSmtpSettings = (user: string) => {
   const host = getTrimmedEnv('SMTP_HOST') ?? (isGmailUser(user) ? 'smtp.gmail.com' : 'smtp.office365.com');
   const rawPort = getTrimmedEnv('SMTP_PORT');
-  const port = rawPort ? Number(rawPort) : 587;
+  const parsedPort = rawPort ? Number(rawPort) : 587;
+  const hasValidPort = Number.isInteger(parsedPort) && parsedPort > 0 && parsedPort <= 65_535;
+  const port = hasValidPort ? parsedPort : 587;
   const secure = parseBoolean(getTrimmedEnv('SMTP_SECURE'), port === 465);
+
+  if (!isSafeSmtpHost(host) || !hasValidPort || secure === null) {
+    throw new Error(SMTP_CONFIG_ERROR);
+  }
 
   return {
     host,
-    port: Number.isFinite(port) && port > 0 ? port : 587,
+    port,
     secure,
   };
 };
@@ -137,7 +130,7 @@ const getSmtpCredentials = () => {
   const user = getTrimmedEnv('EMAIL_USER') ?? '';
   const rawPass = getRuntimeEnv('EMAIL_PASS') ?? '';
 
-  if (!user || !rawPass) {
+  if (!user || !rawPass || !isSafeEmailAddress(user)) {
     throw new Error(SMTP_CONFIG_ERROR);
   }
 
@@ -146,19 +139,57 @@ const getSmtpCredentials = () => {
   return { user, pass };
 };
 
-const getRecipientEmail = () => getTrimmedEnv('EMAIL_TO') || getTrimmedEnv('EMAIL_USER') || 'cristianhbravo@outlook.es';
+const getRecipientEmail = () => {
+  const recipient = getTrimmedEnv('EMAIL_TO') || getTrimmedEnv('EMAIL_USER') || '';
+
+  if (!isSafeEmailAddress(recipient)) {
+    throw new Error(SMTP_CONFIG_ERROR);
+  }
+
+  return recipient;
+};
+
+/**
+ * A memory-only transport is available exclusively to automated tests. It is
+ * deliberately rejected outside NODE_ENV=test so a deploy cannot silently
+ * discard client messages because of a stray environment variable.
+ */
+const shouldUseTestTransport = () => {
+  const mode = getRuntimeEnv(TEST_TRANSPORT_ENV);
+  if (!mode) return false;
+
+  if (process.env.NODE_ENV !== 'test' || mode !== 'stream') {
+    throw new Error(SMTP_CONFIG_ERROR);
+  }
+
+  return true;
+};
 
 const getTransporter = async () => {
   if (transporter) return transporter;
 
+  const { default: nodemailer } = await import('nodemailer');
+
+  if (shouldUseTestTransport()) {
+    transporter = nodemailer.createTransport({
+      streamTransport: true,
+      buffer: true,
+      newline: 'unix',
+    });
+    return transporter;
+  }
+
   const { user, pass } = getSmtpCredentials();
   const { host, port, secure } = getSmtpSettings(user);
-  const { default: nodemailer } = await import('nodemailer');
 
   transporter = nodemailer.createTransport({
     host,
     port,
     secure,
+    requireTLS: !secure,
+    disableFileAccess: true,
+    disableUrlAccess: true,
+    maxRecipients: 1,
     connectionTimeout: 12000,
     greetingTimeout: 12000,
     socketTimeout: 20000,
@@ -168,15 +199,25 @@ const getTransporter = async () => {
     },
     tls: {
       servername: host,
+      minVersion: 'TLSv1.2',
+      rejectUnauthorized: true,
     },
   });
 
   return transporter;
 };
 
-const buildSenderLabel = (value: string, fallback: string) => {
-  const trimmed = value.trim().replace(/[\r\n"]/g, '');
-  return trimmed || fallback;
+const getSafeReplyTo = (value: string) => {
+  if (!isSafeEmailAddress(value)) {
+    throw new Error(INVALID_MAIL_DATA_ERROR);
+  }
+
+  return value;
+};
+
+const getSafeAttachmentName = (value: string) => {
+  const safeName = value.trim().replace(/[\r\n\u0000-\u001f\u007f\\/:*?"<>|]/g, '_').slice(0, 120);
+  return safeName || 'adjunto';
 };
 
 const escapeHtml = (value: string) =>
@@ -445,44 +486,30 @@ const buildProjectEmailHtml = (data: ProjectEmailData, recipientEmail: string) =
 
 export const isSmtpConfigError = (error: unknown) => error instanceof Error && error.message === SMTP_CONFIG_ERROR;
 
-export const getSmtpErrorMessage = (error: unknown) => {
-  const user = getTrimmedEnv('EMAIL_USER') ?? '';
-  const { host } = getSmtpSettings(user);
-  const providerName = isGmailUser(user) || host.includes('gmail') ? 'Gmail' : 'Outlook';
+export const getSmtpErrorMessage = (error: unknown, lang: 'es' | 'en' = 'es') => {
+  const isEnglish = lang === 'en';
 
   if (isSmtpConfigError(error)) {
-    return 'El servicio de correo no esta configurado todavia.';
+    return isEnglish ? 'The email service is not configured yet.' : 'El servicio de correo no esta configurado todavia.';
   }
 
-  if (error && typeof error === 'object') {
-    const code = 'code' in error ? String(error.code) : '';
-    const message = error instanceof Error ? error.message : '';
-
-    if (providerName === 'Outlook' && code === 'EAUTH' && message.includes('SmtpClientAuthentication is disabled')) {
-      return 'Outlook rechazo el acceso SMTP porque Authenticated SMTP esta deshabilitado para esta cuenta.';
-    }
-
-    if (code === 'EAUTH') {
-      return `${providerName} rechazo la autenticacion SMTP. Revisa EMAIL_USER y EMAIL_PASS.`;
-    }
-
-    if (['ECONNECTION', 'ETIMEDOUT', 'ESOCKET', 'ENOTFOUND'].includes(code)) {
-      return `No pudimos conectar con el servidor SMTP (${host}). Revisa SMTP_HOST, SMTP_PORT, firewall y salida SMTP del servidor.`;
-    }
-  }
-
-  return 'No pudimos enviar el correo desde el servidor. Intenta nuevamente.';
+  return isEnglish
+    ? 'We could not send your message from the server. Please try again.'
+    : 'No pudimos enviar el correo desde el servidor. Intenta nuevamente.';
 };
+
+/** Opens and authenticates an SMTP connection without delivering a message. */
+export const verifySmtpTransport = async () => (await getTransporter()).verify();
 
 export async function sendSimpleEmail(data: SimpleEmailData) {
   const { user } = getSmtpCredentials();
   const recipientEmail = getRecipientEmail();
 
   return (await getTransporter()).sendMail({
-    from: `"${buildSenderLabel(data.from_name, 'Formulario simple')}" <${user}>`,
+    from: `"CYSTEMS Formularios" <${user}>`,
     to: recipientEmail,
-    replyTo: data.reply_to,
-    subject: data.subject,
+    replyTo: getSafeReplyTo(data.reply_to),
+    subject: 'Nueva consulta desde CYSTEMS',
     html: buildSimpleEmailHtml(data, recipientEmail),
     text: [
       'Nuevo mensaje de contacto',
@@ -503,15 +530,15 @@ export async function sendProjectEmail(data: ProjectEmailData) {
   const recipientEmail = getRecipientEmail();
 
   return (await getTransporter()).sendMail({
-    from: `"${buildSenderLabel(data.fullName, 'Solicitud de proyecto')}" <${user}>`,
+    from: `"CYSTEMS Formularios" <${user}>`,
     to: recipientEmail,
-    replyTo: data.email,
-    subject: `Nuevo proyecto solicitado - ${data.projectType}`,
+    replyTo: getSafeReplyTo(data.email),
+    subject: 'Nueva solicitud de proyecto desde CYSTEMS',
     html: buildProjectEmailHtml(data, recipientEmail),
     attachments: data.attachment
       ? [
           {
-            filename: data.attachment.filename,
+            filename: getSafeAttachmentName(data.attachment.filename),
             content: data.attachment.content,
             contentType: data.attachment.contentType,
           },

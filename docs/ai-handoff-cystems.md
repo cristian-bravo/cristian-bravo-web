@@ -1,6 +1,29 @@
 # Handoff tecnico para trabajar con IAs - CYSTEMS
 
-Actualizado: 2026-05-22
+Actualizado: 2026-09-19
+
+## Estado vigente — septiembre de 2026
+
+Esta sección reemplaza las referencias de arquitectura del registro histórico que sigue debajo.
+
+- Runtime: Node >= 22.19.0 (`.nvmrc`: 22.23.1), Astro 7, adaptador Node standalone, Tailwind 4. Usar `npm ci`.
+- Home actual: `src/components/home/StudioHome.astro`, contenido ES/EN en `src/data/studio.ts` y estilos `src/styles/studio.css`. Dirección editorial: tinta, papel cálido y coral; animación breve, sin WebGL ni vídeo de fondo.
+- Sistema compartido: `src/styles/brand.css`, layouts y Header/Footer. El perfil del fundador conserva su identidad personal. No inventar métricas comerciales, clientes ni testimonios.
+- Proyectos actual: `src/components/projects/ProjectsGallery.astro` consume los datos ES/EN existentes, con filtros y galerías nativas. La ruta ya no utiliza el motor de scroll por escenas. Sus componentes y guías antiguas son referencia histórica, no la arquitectura activa.
+- Servicios: catálogo base ES/EN más `src/data/service-catalog.ts`, seis servicios y modales accesibles.
+- Yuki: `src/components/YukiAssistant.astro` llama exclusivamente al proxy `/api/yuki-chat`. La URL y credencial del gateway permanecen server-side. El checkbox transmite consentimiento, pero la última edición concurrente exige un `coreRoute` que todavía no se inyecta; `remember:true` falla con 503. Historial y aprendizaje duradero están pendientes de conexión, aislamiento entre visitantes y borrado. El gateway dedicado no tiene herramientas administrativas. No inferir conexión porque el widget se vea ni habilitar la ruta en el entrypoint central con personalidad privada. Véase `yuki-integration.md` antes de integrar los cambios concurrentes.
+- Seguridad: CSP con nonce en `src/middleware.ts`; límites de bytes, esquema y origen en las APIs; cabeceras de IP sólo desde proxies verificados. No reactivar scripts inline sin nonce. `assetsInlineLimit: 0` mantiene los scripts de interacción compatibles con la CSP.
+- Formularios: borrador limitado a `sessionStorage`, sin persistencia entre sesiones. No introducir datos personales o credenciales en logs. El fixture SMTP no envía correos externos; `verify()` tampoco prueba recepción final.
+- Entrada comercial: tres intenciones (crear, mejorar y rescatar) en `/empezar-proyecto`; `intent` sólo acepta `new`, `improve` y `rescue`. La selección precarga un tipo permitido del formulario simple, conserva la intención al cambiar de idioma y mantiene el brief completo como ruta secundaria. El rescate también tiene sección propia en la home.
+- Analítica preparada, sin proveedor activo: `src/lib/analytics.ts` publica el evento local `window` → `cystems:analytics` con sólo `{ event, location, language }` de listas cerradas. `Analytics.astro` observa CTAs marcados, inicio de formularios y vista de Proyectos; los formularios emiten éxito únicamente tras respuesta positiva del servidor y Yuki al abrirse. Sin red, cookies, identificadores, URL ni datos de campos. Un futuro adaptador consentido puede suscribirse sin modificar los formularios. `whatsapp_click` está reservado, pero no se publica un enlace hasta recibir el número comercial confirmado.
+- SEO: rutas indexables centralizadas en `src/lib/seo.ts`; sitemap generado en `src/pages/sitemap.xml.ts`, canonical/hreflang/JSON-LD en BaseLayout. Blog provisional no indexable y URLs desconocidas con estado 404.
+- QA: `npm run typecheck`, `npm run build`, `npm run test:email`, `npm run test:e2e`, `npm run test:perf`, `npm run audit:deps`. Véase `docs/qa-report.md` para resultados y limitaciones. Un solo runner debe usar `dist` y `test-results` a la vez.
+- Se retiraron 23 recursos de terceros sin uso del directorio público Sakura. En la máquina de trabajo se conservan recuperables en `.cache/security-quarantine/sakura`; `preview.jpg` permanece publicado.
+- `.agents/skills/product-frontend-design` y `skills-lock.json` se copiaron del proyecto NY de referencia. Playwright se adaptó al stack Astro; no se copiaron componentes Next ni infraestructura ajena.
+
+## Registro histórico — mayo de 2026
+
+Las secciones siguientes describen el estado anterior, incluidas verificaciones realizadas entonces. No son evidencia de disponibilidad o entrega actual en producción.
 
 Este documento sirve como contexto base para que otra IA, agente de codigo o desarrollador pueda continuar el proyecto sin perder decisiones importantes. No contiene secretos ni credenciales.
 
@@ -368,4 +391,3 @@ Ultima verificacion local:
 - Mobile 390px: sin overflow horizontal en Home, Proyectos y Solicitud.
 - Proyectos mobile: scroll nativo.
 - Dev server local usado: `http://127.0.0.1:4321/`.
-

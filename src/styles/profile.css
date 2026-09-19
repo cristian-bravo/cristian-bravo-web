@@ -5,6 +5,7 @@
   --profile-hero-bottom-space: clamp(2rem, 5vw, 3.5rem);
   position: relative;
   isolation: isolate;
+  overflow-x: clip;
   background:
     radial-gradient(circle at 8% 8%, rgba(124, 60, 255, 0.1), transparent 34%),
     radial-gradient(circle at 90% 16%, rgba(59, 130, 246, 0.1), transparent 30%);
@@ -1911,16 +1912,6 @@
     --profile-quick-link-tooltip-hover-offset-y: calc(-100% - 0.28rem);
   }
 
-  .profile-hero-quick-link.is-top-left,
-  .profile-hero-quick-link.is-bottom-left {
-    --profile-quick-link-shift-x: calc(-62% - 1.2rem);
-  }
-
-  .profile-hero-quick-link.is-top-right,
-  .profile-hero-quick-link.is-bottom-right {
-    --profile-quick-link-shift-x: calc(62% + 1.2rem);
-  }
-
   .profile-hero-quick-link.is-icon-cv .profile-hero-quick-link__icon {
     transform: translateY(-0.14rem);
   }
@@ -2023,6 +2014,24 @@
   }
   50% {
     transform: translate3d(0, -6px, 0);
+  }
+}
+
+@media (max-width: 1379px) {
+  .profile-hero-quick-link.is-top-left,
+  .profile-hero-quick-link.is-bottom-left {
+    left: clamp(0.5rem, 2vw, 1.25rem);
+    --profile-quick-link-shift-x: 0px;
+  }
+
+  .profile-hero-quick-link.is-top-right,
+  .profile-hero-quick-link.is-bottom-right {
+    right: clamp(0.5rem, 2vw, 1.25rem);
+    --profile-quick-link-shift-x: 0px;
+  }
+
+  .profile-hero-quick-link__tooltip {
+    display: none;
   }
 }
 

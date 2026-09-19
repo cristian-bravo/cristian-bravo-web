@@ -1,4 +1,5 @@
 import { useConfirmModal } from './hooks/useConfirmModal';
+import { emitAnalyticsEvent } from '../../../lib/analytics';
 import { useFileValidation } from './hooks/useFileValidation';
 import { useWizardState } from './hooks/useWizardState';
 import { sendProjectRequest } from './services/projectRequestService';
@@ -8,7 +9,11 @@ import {
   type ProjectWizardConfig,
 } from './types/projectRequest.types';
 import { formatSavedTime } from './utils/wizardHelpers';
-import { collectProjectFormData, restoreProjectFormData, validateProjectEssentials } from './utils/projectFormData';
+import {
+  collectProjectFormData,
+  restoreProjectFormData,
+  validateProjectEssentials,
+} from './utils/projectFormData';
 import {
   clearWizardFieldErrors,
   createFieldErrorSetter,
@@ -16,29 +21,59 @@ import {
   focusFirstInvalidField,
   showFieldErrors,
 } from './utils/wizardDom';
-import { persistWizardState, restoreWizardState } from './utils/wizardStorage';
+import {
+  clearLegacyWizardState,
+  persistWizardState,
+  removeWizardState,
+  restoreWizardState,
+} from './utils/wizardStorage';
 import { renderWizardState } from './utils/wizardUi';
 
-const REQUIRED_FIELDS: (keyof ProjectRequestFormData)[] = ['fullName', 'email', 'phone', 'projectDescription'];
+const REQUIRED_FIELDS: (keyof ProjectRequestFormData)[] = [
+  'fullName',
+  'email',
+  'phone',
+  'projectDescription',
+];
 
 export const initProjectRequestWizard = (root: Element) => {
-  if (!(root instanceof HTMLElement) || root.dataset.initialized === 'true') return;
+  if (!(root instanceof HTMLElement) || root.dataset.initialized === 'true')
+    return;
   root.dataset.initialized = 'true';
 
-  const configNode = root.querySelector<HTMLScriptElement>('[data-project-wizard-config]');
-  const form = root.querySelector<HTMLFormElement>('[data-project-wizard-form]');
+  const configNode = root.querySelector<HTMLScriptElement>(
+    '[data-project-wizard-config]',
+  );
+  const form = root.querySelector<HTMLFormElement>(
+    '[data-project-wizard-form]',
+  );
   const modal = root.querySelector<HTMLElement>('[data-confirm-modal]');
   const modalPanel = root.querySelector<HTMLElement>('[data-confirm-panel]');
   const fileInput = root.querySelector<HTMLInputElement>('[data-file-input]');
   const uploadList = root.querySelector<HTMLElement>('[data-upload-list]');
-  const uploadPlaceholder = root.querySelector<HTMLElement>('[data-upload-placeholder]');
-  const confirmCancel = root.querySelector<HTMLButtonElement>('[data-confirm-cancel]');
+  const uploadPlaceholder = root.querySelector<HTMLElement>(
+    '[data-upload-placeholder]',
+  );
+  const confirmCancel = root.querySelector<HTMLButtonElement>(
+    '[data-confirm-cancel]',
+  );
 
-  if (!configNode || !form || !modal || !modalPanel || !fileInput || !uploadList || !uploadPlaceholder || !confirmCancel) {
+  if (
+    !configNode ||
+    !form ||
+    !modal ||
+    !modalPanel ||
+    !fileInput ||
+    !uploadList ||
+    !uploadPlaceholder ||
+    !confirmCancel
+  ) {
     return;
   }
 
-  const config = JSON.parse(configNode.textContent || '{}') as ProjectWizardConfig;
+  const config = JSON.parse(
+    configNode.textContent || '{}',
+  ) as ProjectWizardConfig;
   const wizardCopy = config.ui;
   const state = useWizardState(config.stepTitles.length);
   const setFieldError = createFieldErrorSetter(root);
@@ -69,22 +104,42 @@ export const initProjectRequestWizard = (root: Element) => {
 
   const stepCounter = root.querySelector<HTMLElement>('[data-step-counter]');
   const stepTitle = root.querySelector<HTMLElement>('[data-step-title]');
-  const stepDescription = root.querySelector<HTMLElement>('[data-step-description]');
+  const stepDescription = root.querySelector<HTMLElement>(
+    '[data-step-description]',
+  );
   const savedPill = root.querySelector<HTMLElement>('[data-saved-pill]');
-  const restoredStatus = root.querySelector<HTMLElement>('[data-restored-status]');
+  const restoredStatus = root.querySelector<HTMLElement>(
+    '[data-restored-status]',
+  );
   const progressFill = root.querySelector<HTMLElement>('[data-progress-fill]');
   const errorBlock = root.querySelector<HTMLElement>('[data-submit-error]');
   const errorText = root.querySelector<HTMLElement>('[data-submit-error-text]');
   const successCard = root.querySelector<HTMLElement>('[data-submit-success]');
-  const nextButton = root.querySelector<HTMLButtonElement>('[data-next-button]');
-  const backButton = root.querySelector<HTMLButtonElement>('[data-back-button]');
-  const resetButton = root.querySelector<HTMLButtonElement>('[data-reset-button]');
-  const modalBackdrop = root.querySelector<HTMLButtonElement>('[data-confirm-backdrop]');
-  const confirmSend = root.querySelector<HTMLButtonElement>('[data-confirm-send]');
-  const confirmSendLabel = root.querySelector<HTMLElement>('[data-confirm-send-label]');
-  const confirmSendIcon = root.querySelector<HTMLElement>('[data-confirm-send-icon]');
-  const stepPanels = Array.from(root.querySelectorAll<HTMLElement>('[data-step-panel]'));
-  const stepChips = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-step-chip]'));
+  const nextButton =
+    root.querySelector<HTMLButtonElement>('[data-next-button]');
+  const backButton =
+    root.querySelector<HTMLButtonElement>('[data-back-button]');
+  const resetButton = root.querySelector<HTMLButtonElement>(
+    '[data-reset-button]',
+  );
+  const modalBackdrop = root.querySelector<HTMLButtonElement>(
+    '[data-confirm-backdrop]',
+  );
+  const confirmSend = root.querySelector<HTMLButtonElement>(
+    '[data-confirm-send]',
+  );
+  const confirmSendLabel = root.querySelector<HTMLElement>(
+    '[data-confirm-send-label]',
+  );
+  const confirmSendIcon = root.querySelector<HTMLElement>(
+    '[data-confirm-send-icon]',
+  );
+  const stepPanels = Array.from(
+    root.querySelectorAll<HTMLElement>('[data-step-panel]'),
+  );
+  const stepChips = Array.from(
+    root.querySelectorAll<HTMLButtonElement>('[data-step-chip]'),
+  );
 
   if (
     !stepCounter ||
@@ -107,7 +162,8 @@ export const initProjectRequestWizard = (root: Element) => {
     return;
   }
 
-  const collectFormData = () => collectProjectFormData(form, fileValidation.getUploadedFileNames);
+  const collectFormData = () =>
+    collectProjectFormData(form, fileValidation.getUploadedFileNames);
 
   const clearSubmissionError = () => {
     errorText.textContent = '';
@@ -123,7 +179,7 @@ export const initProjectRequestWizard = (root: Element) => {
     if (submitted) return;
 
     const snapshot = state.getSnapshot();
-    persistWizardState({
+    const saved = persistWizardState({
       storageKey: config.storageKey,
       currentStep: snapshot.currentStep,
       furthestStep: snapshot.furthestStep,
@@ -131,7 +187,7 @@ export const initProjectRequestWizard = (root: Element) => {
     });
 
     savedPill.textContent = `${wizardCopy.savePrefix} ${formatSavedTime(new Date())}`;
-    savedPill.hidden = false;
+    savedPill.hidden = !saved;
   };
 
   const renderState = () => {
@@ -174,21 +230,28 @@ export const initProjectRequestWizard = (root: Element) => {
 
   const restoreState = () => {
     try {
-      window.localStorage.removeItem(config.legacyStorageKey);
-      const parsed = restoreWizardState<{ currentStep?: number; furthestStep?: number; formData?: Partial<ProjectRequestFormData> }>(
-        config.storageKey,
-        {}
-      );
+      clearLegacyWizardState(config.legacyStorageKey, config.storageKey);
+      const parsed = restoreWizardState<{
+        currentStep?: number;
+        furthestStep?: number;
+        formData?: Partial<ProjectRequestFormData>;
+      }>(config.storageKey, {});
       if (!Object.keys(parsed).length) return;
 
-      restoreProjectFormData(form, parsed.formData || DEFAULT_PROJECT_REQUEST_FORM_DATA);
-      state.restore(Number(parsed.currentStep) || 1, Number(parsed.furthestStep) || 1);
+      restoreProjectFormData(
+        form,
+        parsed.formData || DEFAULT_PROJECT_REQUEST_FORM_DATA,
+      );
+      state.restore(
+        Number(parsed.currentStep) || 1,
+        Number(parsed.furthestStep) || 1,
+      );
       restored = true;
       restoredStatus.hidden = false;
       savedPill.textContent = `${wizardCopy.savePrefix} ${formatSavedTime(new Date())}`;
       savedPill.hidden = false;
     } catch {
-      window.localStorage.removeItem(config.storageKey);
+      removeWizardState(config.storageKey);
     }
   };
 
@@ -203,7 +266,7 @@ export const initProjectRequestWizard = (root: Element) => {
     savedPill.hidden = true;
     restoredStatus.hidden = true;
     clearWizardFieldErrors(root);
-    window.localStorage.removeItem(config.storageKey);
+    removeWizardState(config.storageKey);
     renderState();
     updateSummary(collectFormData());
   };
@@ -216,7 +279,10 @@ export const initProjectRequestWizard = (root: Element) => {
 
     if (Object.keys(errors).length || !fileValidation.validateAttachment()) {
       modalController.close(true);
-      state.restore(Object.keys(errors).length ? 1 : config.stepTitles.length, state.getSnapshot().furthestStep);
+      state.restore(
+        Object.keys(errors).length ? 1 : config.stepTitles.length,
+        state.getSnapshot().furthestStep,
+      );
       renderState();
       if (Object.keys(errors).length) {
         focusFirstInvalidField(root);
@@ -240,12 +306,17 @@ export const initProjectRequestWizard = (root: Element) => {
       });
 
       submitted = true;
-      window.localStorage.removeItem(config.storageKey);
+      removeWizardState(config.storageKey);
       form.hidden = true;
       successCard.hidden = false;
+      emitAnalyticsEvent('form_complete', 'project_form');
       modalController.close(true);
     } catch (error) {
-      setSubmissionError(error instanceof Error && error.message ? error.message : wizardCopy.submitError);
+      setSubmissionError(
+        error instanceof Error && error.message
+          ? error.message
+          : wizardCopy.submitError,
+      );
       modalController.close(true);
     } finally {
       isSending = false;
@@ -295,7 +366,7 @@ export const initProjectRequestWizard = (root: Element) => {
     }
 
     updateSummary(formData);
-    modalController.open();
+    modalController.open(nextButton);
   };
 
   restoreState();
@@ -306,7 +377,35 @@ export const initProjectRequestWizard = (root: Element) => {
     restoredStatus.hidden = true;
   }
 
-  stepChips.forEach((chip) => chip.addEventListener('click', () => goToStep(Number(chip.dataset.stepChip))));
+  stepChips.forEach((chip) => {
+    chip.addEventListener('click', () =>
+      goToStep(Number(chip.dataset.stepChip)),
+    );
+    chip.addEventListener('keydown', (event) => {
+      if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key))
+        return;
+
+      const availableChips = stepChips.filter(
+        (candidate) => !candidate.disabled,
+      );
+      const currentIndex = availableChips.indexOf(chip);
+      if (currentIndex < 0 || !availableChips.length) return;
+
+      let nextIndex = currentIndex;
+      if (event.key === 'ArrowRight')
+        nextIndex = (currentIndex + 1) % availableChips.length;
+      if (event.key === 'ArrowLeft')
+        nextIndex =
+          (currentIndex - 1 + availableChips.length) % availableChips.length;
+      if (event.key === 'Home') nextIndex = 0;
+      if (event.key === 'End') nextIndex = availableChips.length - 1;
+
+      const nextChip = availableChips[nextIndex];
+      event.preventDefault();
+      nextChip.focus();
+      goToStep(Number(nextChip.dataset.stepChip));
+    });
+  });
   resetButton.addEventListener('click', resetWizard);
   modalBackdrop.addEventListener('click', () => modalController.close());
   confirmCancel.addEventListener('click', () => modalController.close());
@@ -321,8 +420,13 @@ export const initProjectRequestWizard = (root: Element) => {
       setFieldError(fieldName, '');
     }
 
-    if (target instanceof HTMLInputElement && (target.name === 'features' || target.name === 'integrations')) {
-      target.closest('.development-checkbox-card')?.classList.toggle('is-checked', target.checked);
+    if (
+      target instanceof HTMLInputElement &&
+      (target.name === 'features' || target.name === 'integrations')
+    ) {
+      target
+        .closest('.development-checkbox-card')
+        ?.classList.toggle('is-checked', target.checked);
     }
 
     clearSubmissionError();
@@ -368,5 +472,7 @@ export const initProjectRequestWizard = (root: Element) => {
 };
 
 export const initAllProjectRequestWizards = () => {
-  document.querySelectorAll('[data-project-wizard-root]').forEach((root) => initProjectRequestWizard(root));
+  document
+    .querySelectorAll('[data-project-wizard-root]')
+    .forEach((root) => initProjectRequestWizard(root));
 };

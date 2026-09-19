@@ -1,0 +1,439 @@
+---
+import type { Lang } from '../../data';
+import { getData } from '../../data';
+import { localizePath } from '../../lib/i18n';
+import '../../styles/studio.css';
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const en = lang === 'en';
+const projects = getData(lang).projects.projectsPortfolioContent.groups.flatMap(
+  (group) => group.references,
+);
+const category = (variant?: string) =>
+  variant === 'retail-commerce'
+    ? 'commerce'
+    : ['edu-saas', 'academic-platform'].includes(variant ?? '')
+      ? 'education'
+      : 'business';
+const filters = [
+  { id: 'all', label: en ? 'All work' : 'Todos' },
+  { id: 'education', label: en ? 'Education' : 'Educación' },
+  { id: 'business', label: en ? 'Business' : 'Empresas' },
+  { id: 'commerce', label: en ? 'Commerce' : 'Comercio' },
+];
+const labels = en
+  ? {
+      kicker: 'Selected work / CYSTEMS',
+      title: 'Software built around real operations.',
+      intro:
+        'Business platforms, virtual campuses and commerce. Explore the context, capabilities and interfaces behind each project.',
+      filter: 'Filter projects',
+      detail: 'The project',
+      capabilities: 'Capabilities',
+      screens: 'Explore the interfaces',
+      code: 'Source code',
+      private: 'Confidential reference',
+      privateCopy:
+        'The scope is described at a general level. Private interfaces, data and source code are not published.',
+      cta: 'Let’s build the next one',
+      action: 'Tell us about your project',
+      count: 'projects shown',
+    }
+  : {
+      kicker: 'Trabajo seleccionado / CYSTEMS',
+      title: 'Software con una operación detrás.',
+      intro:
+        'Plataformas empresariales, campus virtuales y comercio. Explora el contexto, las capacidades y las interfaces de cada proyecto.',
+      filter: 'Filtrar proyectos',
+      detail: 'El proyecto',
+      capabilities: 'Capacidades',
+      screens: 'Explorar las interfaces',
+      code: 'Código fuente',
+      private: 'Referencia confidencial',
+      privateCopy:
+        'El alcance se describe de forma general. Las interfaces, los datos y el código privado no se publican.',
+      cta: 'Construyamos el siguiente',
+      action: 'Cuéntanos tu proyecto',
+      count: 'proyectos visibles',
+    };
+---
+
+<div class="studio-home portfolio-page">
+  <section class="studio-wrap portfolio-intro">
+    <p class="studio-eyebrow">{labels.kicker}</p>
+    <h1>{labels.title}</h1>
+    <p>{labels.intro}</p>
+  </section>
+  <div class="studio-wrap portfolio-controls">
+    <div role="group" aria-label={labels.filter} class="portfolio-filters">
+      {filters.map((filter) => (
+        <button
+          type="button"
+          data-project-filter={filter.id}
+          aria-pressed={filter.id === 'all' ? 'true' : 'false'}
+        >
+          {filter.label}
+        </button>
+      ))}
+    </div>
+    <p
+      class="studio-eyebrow"
+      role="status"
+      data-project-count
+      data-count-label={labels.count}
+    >
+      {projects.length} {labels.count}
+    </p>
+  </div>
+  <div class="studio-wrap portfolio-list">
+    {projects.map((project, index) => {
+      const cover = project.gallery.find((item) => item.src);
+      const actions = (project.actions ?? []).filter(
+        (action, i, all) =>
+          all.findIndex((other) => other.href === action.href) === i,
+      );
+      return (
+        <article
+          class:list={[
+            'portfolio-project',
+            project.isConfidential && 'portfolio-project--private',
+          ]}
+          data-project-category={category(project.featuredHero?.variant)}
+        >
+          <div class="portfolio-project__header">
+            <span class="studio-index">0{index + 1}</span>
+            <div>
+              <p class="studio-eyebrow">
+                {project.isConfidential
+                  ? labels.private
+                  : project.featuredHero?.badge}
+              </p>
+              <h2>{project.title}</h2>
+            </div>
+          </div>
+          <div class="portfolio-project__body">
+            <div class="portfolio-project__copy">
+              <p class="portfolio-project__description">
+                {project.description}
+              </p>
+              <h3>{labels.capabilities}</h3>
+              <ul>
+                {project.tags.map((tag) => (
+                  <li>{tag}</li>
+                ))}
+              </ul>
+              {project.isConfidential ? (
+                <p class="portfolio-private-note">{labels.privateCopy}</p>
+              ) : (
+                <div class="portfolio-project__actions">
+                  {actions.map((action, i) => (
+                    <a
+                      class={i === 0 ? 'studio-button' : 'studio-text-link'}
+                      href={action.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {action.label}
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                  ))}
+                  {project.githubUrl && (
+                    <a
+                      class="studio-text-link"
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {labels.code}
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
+            {cover?.src && (
+              <figure class="portfolio-project__cover">
+                <img
+                  src={cover.src}
+                  alt={cover.alt}
+                  width="1200"
+                  height="750"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : undefined}
+                  decoding="async"
+                />
+                <figcaption>{cover.caption}</figcaption>
+              </figure>
+            )}
+          </div>
+          {!project.isConfidential &&
+            project.gallery.filter((item) => item.src).length > 1 && (
+              <details class="portfolio-gallery">
+                <summary>
+                  {labels.screens}
+                  <span aria-hidden="true">+</span>
+                </summary>
+                <div>
+                  {project.gallery
+                    .filter((item) => item.src && item !== cover)
+                    .map((item) => (
+                      <figure>
+                        <img
+                          src={item.src}
+                          alt={item.alt}
+                          width="900"
+                          height="600"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <figcaption>{item.caption}</figcaption>
+                      </figure>
+                    ))}
+                </div>
+              </details>
+            )}
+        </article>
+      );
+    })}
+  </div>
+  <section class="studio-final studio-wrap">
+    <p class="studio-eyebrow">CYSTEMS / ECUADOR</p>
+    <h2>{labels.cta}</h2>
+    <a class="studio-button" href={localizePath('/empezar-proyecto', lang)}>
+      {labels.action}
+      <span aria-hidden="true">↗</span>
+    </a>
+  </section>
+</div>
+<script>
+  const filters = document.querySelectorAll<HTMLButtonElement>(
+    '[data-project-filter]',
+  );
+  const projects = document.querySelectorAll<HTMLElement>(
+    '[data-project-category]',
+  );
+  const count = document.querySelector<HTMLElement>('[data-project-count]');
+  filters.forEach((button) =>
+    button.addEventListener('click', () => {
+      const active = button.dataset.projectFilter;
+      filters.forEach((filter) =>
+        filter.setAttribute('aria-pressed', String(filter === button)),
+      );
+      let visible = 0;
+      projects.forEach((project) => {
+        project.hidden =
+          active !== 'all' && project.dataset.projectCategory !== active;
+        if (!project.hidden) visible++;
+      });
+      if (count) count.textContent = `${visible} ${count.dataset.countLabel}`;
+    }),
+  );
+</script>
+<style>
+  .portfolio-intro {
+    padding-block: 5.5rem 3rem;
+  }
+  .portfolio-intro h1 {
+    font-size: clamp(2.5rem, 5vw, 4.7rem);
+    letter-spacing: -0.06em;
+    line-height: 1.1;
+    max-width: 16ch;
+    margin: 1.5rem 0;
+  }
+  .portfolio-intro > p:last-child {
+    max-width: 40rem;
+    color: var(--studio-muted);
+    font-size: 1rem;
+  }
+  .portfolio-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.5rem;
+    border-block: 1px solid var(--studio-line);
+  }
+  .portfolio-filters {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+  .portfolio-filters button {
+    min-height: 44px;
+    border: 1px solid var(--studio-line);
+    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+    background: transparent;
+    color: var(--studio-ink);
+    cursor: pointer;
+  }
+  .portfolio-filters button[aria-pressed='true'] {
+    color: var(--studio-paper);
+    background: var(--studio-ink);
+    border-color: var(--studio-ink);
+  }
+  .portfolio-project {
+    padding-block: 3.5rem;
+    border-bottom: 1px solid var(--studio-line);
+  }
+  .portfolio-project[hidden] {
+    display: none;
+  }
+  .portfolio-project__header {
+    display: flex;
+    gap: 1.6rem;
+    align-items: baseline;
+    margin-bottom: 2rem;
+  }
+  .portfolio-project h2 {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    letter-spacing: -0.045em;
+    margin: 0.6rem 0;
+  }
+  .portfolio-project__body {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 3rem;
+    align-items: start;
+  }
+  .portfolio-project__description {
+    font-size: 0.96rem;
+    color: var(--studio-muted);
+    margin-bottom: 1.5rem;
+  }
+  .portfolio-project h3 {
+    font-size: 0.74rem;
+    font-weight: 600;
+    margin-bottom: 0.7rem;
+  }
+  .portfolio-project ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  .portfolio-project li {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.65rem;
+    border: 1px solid var(--studio-line);
+    border-radius: 3px;
+    color: var(--studio-muted);
+  }
+  .portfolio-project__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.3rem;
+    align-items: center;
+    margin-top: 1.8rem;
+  }
+  .portfolio-project__cover {
+    margin: 0;
+    min-width: 0;
+  }
+  .portfolio-project__cover img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1.6;
+    object-fit: cover;
+    object-position: top;
+    border: 1px solid var(--studio-line);
+    border-radius: 5px;
+  }
+  .portfolio-project figcaption {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.64rem;
+    color: var(--studio-muted);
+    padding-top: 0.7rem;
+  }
+  .portfolio-gallery {
+    margin-top: 2rem;
+    border-top: 1px solid var(--studio-line);
+  }
+  .portfolio-gallery summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 56px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .portfolio-gallery summary::-webkit-details-marker {
+    display: none;
+  }
+  .portfolio-gallery summary > span {
+    font-size: 1.4rem;
+    color: var(--studio-accent);
+  }
+  .portfolio-gallery[open] summary > span {
+    transform: rotate(45deg);
+  }
+  .portfolio-gallery > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+  }
+  .portfolio-gallery figure {
+    margin: 0;
+    min-width: 0;
+  }
+  .portfolio-gallery img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 24rem;
+    object-fit: contain;
+    object-position: top;
+    background: var(--studio-panel);
+    border: 1px solid var(--studio-line);
+  }
+  .portfolio-project--private .portfolio-project__body {
+    grid-template-columns: minmax(0, 44rem);
+  }
+  .portfolio-private-note {
+    font-size: 0.75rem;
+    color: var(--studio-muted);
+    border-left: 2px solid var(--studio-accent);
+    padding-left: 1rem;
+    margin-top: 1.5rem;
+  }
+  @media (max-width: 767px) {
+    .portfolio-intro {
+      padding-block: 3.5rem 2rem;
+    }
+    .portfolio-controls {
+      align-items: start;
+      flex-direction: column;
+    }
+    .portfolio-project {
+      padding-block: 2.5rem;
+    }
+    .portfolio-project__header {
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .portfolio-project__body {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .portfolio-project__cover {
+      grid-row: 1;
+    }
+    .portfolio-gallery > div {
+      grid-template-columns: 1fr;
+    }
+    .portfolio-filters button {
+      padding: 0.55rem 0.7rem;
+      font-size: 0.74rem;
+    }
+    .portfolio-project__actions .studio-button {
+      gap: 0.8rem;
+    }
+  }
+</style>

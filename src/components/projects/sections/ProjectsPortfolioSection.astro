@@ -10,7 +10,7 @@ interface Props {
 
 const { content } = Astro.props;
 
-const projectSteps = content.groups.flatMap((group, groupIndex) =>
+const projectSteps = content.groups.flatMap((group) =>
   group.references.map((project, projectIndex) => ({
     project,
     groupTitle: group.title,

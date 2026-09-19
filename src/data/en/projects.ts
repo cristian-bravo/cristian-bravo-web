@@ -1,6 +1,7 @@
 import {
   projectsPortfolioContent as esProjectsPortfolioContent,
   type ProjectReferenceContent,
+  type ProjectFeaturedHeroContent,
   type ProjectsPortfolioContent,
 } from '../es/projects';
 import type { PageMetadata } from '../../types/content';
@@ -9,7 +10,7 @@ export * from '../es/projects';
 
 const withProjectCopy = (
   project: ProjectReferenceContent,
-  copy: Partial<ProjectReferenceContent>
+  copy: Partial<Omit<ProjectReferenceContent, 'featuredHero'>> & { featuredHero?: Partial<ProjectFeaturedHeroContent> }
 ): ProjectReferenceContent => ({
   ...project,
   ...copy,
@@ -20,7 +21,7 @@ const withProjectCopy = (
         ...project.featuredHero,
         ...(copy.featuredHero ?? {}),
       }
-    : copy.featuredHero,
+    : undefined,
 });
 
 const publicProjects = esProjectsPortfolioContent.groups[0].references;

@@ -3,6 +3,7 @@ import type { DevelopmentProjectScopeStepContent } from '../../../../data';
 
 interface Props {
   panelId: string;
+  tabId: string;
   copy: DevelopmentProjectScopeStepContent;
   projectTypeOptions: string[];
   projectLevelOptions: string[];
@@ -10,9 +11,9 @@ interface Props {
   designOptions: string[];
 }
 
-const { panelId, copy, projectTypeOptions, projectLevelOptions, pageOptions, designOptions } = Astro.props;
+const { panelId, tabId, copy, projectTypeOptions, projectLevelOptions, pageOptions, designOptions } = Astro.props;
 ---
-<section id={panelId} class="development-step-panel" data-step-panel="2" hidden>
+<section id={panelId} class="development-step-panel" data-step-panel="2" role="tabpanel" aria-labelledby={tabId} hidden>
   <div class="development-step-stack">
     <div class="development-step-grid development-step-grid--two">
       <label class="development-field">
@@ -23,7 +24,7 @@ const { panelId, copy, projectTypeOptions, projectLevelOptions, pageOptions, des
             <option value={option}>{option}</option>
           ))}
         </select>
-        <span class="development-field-error" data-error-for="projectType" hidden></span>
+        <span class="development-field-error" data-error-for="projectType" role="alert" hidden></span>
       </label>
 
       <label class="development-field">
@@ -34,7 +35,7 @@ const { panelId, copy, projectTypeOptions, projectLevelOptions, pageOptions, des
             <option value={option}>{option}</option>
           ))}
         </select>
-        <span class="development-field-error" data-error-for="projectLevel" hidden></span>
+        <span class="development-field-error" data-error-for="projectLevel" role="alert" hidden></span>
       </label>
 
       <label class="development-field">
@@ -45,7 +46,7 @@ const { panelId, copy, projectTypeOptions, projectLevelOptions, pageOptions, des
             <option value={option}>{option}</option>
           ))}
         </select>
-        <span class="development-field-error" data-error-for="pageRange" hidden></span>
+        <span class="development-field-error" data-error-for="pageRange" role="alert" hidden></span>
       </label>
 
       <label class="development-field">
@@ -56,7 +57,7 @@ const { panelId, copy, projectTypeOptions, projectLevelOptions, pageOptions, des
             <option value={option}>{option}</option>
           ))}
         </select>
-        <span class="development-field-error" data-error-for="designLevel" hidden></span>
+        <span class="development-field-error" data-error-for="designLevel" role="alert" hidden></span>
       </label>
     </div>
   </div>

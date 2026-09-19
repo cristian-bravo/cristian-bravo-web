@@ -6,7 +6,8 @@ const { title, description } = Astro.props;
     <div class="absolute inset-0 bg-gradient-to-br from-brand-purple/15 via-transparent to-brand-blue/10"></div>
   </div>
   <div class="relative z-10">
-    <h3 class="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">{title}</h3>
+    <h2 class="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-brand-text">{title}</h2>
     <p class="mt-2 text-sm text-slate-600 dark:text-brand-muted">{description}</p>
+    <span class="mt-5 inline-block text-xl" aria-hidden="true">↗</span>
   </div>
 </article>

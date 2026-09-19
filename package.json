@@ -1,22 +1,44 @@
 {
-  "name": "empty",
+  "name": "cristian-bravo-web",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev --force",
+    "dev:yuki": "node ../yuki-bot/scripts/site-chat-local-smoke.mjs",
+    "test:yuki:live": "node ../yuki-bot/scripts/site-chat-local-smoke.mjs --once",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "typecheck": "astro check",
+    "test:perf": "node scripts/performance.mjs",
+    "test:email": "node --test tests/email-fixture.test.mjs tests/email-endpoint-fixture.test.mjs",
+    "test:security": "node --test tests/rate-limit-proxy.test.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:qa": "playwright test --project=chromium",
+    "audit:deps": "npm audit --omit=dev"
   },
   "dependencies": {
-    "@astrojs/node": "^9.5.5",
-    "astro": "^5.16.15",
-    "nodemailer": "^8.0.2"
+    "@astrojs/node": "11.1.6",
+    "astro": "7.3.3",
+    "nodemailer": "10.0.10"
   },
   "devDependencies": {
-    "@astrojs/tailwind": "^6.0.2",
-    "autoprefixer": "^10.4.23",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^3.4.19"
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "^22.20.4",
+    "@types/nodemailer": "^8.0.2",
+    "chrome-launcher": "1.2.1",
+    "lighthouse": "13.5.0",
+    "prettier": "3.9.8",
+    "prettier-plugin-astro": "1.0.1",
+    "tailwindcss": "4.3.3",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.19.0",
+    "npm": ">=10"
   }
 }

@@ -1,4 +1,8 @@
-import type { LinkActionContent, PageMetadata, SectionHeaderContent } from '../../types/content';
+import type {
+  LinkActionContent,
+  PageMetadata,
+  SectionHeaderContent,
+} from '../../types/content';
 
 export interface DevelopmentRequestCardContent {
   kicker: string;
@@ -23,6 +27,7 @@ export interface DevelopmentRequestLandingContent {
   supportTitle: string;
   supportDescription: string;
   supportChips: string[];
+  supportAction: LinkActionContent;
 }
 
 export interface DevelopmentSimpleFormFieldsContent {
@@ -65,6 +70,10 @@ export interface DevelopmentSimpleContent {
   supportDescription: string;
   supportItems: string[];
   consultationOptions: string[];
+  intents: Record<
+    'new' | 'improve' | 'rescue',
+    { title: string; prompt: string; consultationType: string }
+  >;
   submitLabel: string;
   footerNote: string;
   emailLabel: string;
@@ -217,17 +226,20 @@ export interface DevelopmentProjectContent {
 
 export const developmentRequestLandingPageMeta: PageMetadata = {
   title: 'Empezar proyecto | CYSTEMS',
-  description: 'Inicia una consulta o solicita una propuesta de desarrollo de software con CYSTEMS.',
+  description:
+    'Inicia una consulta o solicita una propuesta de desarrollo de software con CYSTEMS.',
 };
 
 export const developmentRequestSimplePageMeta: PageMetadata = {
   title: 'Desarrollo simple | CYSTEMS',
-  description: 'Formulario rapido para consultas y desarrollos pequenos en CYSTEMS.',
+  description:
+    'Formulario rapido para consultas y desarrollos pequenos en CYSTEMS.',
 };
 
 export const developmentRequestProjectPageMeta: PageMetadata = {
   title: 'Proyecto completo | CYSTEMS',
-  description: 'Wizard paso a paso para solicitar un desarrollo completo en CYSTEMS.',
+  description:
+    'Wizard paso a paso para solicitar un desarrollo completo en CYSTEMS.',
 };
 
 export const developmentRequestApiContent: DevelopmentRequestApiContent = {
@@ -236,54 +248,92 @@ export const developmentRequestApiContent: DevelopmentRequestApiContent = {
   rateLimitError: 'Has enviado muchas solicitudes. Intenta más tarde.',
 };
 
-export const developmentRequestLandingContent: DevelopmentRequestLandingContent = {
-  header: {
-    kicker: 'Empieza aquí',
-    title: 'Solicita una solución digital',
-    description:
-      'Elige el flujo adecuado según tu etapa: una consulta rápida o un brief completo para estimar mejor alcance, prioridad y siguientes pasos.',
-  },
-  cards: [
-    {
-      kicker: 'Opción 1',
-      title: 'Consulta rápida',
-      description: 'Para validar una idea o resolver dudas iniciales.',
-      detail:
-        'Ideal si necesitas una primera orientación técnica o quieres saber si tu idea es viable.',
-      bullets: ['Respuesta directa', 'Diagnóstico inicial', 'Sin fricción'],
-      action: {
-        label: 'Empezar',
-        href: '/empezar-proyecto/simple',
-      },
-      rotation: '-1.5deg',
+export const developmentRequestLandingContent: DevelopmentRequestLandingContent =
+  {
+    header: {
+      kicker: 'Empieza aquí',
+      title: '¿En qué punto está tu proyecto?',
+      description:
+        'Crear desde cero, mejorar lo que ya funciona o recuperar un sistema con problemas. Empecemos por lo que necesitas resolver.',
     },
-    {
-      kicker: 'Opción 2',
-      title: 'Proyecto completo',
-      description: 'Para una propuesta con más contexto técnico y comercial.',
-      detail:
-        'Recomendado cuando necesitas estimar alcance, funcionalidades, integraciones y tiempos.',
-      bullets: ['Brief estructurado', 'Mejor estimación', 'Planificación clara'],
-      action: {
-        label: 'Crear solicitud',
-        href: '/empezar-proyecto/proyecto',
+    cards: [
+      {
+        kicker: '01 / Crear',
+        title: 'Tengo una idea nueva',
+        description:
+          'Convierte una necesidad de negocio en un producto concreto.',
+        detail:
+          'Cuéntanos quién lo usará y qué problema debe resolver. Definiremos juntos un primer alcance.',
+        bullets: [
+          'MVP y validación',
+          'Software a medida',
+          'Integraciones desde el inicio',
+        ],
+        action: {
+          label: 'Explorar mi idea',
+          href: '/empezar-proyecto/simple?intent=new',
+        },
+        rotation: '0deg',
       },
-      rotation: '1.5deg',
+      {
+        kicker: '02 / Mejorar',
+        title: 'Quiero mejorar mi sistema',
+        description:
+          'Tu operación cambió. Tu software también puede evolucionar.',
+        detail:
+          'Identifiquemos tareas manuales, conexiones que faltan y funciones que tu equipo necesita.',
+        bullets: [
+          'Automatización',
+          'Nuevas funcionalidades',
+          'Rendimiento y experiencia',
+        ],
+        action: {
+          label: 'Planear la mejora',
+          href: '/empezar-proyecto/simple?intent=improve',
+        },
+        rotation: '0deg',
+      },
+      {
+        kicker: '03 / Rescatar',
+        title: 'Necesito recuperar un proyecto',
+        description:
+          'Errores, entregas incompletas o un sistema difícil de mantener.',
+        detail:
+          'Primero revisamos su estado. Después priorizamos reparaciones, riesgos y una ruta de continuidad.',
+        bullets: [
+          'Diagnóstico técnico',
+          'Estabilidad y seguridad',
+          'Continuidad del proyecto',
+        ],
+        action: {
+          label: 'Revisar mi caso',
+          href: '/empezar-proyecto/simple?intent=rescue',
+        },
+        rotation: '0deg',
+      },
+    ],
+    supportKicker: '¿Ya tienes un alcance?',
+    supportTitle: 'Comparte un brief más completo',
+    supportDescription:
+      'Si ya conoces las funciones e integraciones que necesitas, puedes detallarlas en una solicitud guiada. Revisas todo antes de enviar.',
+    supportChips: [
+      'Discovery',
+      'Alcance',
+      'Prioridades',
+      'Riesgos',
+      'Siguientes pasos',
+    ],
+    supportAction: {
+      label: 'Completar el brief',
+      href: '/empezar-proyecto/proyecto',
     },
-  ],
-  supportKicker: 'Proceso comercial',
-  supportTitle: 'Más claridad desde el primer contacto',
-  supportDescription:
-    'La información correcta permite responder con una ruta de trabajo más precisa y realista.',
-  supportChips: ['Discovery', 'Alcance', 'Prioridades', 'Riesgos', 'Siguientes pasos'],
-};
+  };
 
 export const developmentRequestSimpleContent: DevelopmentSimpleContent = {
   header: {
     kicker: 'Consulta rápida',
     title: 'Hablemos',
-    description:
-      'Cuéntanos qué necesitas y te respondemos lo antes posible.',
+    description: 'Cuéntanos qué necesitas y te respondemos lo antes posible.',
   },
   supportKicker: 'Fácil',
   supportTitle: '¿Para qué sirve?',
@@ -301,10 +351,34 @@ export const developmentRequestSimpleContent: DevelopmentSimpleContent = {
     'Aplicación web',
     'Sistema',
     'Automatización',
+    'Crear software',
+    'Mejorar software',
+    'Rescatar software',
     'Otro',
   ],
+  intents: {
+    new: {
+      title: 'Crear algo nuevo',
+      prompt:
+        '¿Qué problema quieres resolver, quién usará el producto y qué debería poder hacer en su primera versión?',
+      consultationType: 'Crear software',
+    },
+    improve: {
+      title: 'Mejorar un sistema existente',
+      prompt:
+        '¿Qué sistema usas hoy y qué tarea, integración o experiencia necesitas mejorar?',
+      consultationType: 'Mejorar software',
+    },
+    rescue: {
+      title: 'Recuperar un proyecto',
+      prompt:
+        '¿Qué está fallando y cómo afecta a tu operación? Describe el estado del proyecto; no envíes contraseñas ni datos de clientes.',
+      consultationType: 'Rescatar software',
+    },
+  },
   submitLabel: 'Enviar',
-  footerNote: 'Te responderemos pronto. También puedes escribir a contacto@cystems.ec',
+  footerNote:
+    'Te responderemos pronto. También puedes escribir a contacto@cystems.ec',
   emailLabel: 'Correo',
   emailValue: 'contacto@cystems.ec',
   returnAction: {
@@ -333,7 +407,7 @@ export const developmentRequestSimpleContent: DevelopmentSimpleContent = {
       nameRequired: 'Ingresa tu nombre.',
       emailRequired: 'Ingresa tu correo.',
       emailInvalid: 'Correo no válido.',
-      companyInvalid: 'Solo números.',
+      companyInvalid: 'Ingresa un teléfono válido (7 a 15 dígitos).',
       consultationTypeRequired: 'Elige una opción.',
       messageRequired: 'Escribe tu mensaje.',
       submitError: 'No se pudo enviar. Intenta de nuevo.',
@@ -354,20 +428,17 @@ export const developmentRequestProjectContent: DevelopmentProjectContent = {
   sidebarHighlights: [
     '3 pasos simples',
     'Solo lo necesario',
-    'Se guarda automáticamente',
+    'Borrador solo en esta pestaña',
     'Confirmas antes de enviar',
   ],
-  responsePromise: 'Te respondemos en menos de 24 horas.',
+  responsePromise:
+    'Revisaremos tu solicitud para acordar los siguientes pasos.',
   contactEmail: 'contacto@cystems.ec',
   returnAction: {
     label: 'Volver',
     href: '/empezar-proyecto',
   },
-  stepTitles: [
-    'Datos básicos',
-    'Tu proyecto',
-    'Detalles finales',
-  ],
+  stepTitles: ['Datos básicos', 'Tu proyecto', 'Detalles finales'],
   stepDescriptions: [
     'Información para poder contactarte.',
     'Cuéntanos qué quieres construir.',
@@ -391,12 +462,7 @@ export const developmentRequestProjectContent: DevelopmentProjectContent = {
     'Más de 20',
     'No sé',
   ],
-  designOptions: [
-    'Básico',
-    'Moderno',
-    'Premium',
-    'No sé',
-  ],
+  designOptions: ['Básico', 'Moderno', 'Premium', 'No sé'],
   featureOptions: [
     'Formulario',
     'Blog',
@@ -422,11 +488,7 @@ export const developmentRequestProjectContent: DevelopmentProjectContent = {
     'ERP',
   ],
   hostingOptions: ['Ya tengo', 'Necesito', 'Hosting + dominio', 'No sé'],
-  brandingOptions: [
-    'Ya tengo branding',
-    'Tengo logo',
-    'Necesito todo',
-  ],
+  brandingOptions: ['Ya tengo branding', 'Tengo logo', 'Necesito todo'],
   contentOptions: [
     'Yo pongo el contenido',
     'Necesito ayuda',
@@ -446,8 +508,9 @@ export const developmentRequestProjectContent: DevelopmentProjectContent = {
     sidebarKicker: 'Formulario',
     stepNavigationLabel: 'Pasos',
     stepCounterTemplate: 'Paso {current} de {total}',
-    restoredStatus: 'Recuperamos tu progreso.',
-    savePrefix: 'Guardado:',
+    restoredStatus:
+      'Recuperamos el borrador de esta pestaña. Se elimina al cerrarla.',
+    savePrefix: 'Guardado en esta pestaña:',
     backLabel: 'Atrás',
     nextLabel: 'Siguiente',
     successKicker: 'Listo',

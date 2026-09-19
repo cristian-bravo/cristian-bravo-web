@@ -1,0 +1,93 @@
+---
+// Local-only analytics wiring. A future provider can subscribe to
+// `cystems:analytics`; this component deliberately makes no network request.
+---
+
+<script>
+  import { emitAnalyticsEvent, isAnalyticsLocation } from '../lib/analytics';
+
+  const analyticsTargetSelector =
+    'a[data-analytics-event][data-analytics-location], button[data-analytics-event][data-analytics-location]';
+  const analyticsRuntimeKey = '__cystemsAnalyticsRuntime';
+
+  interface AnalyticsRuntime {
+    lifecycleBound: boolean;
+    listenersBound: boolean;
+    projectViewTracked: boolean;
+  }
+
+  const getRuntime = (): AnalyticsRuntime => {
+    const analyticsWindow = window as typeof window & {
+      [analyticsRuntimeKey]?: AnalyticsRuntime;
+    };
+    return (analyticsWindow[analyticsRuntimeKey] ??= {
+      lifecycleBound: false,
+      listenersBound: false,
+      projectViewTracked: false,
+    });
+  };
+
+  const isAnalyticsTarget = (element: Element): element is HTMLAnchorElement | HTMLButtonElement =>
+    element instanceof HTMLAnchorElement || element instanceof HTMLButtonElement;
+
+  const getAnalyticsTarget = (target: EventTarget | null) => {
+    if (!(target instanceof Element)) return null;
+    const candidate = target.closest(analyticsTargetSelector);
+    return candidate && isAnalyticsTarget(candidate) ? candidate : null;
+  };
+
+  const handleTrackedClick = (event: MouseEvent) => {
+    const target = getAnalyticsTarget(event.target);
+    if (!target || (target instanceof HTMLButtonElement && target.disabled)) return;
+
+    emitAnalyticsEvent(target.dataset.analyticsEvent, target.dataset.analyticsLocation);
+  };
+
+  const handleFormStart = (event: FocusEvent) => {
+    if (!(event.target instanceof Element)) return;
+    const form = event.target.closest('form[data-analytics-form]');
+    const location = form?.getAttribute('data-analytics-form');
+
+    if (!(form instanceof HTMLFormElement) || form.dataset.analyticsStarted === 'true') return;
+    if (!isAnalyticsLocation(location)) return;
+
+    form.dataset.analyticsStarted = 'true';
+    emitAnalyticsEvent('form_start', location);
+  };
+
+  const bindAnalytics = () => {
+    const runtime = getRuntime();
+    if (runtime.listenersBound) return;
+    runtime.listenersBound = true;
+    document.addEventListener('click', handleTrackedClick);
+    document.addEventListener('focusin', handleFormStart);
+  };
+
+  const trackProjectView = () => {
+    const runtime = getRuntime();
+    if (runtime.projectViewTracked) return;
+
+    const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
+    if (pathname !== '/proyectos' && pathname !== '/en/proyectos') return;
+
+    runtime.projectViewTracked = true;
+    emitAnalyticsEvent('project_view', 'projects');
+  };
+
+  const initializeAnalytics = () => {
+    bindAnalytics();
+    trackProjectView();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAnalytics, { once: true });
+  } else {
+    initializeAnalytics();
+  }
+
+  const runtime = getRuntime();
+  if (!runtime.lifecycleBound) {
+    runtime.lifecycleBound = true;
+    window.addEventListener('astro:page-load', initializeAnalytics);
+  }
+</script>

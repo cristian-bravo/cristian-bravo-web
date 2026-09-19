@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#101b1c"/><path d="M72 112H1128M72 536H1128" stroke="#334446"/>
+<text x="72" y="77" fill="#f1f2e9" font-family="sans-serif" font-size="30" letter-spacing="6" font-weight="700">CYSTEMS</text>
+<text x="1128" y="76" text-anchor="end" fill="#adbab5" font-family="monospace" font-size="17" letter-spacing="2">ECUADOR / SOFTWARE ENGINEERING</text>
+<text x="72" y="240" fill="#f1f2e9" font-family="sans-serif" font-size="69" font-weight="600">Tu operación,</text>
+<text x="72" y="323" fill="#f1a274" font-family="sans-serif" font-size="69" font-weight="600">mejor conectada.</text>
+<text x="75" y="402" fill="#adbab5" font-family="sans-serif" font-size="25">Software a medida, automatización e IA para empresas.</text>
+<rect x="961" y="190" width="165" height="165" rx="5" fill="#192729" stroke="#546360"/><text x="1043" y="300" fill="#f1f2e9" text-anchor="middle" font-family="sans-serif" font-size="87">Y<tspan fill="#f1a274">·</tspan></text><path d="M1043 355V467H850" stroke="#546360" fill="none"/><circle cx="850" cy="467" r="5" fill="#f1a274"/>
+<text x="72" y="580" fill="#adbab5" font-family="monospace" font-size="19">PLATAFORMAS / INTEGRACIONES / YUKI IA</text><text x="1128" y="580" text-anchor="end" fill="#f1f2e9" font-family="sans-serif" font-size="21">cystems.ec ↗</text>
+</svg>

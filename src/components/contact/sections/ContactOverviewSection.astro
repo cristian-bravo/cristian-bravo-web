@@ -9,9 +9,10 @@ interface Props {
 const { content } = Astro.props;
 const emailHref = `mailto:${content.emailValue}`;
 ---
+
 <section class="contact-overview-section py-16 sm:py-20 lg:py-24">
   <div class="mx-auto w-full max-w-[1120px] px-4 sm:px-6">
-    <div class="grid items-start gap-10 lg:grid-cols-[1.1fr,0.9fr]">
+    <div class="grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr]">
       <div class="grid gap-4">
         <SectionHeader
           content={content.header}
@@ -39,15 +40,21 @@ const emailHref = `mailto:${content.emailValue}`;
             <a
               class="mt-2 inline-flex text-base font-semibold text-slate-900 transition-colors hover:text-brand-purple focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:text-brand-text dark:hover:text-blue-200 dark:focus-visible:ring-offset-brand-bg"
               href={emailHref}
+              data-analytics-event="contact_click"
+              data-analytics-location="contact"
             >
               {content.emailValue}
             </a>
           </div>
-          <p class="text-sm text-slate-600 dark:text-brand-muted">{content.panelDescription}</p>
+          <p class="text-sm text-slate-600 dark:text-brand-muted">
+            {content.panelDescription}
+          </p>
           <div class="flex flex-wrap gap-3">
             <a
               class="inline-flex items-center justify-center rounded-full bg-brand-gradient px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:shadow-glow dark:focus-visible:ring-offset-brand-bg"
               href={content.primaryAction.href}
+              data-analytics-event="contact_click"
+              data-analytics-location="contact"
             >
               {content.primaryAction.label}
             </a>
@@ -63,4 +70,3 @@ const emailHref = `mailto:${content.emailValue}`;
     </div>
   </div>
 </section>
-

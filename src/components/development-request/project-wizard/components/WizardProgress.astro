@@ -13,7 +13,9 @@ const counterLabel = counterTemplate
 ---
 <div class="development-wizard-topbar">
   <div>
-    <p class="development-paper-kicker" data-step-counter>{counterLabel}</p>
+    <p class="development-paper-kicker" data-step-counter role="status" aria-live="polite" aria-atomic="true">
+      {counterLabel}
+    </p>
     <h2 class="development-form-title" data-step-title>{stepTitles[0]}</h2>
     <p class="development-form-copy" data-step-description>{stepDescriptions[0]}</p>
   </div>
@@ -26,10 +28,10 @@ const counterLabel = counterTemplate
   <span class="development-progress-fill" data-progress-fill style="width: 33%;"></span>
 </div>
 
-<p class="development-inline-status" data-restored-status hidden>
+<p class="development-inline-status" data-restored-status role="status" aria-live="polite" hidden>
   {restoredStatus}
 </p>
 
 <div class="development-submit-alert" data-submit-error hidden>
-  <p class="development-inline-status development-inline-status--error" data-submit-error-text></p>
+  <p class="development-inline-status development-inline-status--error" data-submit-error-text role="alert"></p>
 </div>

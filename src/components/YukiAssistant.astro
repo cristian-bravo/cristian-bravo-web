@@ -1,0 +1,890 @@
+---
+import type { Lang } from '../data';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'es' } = Astro.props;
+const isEnglish = lang === 'en';
+// This capability is off until the dedicated gateway's scoped persistence
+// has been wired and verified. Presence of the chat UI is not that evidence.
+const historyEnabled = process.env.YUKI_SITE_CHAT_HISTORY_ENABLED === 'true';
+const copy = isEnglish
+  ? {
+      close: 'Close Yuki chat',
+      historyUnavailable: 'Conversation history is not available yet.',
+      consent:
+        'Let Yuki keep this conversation history for my next visit from this browser.',
+      consentHint:
+        'Do not share passwords, payment details, or other sensitive data.',
+      empty:
+        'I can help you frame a project, explore services, or find the right next step.',
+      input: 'Write a message to Yuki',
+      intro:
+        'Hi, I’m Yuki. Tell me what you want to build and I’ll help you turn it into a clear next step.',
+      open: 'Talk to Yuki',
+      placeholder: 'For example: I need a site that converts more leads…',
+      privacy:
+        'Without consent, Yuki does not save conversation history. The AI provider processes your message. Turning this off stops new history from being saved, but does not delete earlier history.',
+      quick: [
+        'I want to start a project',
+        'What services do you offer?',
+        'Help me define my idea',
+      ],
+      send: 'Send',
+      sending: 'Thinking…',
+      status: 'Your project assistant',
+      title: 'Talk with Yuki',
+    }
+  : {
+      close: 'Cerrar chat de Yuki',
+      historyUnavailable: 'El historial todavía no está disponible.',
+      consent:
+        'Permitir que Yuki conserve este historial para mi próxima visita desde este navegador.',
+      consentHint:
+        'No compartas contraseñas, datos de pago ni otra información sensible.',
+      empty:
+        'Puedo ayudarte a aterrizar un proyecto, explorar servicios o elegir el siguiente paso.',
+      input: 'Escribe un mensaje para Yuki',
+      intro:
+        'Hola, soy Yuki. Cuéntame qué quieres construir y te ayudo a convertirlo en un siguiente paso claro.',
+      open: 'Hablar con Yuki',
+      placeholder: 'Por ejemplo: necesito un sitio que convierta más clientes…',
+      privacy:
+        'Sin consentimiento, Yuki no guarda el historial. El proveedor de IA procesa tu mensaje. Desactivarlo evita guardar historial nuevo, pero no elimina el historial anterior.',
+      quick: [
+        'Quiero empezar un proyecto',
+        '¿Qué servicios ofrecen?',
+        'Ayúdame a definir mi idea',
+      ],
+      send: 'Enviar',
+      sending: 'Pensando…',
+      status: 'Asistente de proyectos',
+      title: 'Habla con Yuki',
+    };
+---
+
+<aside
+  class="yuki-widget"
+  data-yuki-assistant
+  data-lang={lang}
+  data-yuki-history-enabled={String(historyEnabled)}
+  aria-label={copy.title}
+>
+  <section
+    id="yuki-panel"
+    class="yuki-panel"
+    data-yuki-panel
+    hidden
+    aria-labelledby="yuki-title"
+  >
+    <header class="yuki-panel__header">
+      <div class="yuki-identity">
+        <span class="yuki-identity__avatar" aria-hidden="true">
+          <img
+            src="/avatar/yuki_chibi.webp"
+            alt=""
+            width="88"
+            height="88"
+            loading="lazy"
+            decoding="async"
+          />
+        </span>
+        <span>
+          <strong id="yuki-title">Yuki</strong>
+          <small>
+            <i aria-hidden="true"></i>
+            {copy.status}
+          </small>
+        </span>
+      </div>
+      <button
+        class="yuki-icon-button"
+        type="button"
+        data-yuki-close
+        aria-label={copy.close}
+        title={copy.close}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="m6 6 12 12M18 6 6 18" stroke-linecap="round" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="yuki-panel__body">
+      <div
+        class="yuki-messages"
+        role="log"
+        aria-live="polite"
+        aria-relevant="additions"
+        data-yuki-messages
+        tabindex="0"
+      >
+        <article class="yuki-message yuki-message--assistant">
+          <span class="yuki-message__label">Yuki</span>
+          <p>{copy.intro}</p>
+        </article>
+      </div>
+
+      <div class="yuki-quick-actions" aria-label={copy.title}>
+        {copy.quick.map((prompt) => (
+          <button type="button" data-yuki-prompt={prompt}>
+            {prompt}
+          </button>
+        ))}
+      </div>
+
+      <form class="yuki-form" data-yuki-form novalidate>
+        <label for="yuki-message" class="sr-only">
+          {copy.input}
+        </label>
+        <textarea
+          id="yuki-message"
+          name="message"
+          rows="2"
+          maxlength="1200"
+          required
+          data-yuki-input
+          placeholder={copy.placeholder}
+          aria-describedby="yuki-privacy"
+        ></textarea>
+        <div class="yuki-form__actions">
+          <button class="yuki-send" type="submit" data-yuki-send>
+            <span data-yuki-send-label>{copy.send}</span>
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="m5 12 14-7-4 14-3-5-7-2Z" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </form>
+
+      <label class="yuki-consent">
+        <input type="checkbox" disabled={!historyEnabled} data-yuki-consent />
+        <span>{historyEnabled ? copy.consent : copy.historyUnavailable}</span>
+      </label>
+      <p class="yuki-consent__hint">{copy.consentHint}</p>
+      <p id="yuki-privacy" class="yuki-privacy">
+        {copy.privacy}
+      </p>
+    </div>
+  </section>
+
+  <button
+    class="yuki-launcher"
+    type="button"
+    data-yuki-open
+    aria-expanded="false"
+    aria-controls="yuki-panel"
+    aria-label={copy.open}
+  >
+    <span class="yuki-launcher__pulse" aria-hidden="true"></span>
+    <span class="yuki-launcher__avatar" aria-hidden="true">
+      <img
+        src="/avatar/yuki_chibi.webp"
+        alt=""
+        width="96"
+        height="96"
+        loading="lazy"
+        decoding="async"
+      />
+    </span>
+    <span class="yuki-launcher__copy">
+      <strong>Yuki</strong>
+      <small>{copy.open}</small>
+    </span>
+  </button>
+</aside>
+
+<script>
+  import { emitAnalyticsEvent } from '../lib/analytics';
+  const YUKI_STORAGE_KEY = 'cystems-yuki-memory-opt-in';
+  const YUKI_MAX_CLIENT_LENGTH = 1200;
+  let cleanupYukiAssistant: (() => void) | undefined;
+
+  const readConsent = () => {
+    try {
+      return window.localStorage.getItem(YUKI_STORAGE_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  };
+
+  const saveConsent = (value: boolean) => {
+    try {
+      window.localStorage.setItem(YUKI_STORAGE_KEY, String(value));
+    } catch {
+      // Private browsing or disabled storage must not disable the chat.
+    }
+  };
+
+  const initYukiAssistant = () => {
+    cleanupYukiAssistant?.();
+
+    const root = document.querySelector('[data-yuki-assistant]');
+    if (!(root instanceof HTMLElement)) return;
+
+    const panel = root.querySelector('[data-yuki-panel]');
+    const openButton = root.querySelector('[data-yuki-open]');
+    const closeButton = root.querySelector('[data-yuki-close]');
+    const form = root.querySelector('[data-yuki-form]');
+    const input = root.querySelector('[data-yuki-input]');
+    const messages = root.querySelector('[data-yuki-messages]');
+    const consent = root.querySelector('[data-yuki-consent]');
+    const sendButton = root.querySelector('[data-yuki-send]');
+    const sendLabel = root.querySelector('[data-yuki-send-label]');
+    const promptButtons = Array.from(
+      root.querySelectorAll('[data-yuki-prompt]'),
+    );
+
+    if (
+      !(panel instanceof HTMLElement) ||
+      !(openButton instanceof HTMLButtonElement) ||
+      !(closeButton instanceof HTMLButtonElement) ||
+      !(form instanceof HTMLFormElement) ||
+      !(input instanceof HTMLTextAreaElement) ||
+      !(messages instanceof HTMLElement) ||
+      !(consent instanceof HTMLInputElement) ||
+      !(sendButton instanceof HTMLButtonElement) ||
+      !(sendLabel instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    const lang = root.dataset.lang === 'en' ? 'en' : 'es';
+    const labels =
+      lang === 'en'
+        ? {
+            assistant: 'Yuki',
+            error: 'Something went wrong. Please try again in a moment.',
+            sending: 'Thinking…',
+            send: 'Send',
+            user: 'You',
+          }
+        : {
+            assistant: 'Yuki',
+            error: 'Algo salió mal. Inténtalo nuevamente en un momento.',
+            sending: 'Pensando…',
+            send: 'Enviar',
+            user: 'Tú',
+          };
+    let busy = false;
+
+    const historyAvailable =
+      root.getAttribute('data-yuki-history-enabled') === 'true';
+    consent.checked = historyAvailable && readConsent();
+    consent.disabled = !historyAvailable;
+
+    const scrollMessagesToEnd = () => {
+      messages.scrollTop = messages.scrollHeight;
+    };
+
+    const appendMessage = (
+      role: 'user' | 'assistant',
+      content: string,
+      pending = false,
+    ) => {
+      const article = document.createElement('article');
+      const label = document.createElement('span');
+      const paragraph = document.createElement('p');
+
+      article.className = `yuki-message yuki-message--${role}${pending ? ' is-pending' : ''}`;
+      label.className = 'yuki-message__label';
+      label.textContent = role === 'assistant' ? labels.assistant : labels.user;
+      paragraph.textContent = content;
+      article.append(label, paragraph);
+      messages.append(article);
+      scrollMessagesToEnd();
+      return article;
+    };
+
+    const setOpen = (nextOpen: boolean) => {
+      if (nextOpen && panel.hidden)
+        emitAnalyticsEvent('ai_open', 'yuki_widget');
+      panel.hidden = !nextOpen;
+      root.classList.toggle('is-open', nextOpen);
+      openButton.setAttribute('aria-expanded', String(nextOpen));
+
+      if (nextOpen) {
+        window.requestAnimationFrame(() => input.focus());
+      } else {
+        openButton.focus();
+      }
+    };
+
+    const setBusy = (nextBusy: boolean) => {
+      busy = nextBusy;
+      form.setAttribute('aria-busy', String(nextBusy));
+      sendButton.disabled = nextBusy;
+      input.disabled = nextBusy;
+      promptButtons.forEach((button) => {
+        if (button instanceof HTMLButtonElement) button.disabled = nextBusy;
+      });
+      sendLabel.textContent = nextBusy ? labels.sending : labels.send;
+      root.classList.toggle('is-busy', nextBusy);
+    };
+
+    const submitMessage = async (rawMessage: string) => {
+      const message = rawMessage.trim();
+      if (!message || busy || message.length > YUKI_MAX_CLIENT_LENGTH) return;
+
+      appendMessage('user', message);
+      input.value = '';
+      setBusy(true);
+      const pending = appendMessage('assistant', labels.sending, true);
+
+      try {
+        const response = await fetch('/api/yuki-chat', {
+          method: 'POST',
+          signal: AbortSignal.timeout(25_000),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message,
+            remember: historyAvailable && consent.checked,
+          }),
+        });
+        const result = await response.json().catch(() => null);
+        const answer =
+          result && typeof result.response === 'string'
+            ? result.response
+            : null;
+
+        pending.remove();
+        appendMessage(
+          'assistant',
+          answer ||
+            (result && typeof result.message === 'string'
+              ? result.message
+              : labels.error),
+        );
+      } catch {
+        pending.remove();
+        appendMessage('assistant', labels.error);
+      } finally {
+        setBusy(false);
+        if (!panel.hidden) input.focus();
+      }
+    };
+
+    const handleOpen = () => setOpen(Boolean(panel.hidden));
+    const handleClose = () => setOpen(false);
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !panel.hidden) {
+        event.preventDefault();
+        setOpen(false);
+      }
+    };
+    const handleSubmit = (event: SubmitEvent) => {
+      event.preventDefault();
+      void submitMessage(input.value);
+    };
+    const handleInputKeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
+    };
+    const handleConsent = () => saveConsent(consent.checked);
+
+    openButton.addEventListener('click', handleOpen);
+    closeButton.addEventListener('click', handleClose);
+    form.addEventListener('submit', handleSubmit);
+    input.addEventListener('keydown', handleInputKeydown);
+    consent.addEventListener('change', handleConsent);
+    window.addEventListener('keydown', handleKeydown);
+    promptButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const prompt = button.getAttribute('data-yuki-prompt');
+        if (prompt) void submitMessage(prompt);
+      });
+    });
+
+    cleanupYukiAssistant = () => {
+      openButton.removeEventListener('click', handleOpen);
+      closeButton.removeEventListener('click', handleClose);
+      form.removeEventListener('submit', handleSubmit);
+      input.removeEventListener('keydown', handleInputKeydown);
+      consent.removeEventListener('change', handleConsent);
+      window.removeEventListener('keydown', handleKeydown);
+      root.classList.remove('is-open', 'is-busy');
+    };
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initYukiAssistant, {
+      once: true,
+    });
+  } else {
+    initYukiAssistant();
+  }
+
+  window.addEventListener('astro:page-load', initYukiAssistant);
+</script>
+
+<style>
+  .yuki-widget {
+    --yuki-ink: #15191c;
+    --yuki-paper: #fffaf1;
+    --yuki-red: #d8563b;
+    --yuki-coral: #f1a261;
+    --yuki-line: rgba(21, 25, 28, 0.14);
+    position: fixed;
+    right: clamp(0.8rem, 2.7vw, 2rem);
+    bottom: max(0.8rem, env(safe-area-inset-bottom));
+    z-index: 220;
+    width: min(25rem, calc(100vw - 1.6rem));
+    font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  }
+
+  .yuki-panel {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+    width: 100%;
+    max-height: min(39rem, calc(100dvh - 6.4rem));
+    margin-bottom: 0.78rem;
+    border: 1px solid var(--yuki-line);
+    border-radius: 1.35rem 1.35rem 0.45rem 1.35rem;
+    background: var(--yuki-paper);
+    box-shadow:
+      0 1.25rem 3.5rem rgba(15, 23, 42, 0.24),
+      0 0.25rem 0 rgba(255, 255, 255, 0.68) inset;
+    color: var(--yuki-ink);
+    transform-origin: right bottom;
+    animation: yuki-panel-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .yuki-panel[hidden] {
+    display: none;
+  }
+
+  .yuki-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 5rem;
+    padding: 0.85rem 1rem 0.8rem;
+    border-bottom: 1px solid var(--yuki-line);
+    background:
+      radial-gradient(
+        circle at 13% 18%,
+        rgba(241, 162, 97, 0.45),
+        transparent 24%
+      ),
+      linear-gradient(118deg, #fff5e6, #f8e4d0);
+  }
+
+  .yuki-identity {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.72rem;
+  }
+
+  .yuki-identity__avatar,
+  .yuki-launcher__avatar {
+    display: grid;
+    flex: 0 0 auto;
+    place-items: end center;
+    overflow: hidden;
+    border: 1px solid rgba(21, 25, 28, 0.12);
+    background: #f5c791;
+  }
+
+  .yuki-identity__avatar {
+    width: 3.35rem;
+    height: 3.35rem;
+    border-radius: 1rem;
+  }
+
+  .yuki-identity__avatar img {
+    width: 3.55rem;
+    max-width: none;
+    transform: translateY(0.18rem);
+  }
+
+  .yuki-identity strong,
+  .yuki-launcher__copy strong {
+    display: block;
+    font-family: var(--font-display, ui-sans-serif, system-ui, sans-serif);
+    font-size: 1rem;
+    font-weight: 760;
+    letter-spacing: -0.03em;
+  }
+
+  .yuki-identity small {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.1rem;
+    color: #566166;
+    font-size: 0.72rem;
+    font-weight: 650;
+  }
+
+  .yuki-identity small i {
+    width: 0.46rem;
+    height: 0.46rem;
+    border-radius: 999px;
+    background: #687479;
+    box-shadow: 0 0 0 0.2rem rgba(104, 116, 121, 0.12);
+  }
+
+  .yuki-icon-button {
+    display: inline-grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 1px solid rgba(21, 25, 28, 0.14);
+    border-radius: 0.82rem;
+    background: rgba(255, 250, 241, 0.68);
+    color: var(--yuki-ink);
+    transition:
+      transform 160ms ease,
+      background 160ms ease;
+  }
+
+  .yuki-icon-button:hover,
+  .yuki-icon-button:focus-visible {
+    background: #fff;
+    transform: rotate(4deg);
+  }
+
+  .yuki-icon-button svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .yuki-panel__body {
+    display: grid;
+    min-height: 0;
+    overflow-y: auto;
+    gap: 0.7rem;
+    padding: 0.9rem;
+  }
+
+  .yuki-messages {
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+    min-height: 7rem;
+    max-height: min(20rem, calc(100dvh - 22rem));
+    overflow: auto;
+    padding-right: 0.2rem;
+    scrollbar-width: thin;
+  }
+
+  .yuki-message {
+    max-width: 92%;
+    padding: 0.75rem 0.84rem;
+    border: 1px solid var(--yuki-line);
+    border-radius: 0.9rem 0.9rem 0.9rem 0.28rem;
+    background: #fff;
+    line-height: 1.5;
+  }
+
+  .yuki-message--user {
+    justify-self: end;
+    border-color: #26383d;
+    border-radius: 0.9rem 0.9rem 0.28rem 0.9rem;
+    background: #26383d;
+    color: #f8fbf6;
+  }
+
+  .yuki-message.is-pending p::after {
+    content: '';
+    display: inline-block;
+    width: 0.36rem;
+    height: 0.36rem;
+    margin-left: 0.36rem;
+    border-radius: 999px;
+    background: var(--yuki-red);
+    animation: yuki-pulse 840ms ease-in-out infinite;
+  }
+
+  .yuki-message__label {
+    display: block;
+    margin-bottom: 0.18rem;
+    color: #69747a;
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .yuki-message--user .yuki-message__label {
+    color: rgba(248, 251, 246, 0.66);
+  }
+  .yuki-message p {
+    margin: 0;
+    font-size: 0.84rem;
+    overflow-wrap: anywhere;
+  }
+
+  .yuki-quick-actions {
+    display: flex;
+    gap: 0.45rem;
+    overflow-x: auto;
+    padding-bottom: 0.1rem;
+    scrollbar-width: none;
+  }
+
+  .yuki-quick-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .yuki-quick-actions button {
+    flex: 0 0 auto;
+    min-height: 2.75rem;
+    border: 1px solid rgba(216, 86, 59, 0.28);
+    border-radius: 999px;
+    background: rgba(216, 86, 59, 0.06);
+    color: #833923;
+    padding: 0.4rem 0.72rem;
+    font-size: 0.72rem;
+    font-weight: 720;
+    line-height: 1.2;
+    transition:
+      background 160ms ease,
+      color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .yuki-quick-actions button:hover,
+  .yuki-quick-actions button:focus-visible {
+    background: var(--yuki-red);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .yuki-form {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .yuki-form textarea {
+    width: 100%;
+    min-height: 4.5rem;
+    resize: vertical;
+    border: 1px solid rgba(21, 25, 28, 0.2);
+    border-radius: 0.82rem;
+    background: #fffefb;
+    color: var(--yuki-ink);
+    padding: 0.7rem 0.8rem;
+    font: inherit;
+    font-size: 0.84rem;
+    line-height: 1.45;
+  }
+
+  .yuki-form textarea::placeholder {
+    color: #879095;
+  }
+  .yuki-form textarea:focus-visible {
+    border-color: var(--yuki-red);
+    outline: 3px solid rgba(216, 86, 59, 0.18);
+  }
+
+  .yuki-form__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .yuki-send {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.44rem;
+    border: 1px solid #26383d;
+    border-radius: 0.72rem;
+    background: #26383d;
+    color: #fff;
+    padding: 0.48rem 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 780;
+    transition:
+      background 160ms ease,
+      transform 160ms ease;
+  }
+
+  .yuki-send:hover:not(:disabled),
+  .yuki-send:focus-visible:not(:disabled) {
+    background: #182428;
+    transform: translateY(-1px);
+  }
+  .yuki-send:disabled {
+    cursor: wait;
+    opacity: 0.62;
+  }
+  .yuki-send svg {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .yuki-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    color: #48555a;
+    font-size: 0.69rem;
+    line-height: 1.35;
+  }
+
+  .yuki-consent input {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.04rem;
+    accent-color: var(--yuki-red);
+  }
+  .yuki-consent__hint,
+  .yuki-privacy {
+    margin: 0;
+    color: #59676b;
+    font-size: 0.7rem;
+    line-height: 1.4;
+  }
+  .yuki-consent__hint {
+    margin-top: -0.42rem;
+    padding-left: 1.48rem;
+  }
+  .yuki-privacy {
+    border-top: 1px solid var(--yuki-line);
+    padding-top: 0.6rem;
+  }
+
+  .yuki-launcher {
+    position: relative;
+    display: flex;
+    width: max-content;
+    min-height: 3.75rem;
+    margin-left: auto;
+    align-items: center;
+    gap: 0.52rem;
+    border: 1px solid rgba(21, 25, 28, 0.22);
+    border-radius: 1.1rem 1.1rem 0.45rem 1.1rem;
+    background: #fffaf1;
+    box-shadow:
+      0 0.7rem 1.8rem rgba(15, 23, 42, 0.2),
+      0 1px 0 #fff inset;
+    color: var(--yuki-ink);
+    padding: 0.35rem 0.74rem 0.35rem 0.38rem;
+    text-align: left;
+    transition:
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  .yuki-launcher:hover,
+  .yuki-launcher:focus-visible {
+    transform: translateY(-2px) rotate(-1deg);
+    box-shadow:
+      0 1rem 2.15rem rgba(15, 23, 42, 0.25),
+      0 1px 0 #fff inset;
+  }
+
+  .yuki-launcher__avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.86rem;
+  }
+  .yuki-launcher__avatar img {
+    width: 3.32rem;
+    max-width: none;
+    transform: translateY(0.22rem);
+  }
+  .yuki-launcher__copy strong {
+    font-size: 0.92rem;
+  }
+  .yuki-launcher__copy small {
+    display: block;
+    margin-top: 0.02rem;
+    color: #687479;
+    font-size: 0.67rem;
+    font-weight: 680;
+  }
+
+  .yuki-launcher__pulse {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.28rem;
+    width: 0.52rem;
+    height: 0.52rem;
+    border: 2px solid #fffaf1;
+    border-radius: 50%;
+    background: #687479;
+    box-shadow: 0 0 0 0 rgba(104, 116, 121, 0.32);
+    animation: yuki-ring 2.4s ease-out 2;
+  }
+
+  @keyframes yuki-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.65rem) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes yuki-pulse {
+    50% {
+      opacity: 0.2;
+      transform: translateY(-0.1rem);
+    }
+  }
+  @keyframes yuki-ring {
+    65% {
+      box-shadow: 0 0 0 0.46rem rgba(104, 116, 121, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(104, 116, 121, 0);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .yuki-widget {
+      right: 0.55rem;
+      width: calc(100vw - 1.1rem);
+    }
+    .yuki-panel {
+      max-height: calc(100dvh - 6.1rem);
+    }
+    .yuki-messages {
+      max-height: min(16rem, calc(100dvh - 23rem));
+    }
+    .yuki-launcher__copy {
+      display: none;
+    }
+    .yuki-launcher {
+      padding-right: 0.35rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .yuki-panel,
+    .yuki-launcher,
+    .yuki-icon-button,
+    .yuki-quick-actions button,
+    .yuki-send,
+    .yuki-launcher__pulse,
+    .yuki-message.is-pending p::after {
+      animation: none;
+      transition: none;
+    }
+  }
+</style>

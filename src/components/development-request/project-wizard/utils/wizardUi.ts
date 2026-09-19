@@ -69,6 +69,7 @@ export const renderWizardState = ({
     const chipStep = Number(chip.dataset.stepChip);
     chip.disabled = !canAccessStep(chipStep) || isSending;
     chip.setAttribute('aria-selected', String(chipStep === currentStep));
+    chip.tabIndex = chipStep === currentStep && !chip.disabled ? 0 : -1;
     chip.classList.toggle('is-active', chipStep === currentStep);
     chip.classList.toggle('is-completed', chipStep < currentStep);
   });

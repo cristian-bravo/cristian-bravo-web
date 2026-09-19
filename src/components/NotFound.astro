@@ -1,0 +1,32 @@
+---
+import CystemsLayout from '../layouts/CystemsLayout.astro';
+import { localizePath } from '../lib/i18n';
+const lang = Astro.url.pathname.startsWith('/en/') ? 'en' : 'es';
+const en = lang === 'en';
+---
+
+<CystemsLayout
+  title={en ? 'Page not found | CYSTEMS' : 'Página no encontrada | CYSTEMS'}
+  description={
+    en
+      ? 'Return to CYSTEMS services and projects.'
+      : 'Regresa a los servicios y proyectos de CYSTEMS.'
+  }
+  lang={lang}
+  noindex
+>
+  <section class="mx-auto max-w-3xl px-6 py-24">
+    <p class="mb-6 font-mono text-sm">404 / CYSTEMS</p>
+    <h1 class="mb-6 font-display text-4xl font-semibold">
+      {en ? 'This page is not here.' : 'Esta página no está aquí.'}
+    </h1>
+    <p class="mb-8">
+      {en
+        ? 'The address may have changed. You can continue from our home page.'
+        : 'Es posible que la dirección haya cambiado. Puedes continuar desde el inicio.'}
+    </p>
+    <a class="underline underline-offset-4" href={localizePath('/', lang)}>
+      {en ? 'Back to home →' : 'Volver al inicio →'}
+    </a>
+  </section>
+</CystemsLayout>

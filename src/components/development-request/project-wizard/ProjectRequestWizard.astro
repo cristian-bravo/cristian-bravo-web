@@ -16,7 +16,8 @@ interface Props {
 }
 
 const { content } = Astro.props;
-const replaceEmailToken = (template: string) => template.replace('{email}', content.contactEmail);
+const replaceEmailToken = (template: string) =>
+  template.replace('{email}', content.contactEmail);
 const wizardId = `project-request-${Math.random().toString(36).slice(2, 10)}`;
 const wizardConfig = {
   stepTitles: content.stepTitles,
@@ -36,13 +37,24 @@ const wizardConfig = {
   attachmentAccept: PROJECT_ATTACHMENT_ACCEPT,
   ui: content.ui,
 };
+const safeWizardConfig = JSON.stringify(wizardConfig).replace(/</g, '\\u003c');
 const successEmailLabel = replaceEmailToken(content.ui.successEmailLabel);
-const confirmDestinationLabel = replaceEmailToken(content.ui.confirmDestinationLabel);
+const confirmDestinationLabel = replaceEmailToken(
+  content.ui.confirmDestinationLabel,
+);
 ---
-<div class="development-wizard-shell" data-project-wizard-root data-wizard-id={wizardId}>
-  <script type="application/json" data-project-wizard-config set:html={JSON.stringify(wizardConfig)}></script>
 
-  <form data-project-wizard-form noValidate>
+<div
+  class="development-wizard-shell"
+  data-project-wizard-root
+  data-wizard-id={wizardId}
+>
+  <script
+    type="application/json"
+    data-project-wizard-config
+    set:html={safeWizardConfig}
+  ></script>
+  <form data-project-wizard-form data-analytics-form="project_form" novalidate>
     <WizardProgress
       stepTitles={content.stepTitles}
       stepDescriptions={content.stepDescriptions}
@@ -57,9 +69,14 @@ const confirmDestinationLabel = replaceEmailToken(content.ui.confirmDestinationL
       stepNavigationLabel={content.ui.stepNavigationLabel}
     />
 
-    <StepContact panelId={`${wizardId}-step-panel-1`} copy={content.ui.contactStep} />
+    <StepContact
+      panelId={`${wizardId}-step-panel-1`}
+      tabId={`${wizardId}-step-tab-1`}
+      copy={content.ui.contactStep}
+    />
     <StepScope
       panelId={`${wizardId}-step-panel-2`}
+      tabId={`${wizardId}-step-tab-2`}
       copy={content.ui.scopeStep}
       projectTypeOptions={content.projectTypeOptions}
       projectLevelOptions={content.projectLevelOptions}
@@ -68,6 +85,7 @@ const confirmDestinationLabel = replaceEmailToken(content.ui.confirmDestinationL
     />
     <StepReview
       panelId={`${wizardId}-step-panel-3`}
+      tabId={`${wizardId}-step-tab-3`}
       copy={content.ui.reviewStep}
       featureOptions={content.featureOptions}
       integrationOptions={content.integrationOptions}
@@ -93,12 +111,21 @@ const confirmDestinationLabel = replaceEmailToken(content.ui.confirmDestinationL
     <h2 class="font-display text-3xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
       {content.successTitle}
     </h2>
-    <p class="text-sm leading-7 text-slate-600 dark:text-brand-muted">{content.successDescription}</p>
+    <p class="text-sm leading-7 text-slate-600 dark:text-brand-muted">
+      {content.successDescription}
+    </p>
     <div class="development-success-actions">
-      <button class="development-secondary-link development-secondary-link--button" type="button" data-reset-button>
+      <button
+        class="development-secondary-link development-secondary-link--button"
+        type="button"
+        data-reset-button
+      >
         {content.ui.successResetLabel}
       </button>
-      <a class="development-primary-link" href={`mailto:${content.contactEmail}`}>
+      <a
+        class="development-primary-link"
+        href={`mailto:${content.contactEmail}`}
+      >
         <span>{successEmailLabel}</span>
         <span aria-hidden="true">-&gt;</span>
       </a>
@@ -121,52 +148,91 @@ const confirmDestinationLabel = replaceEmailToken(content.ui.confirmDestinationL
       data-confirm-backdrop
     ></button>
 
-    <div class="services-modal-panel development-confirm-panel" role="document" data-confirm-panel tabindex="-1">
+    <div
+      class="services-modal-panel development-confirm-panel"
+      role="document"
+      data-confirm-panel
+      tabindex="-1"
+    >
       <div class="development-confirm-header">
         <p class="development-paper-kicker">{content.ui.confirmKicker}</p>
-        <span class="development-confirm-destination">{confirmDestinationLabel}</span>
+        <span class="development-confirm-destination">
+          {confirmDestinationLabel}
+        </span>
       </div>
 
-      <h3 id={`${wizardId}-confirm-title`} class="development-confirm-title">{content.confirmModalTitle}</h3>
-      <p id={`${wizardId}-confirm-description`} class="development-form-copy">{content.confirmModalDescription}</p>
+      <h3 id={`${wizardId}-confirm-title`} class="development-confirm-title">
+        {content.confirmModalTitle}
+      </h3>
+      <p id={`${wizardId}-confirm-description`} class="development-form-copy">
+        {content.confirmModalDescription}
+      </p>
 
       <div class="development-confirm-summary">
         <article class="development-confirm-summary-item">
           <span>{content.ui.summaryLabels.contact}</span>
-          <strong data-summary-contact-name>{content.ui.summaryFallbacks.contactName}</strong>
-          <p data-summary-contact-email>{content.ui.summaryFallbacks.contactEmail}</p>
+          <strong data-summary-contact-name>
+            {content.ui.summaryFallbacks.contactName}
+          </strong>
+          <p data-summary-contact-email>
+            {content.ui.summaryFallbacks.contactEmail}
+          </p>
           <small data-summary-contact-meta></small>
         </article>
 
         <article class="development-confirm-summary-item">
           <span>{content.ui.summaryLabels.scope}</span>
-          <strong data-summary-scope-title>{content.ui.summaryFallbacks.scopeTitle}</strong>
-          <p data-summary-scope-detail>{content.ui.summaryFallbacks.scopeDescription}</p>
+          <strong data-summary-scope-title>
+            {content.ui.summaryFallbacks.scopeTitle}
+          </strong>
+          <p data-summary-scope-detail>
+            {content.ui.summaryFallbacks.scopeDescription}
+          </p>
         </article>
 
         <article class="development-confirm-summary-item">
           <span>{content.ui.summaryLabels.stack}</span>
-          <strong data-summary-stack-features>{content.ui.summaryFallbacks.features}</strong>
-          <p data-summary-stack-integrations>{content.ui.summaryFallbacks.integrations}</p>
+          <strong data-summary-stack-features>
+            {content.ui.summaryFallbacks.features}
+          </strong>
+          <p data-summary-stack-integrations>
+            {content.ui.summaryFallbacks.integrations}
+          </p>
           <small data-summary-stack-meta></small>
         </article>
 
         <article class="development-confirm-summary-item">
           <span>{content.ui.summaryLabels.brief}</span>
-          <strong data-summary-brief>{content.ui.summaryFallbacks.brief}</strong>
+          <strong data-summary-brief>
+            {content.ui.summaryFallbacks.brief}
+          </strong>
           <p data-summary-notes>{content.ui.summaryFallbacks.notes}</p>
-          <small data-summary-assets>{content.ui.summaryFallbacks.assets}</small>
+          <small data-summary-assets>
+            {content.ui.summaryFallbacks.assets}
+          </small>
         </article>
       </div>
 
       <div class="development-confirm-actions">
-        <button class="development-secondary-link development-secondary-link--button" type="button" data-confirm-cancel>
+        <button
+          class="development-secondary-link development-secondary-link--button"
+          type="button"
+          data-confirm-cancel
+        >
           {content.confirmModalCancelLabel}
         </button>
 
-        <button class="development-primary-link development-primary-link--button" type="button" data-confirm-send>
-          <span data-confirm-send-label>{content.confirmModalConfirmLabel}</span>
-          <span aria-hidden="true" data-confirm-send-icon>-&gt;</span>
+        <button
+          class="development-primary-link development-primary-link--button"
+          type="button"
+          data-confirm-send
+        >
+          <span data-confirm-send-label>
+            {content.confirmModalConfirmLabel}
+          </span>
+          <span aria-hidden="true" data-confirm-send-icon>
+            -&gt;
+          </span>
         </button>
       </div>
     </div>
@@ -177,11 +243,14 @@ const confirmDestinationLabel = replaceEmailToken(content.ui.confirmDestinationL
   import { initAllProjectRequestWizards } from './projectWizard.client';
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAllProjectRequestWizards, { once: true });
+    document.addEventListener(
+      'DOMContentLoaded',
+      initAllProjectRequestWizards,
+      { once: true },
+    );
   } else {
     initAllProjectRequestWizards();
   }
 
   window.addEventListener('astro:page-load', initAllProjectRequestWizards);
 </script>
-

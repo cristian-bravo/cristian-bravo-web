@@ -21,7 +21,7 @@ const { content } = Astro.props;
       <h2 class="projects-final-cta__title" data-project-cta-reveal="title" data-animation="cta-reveal">
         {content.title}
       </h2>
-      <a
+      {content.action && <a
         class="projects-final-cta__button"
         href={content.action.href}
         data-project-cta-reveal="button"
@@ -29,7 +29,7 @@ const { content } = Astro.props;
         data-project-cta-button
       >
         {content.action.label}
-      </a>
+      </a>}
     </div>
   </div>
 </section>

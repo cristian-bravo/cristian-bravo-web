@@ -8,7 +8,7 @@ const { targetId } = Astro.props;
 <div data-services-intro-animator data-target-id={targetId}></div>
 
 <script>
-  const initServicesIntroAnimator = (node) => {
+  const initServicesIntroAnimator = (node: Element) => {
     if (!(node instanceof HTMLElement) || node.dataset.initialized === 'true') return;
     node.dataset.initialized = 'true';
 

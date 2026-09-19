@@ -5,6 +5,7 @@ import ServicesAccompanimentSection from '../components/services/sections/Servic
 import ServicesModals from '../components/services/modals/ServicesModals.astro';
 import ServicesModalScript from '../components/services/modals/ServicesModalScript.astro';
 import { getData } from '../data';
+import { getAdditionalServices } from '../data/service-catalog';
 import '../styles/servicios.css';
 
 const lang = Astro.props.lang === 'en' ? 'en' : 'es';
@@ -16,11 +17,12 @@ const {
   servicesIntro,
   servicesPageMeta,
 } = services;
+const additional = getAdditionalServices(lang);
 ---
 <CystemsLayout title={servicesPageMeta.title} description={servicesPageMeta.description} lang={lang}>
-  <ServicesIntroSection intro={servicesIntro} cards={serviceCards} />
+  <ServicesIntroSection intro={servicesIntro} cards={[...serviceCards, ...additional.cards]} />
   <ServicesAccompanimentSection content={servicesAccompaniment} />
-  <ServicesModals modals={serviceModals} />
+  <ServicesModals modals={[...serviceModals, ...additional.modals].map(modal => ({...modal, closeLabel: lang === 'en' ? 'Close' : 'Cerrar'}))} />
   <ServicesModalScript />
 </CystemsLayout>
 

@@ -1,8 +1,11 @@
 ﻿---
 import '../styles/global.css';
 import '../styles/final-tech-background.css';
+import '../styles/brand.css';
+import YukiAssistant from '../components/YukiAssistant.astro';
+import Analytics from '../components/Analytics.astro';
 import type { Lang } from '../data';
-import { getAlternateLangPath, getUiCopy, localizePath, stripLangPrefix } from '../lib/i18n';
+import { getUiCopy, localizePath, stripLangPrefix } from '../lib/i18n';
 
 interface Props {
   title?: string;
@@ -10,22 +13,33 @@ interface Props {
   lang?: Lang;
   image?: string;
   canonicalPath?: string;
+  noindex?: boolean;
 }
 
 const {
   title = 'CYSTEMS',
   description = 'Soluciones tecnológicas modernas',
   lang = 'es',
-  image = '/logos/logo-header-black.webp',
+  image = '/social/cystems.png',
   canonicalPath,
+  noindex = false,
 } = Astro.props;
 
 const site = Astro.site ?? new URL('https://cystems.ec');
 const copy = getUiCopy(lang);
-const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, site).toString();
-const alternateEsUrl = new URL(localizePath(stripLangPrefix(Astro.url.pathname), 'es'), site).toString();
-const alternateEnUrl = new URL(localizePath(stripLangPrefix(Astro.url.pathname), 'en'), site).toString();
+const normalizedPath =
+  (canonicalPath ?? Astro.url.pathname).replace(/\/+$/, '') || '/';
+const canonicalUrl = new URL(normalizedPath, site).toString();
+const alternateEsUrl = new URL(
+  localizePath(stripLangPrefix(Astro.url.pathname), 'es'),
+  site,
+).toString();
+const alternateEnUrl = new URL(
+  localizePath(stripLangPrefix(Astro.url.pathname), 'en'),
+  site,
+).toString();
 const ogImageUrl = new URL(image, site).toString();
+const cspNonce = Astro.locals.cspNonce ?? '';
 const themeLabels = {
   light: copy.themeLightLabel,
   dark: copy.themeDarkLabel,
@@ -42,17 +56,49 @@ const structuredData = {
     '@type': 'Person',
     name: 'Cristian Bravo',
     jobTitle: 'Full-stack developer and software architect',
-    url: new URL(getAlternateLangPath('/perfil/cristian-bravo', lang), site).toString(),
+    url: new URL(localizePath('/perfil/cristian-bravo', lang), site).toString(),
   },
-  areaServed: ['Ecuador', 'Latam', 'Remote'],
-  serviceType: ['Software development', 'Web platforms', 'Systems architecture', 'Automation'],
+  '@id': new URL('/#organization', site).toString(),
+  areaServed: [{ '@type': 'Country', name: 'Ecuador' }, 'Latin America'],
+  knowsLanguage: ['es', 'en'],
+  serviceType: [
+    'Custom software development',
+    'Business web platforms',
+    'Systems architecture',
+    'Automation',
+    'Applied artificial intelligence',
+  ],
 };
+const safeStructuredData = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    structuredData,
+    {
+      '@type': 'WebSite',
+      '@id': new URL('/#website', site).toString(),
+      name: 'CYSTEMS',
+      url: site.toString(),
+      inLanguage: ['es', 'en'],
+      publisher: { '@id': new URL('/#organization', site).toString() },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonicalUrl}#webpage`,
+      url: canonicalUrl,
+      name: title,
+      description,
+      inLanguage: lang === 'es' ? 'es-EC' : 'en',
+      isPartOf: { '@id': new URL('/#website', site).toString() },
+    },
+  ],
+}).replace(/</g, '\\u003c');
 ---
+
 <!doctype html>
 <html lang={lang}>
   <head>
     <meta charset="utf-8" />
-    <script is:inline define:vars={{ themeLabels }}>
+    <script is:inline nonce={cspNonce} define:vars={{ themeLabels }}>
       const storageKey = 'theme';
       const root = document.documentElement;
       const toggleSelector = '[data-theme-toggle]';
@@ -76,8 +122,12 @@ const structuredData = {
 
       const normalizeTheme = (value) => (value === 'dark' ? 'dark' : 'light');
       const getPreferredTheme = () =>
-        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      const getToggles = () => Array.from(document.querySelectorAll(toggleSelector));
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      const getToggles = () =>
+        Array.from(document.querySelectorAll(toggleSelector));
       const setToggleState = (theme) => {
         const toggles = getToggles();
         if (!toggles.length) return;
@@ -85,8 +135,14 @@ const structuredData = {
         toggles.forEach((toggle) => {
           toggle.setAttribute('data-theme', theme);
           toggle.setAttribute('aria-pressed', String(isDark));
-          toggle.setAttribute('aria-label', isDark ? themeLabels.light : themeLabels.dark);
-          toggle.setAttribute('title', isDark ? themeLabels.titleLight : themeLabels.titleDark);
+          toggle.setAttribute(
+            'aria-label',
+            isDark ? themeLabels.light : themeLabels.dark,
+          );
+          toggle.setAttribute(
+            'title',
+            isDark ? themeLabels.titleLight : themeLabels.titleDark,
+          );
         });
       };
 
@@ -119,7 +175,9 @@ const structuredData = {
       };
 
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', bindToggle, { once: true });
+        document.addEventListener('DOMContentLoaded', bindToggle, {
+          once: true,
+        });
       } else {
         bindToggle();
       }
@@ -148,7 +206,12 @@ const structuredData = {
       name="keywords"
       content="CYSTEMS, Cristian Bravo, desarrollo web, software a medida, arquitectura de software, sistemas empresariales, automatización, Ecuador"
     />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta
+      name="robots"
+      content={
+        noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'
+      }
+    />
     <meta name="theme-color" content="#0f172a" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="alternate" hreflang="es" href={alternateEsUrl} />
@@ -157,10 +220,16 @@ const structuredData = {
     <meta property="og:site_name" content="CYSTEMS" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={copy.locale} />
+    <meta
+      property="og:locale:alternate"
+      content={lang === 'es' ? 'en_US' : 'es_EC'}
+    />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="CYSTEMS - Cristian Bravo" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
@@ -172,14 +241,21 @@ const structuredData = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
-    <script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+    <script
+      type="application/ld+json"
+      nonce={cspNonce}
+      set:html={safeStructuredData}
+    ></script>
   </head>
-  <body
-    class="min-h-screen bg-tech font-sans text-slate-900 antialiased leading-relaxed transition-colors duration-300 selection:bg-brand-purple/40 selection:text-white dark:text-brand-text"
-  >
+  <body class="min-h-screen bg-tech font-sans text-slate-900 antialiased leading-relaxed transition-colors duration-300 selection:bg-brand-purple/40 selection:text-white dark:text-brand-text">
+    <a class="skip-link" href="#main-content" tabindex="0">
+      {copy.skipLabel}
+    </a>
     <slot />
+    <YukiAssistant lang={lang} />
+    <Analytics />
   </body>
 </html>

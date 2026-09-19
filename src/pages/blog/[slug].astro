@@ -1,20 +1,5 @@
 ---
-import CystemsLayout from '../../layouts/CystemsLayout.astro';
-import BlogPlaceholderSection from '../../components/blog/sections/BlogPlaceholderSection.astro';
-import { getData } from '../../data';
-import '../../styles/blog.css';
-
-const lang = Astro.props.lang === 'en' ? 'en' : 'es';
-const { blog } = getData(lang);
-const { blogPlaceholderContent, blogSlugPageMeta } = blog;
-
-export const prerender = true;
-
-export function getStaticPaths() {
-  // The blog is disabled for now, so no detail pages are generated.
-  return [];
-}
+import NotFound from '../../components/NotFound.astro';
+Astro.response.status = 404;
 ---
-<CystemsLayout title={blogSlugPageMeta.title} description={blogSlugPageMeta.description} lang={lang}>
-  <BlogPlaceholderSection content={blogPlaceholderContent} />
-</CystemsLayout>
+<NotFound />

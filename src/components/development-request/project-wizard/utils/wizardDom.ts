@@ -8,6 +8,7 @@ export const createFieldErrorSetter = (root: HTMLElement) => (fieldName: string,
 
   if (field instanceof HTMLElement) {
     field.classList.toggle('is-invalid', Boolean(message));
+    field.setAttribute('aria-invalid', String(Boolean(message)));
   }
 
   if (error instanceof HTMLElement) {
@@ -72,6 +73,7 @@ export const createSummaryUpdater =
 
 export const clearWizardFieldErrors = (root: HTMLElement) => {
   root.querySelectorAll('.is-invalid').forEach((field) => field.classList.remove('is-invalid'));
+  root.querySelectorAll<HTMLElement>('[data-field]').forEach((field) => field.setAttribute('aria-invalid', 'false'));
   root.querySelectorAll<HTMLElement>('[data-error-for]').forEach((node) => {
     node.textContent = '';
     node.hidden = true;

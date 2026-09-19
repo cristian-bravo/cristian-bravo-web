@@ -24,9 +24,9 @@ const titleId = `${id}-title`;
   aria-labelledby={titleId}
   hidden
 >
-  <button class="services-modal-backdrop" type="button" data-modal-close aria-label="Cerrar modal"></button>
+  <button class="services-modal-backdrop" type="button" data-modal-close aria-label={closeLabel} tabindex="-1"></button>
   <div class="services-modal-panel" role="document">
-    <button class="services-modal-close" type="button" data-modal-close aria-label="Cerrar modal">×</button>
+    <button class="services-modal-close" type="button" data-modal-close aria-label={closeLabel}>×</button>
     <p class="services-modal-kicker">{kicker}</p>
     <h3 id={titleId} class="services-modal-title">{title}</h3>
     <p class="services-modal-description">{description}</p>

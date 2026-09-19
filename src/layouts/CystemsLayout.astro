@@ -8,17 +8,19 @@ interface Props {
   title?: string;
   description?: string;
   lang?: Lang;
+  noindex?: boolean;
 }
 
 const {
   title = 'CYSTEMS | Tecnología para negocios',
   description = 'Transforma ideas en tecnología con plataformas modernas y escalables.',
   lang = 'es',
+  noindex = false,
 } = Astro.props;
 ---
-<BaseLayout title={title} description={description} lang={lang}>
+<BaseLayout title={title} description={description} lang={lang} noindex={noindex}>
   <Header lang={lang} />
-  <main id="main-content" class="min-h-[60vh]">
+  <main id="main-content" tabindex="-1" class="cystems-main min-h-[60vh]">
     <slot />
   </main>
   <Footer lang={lang} />

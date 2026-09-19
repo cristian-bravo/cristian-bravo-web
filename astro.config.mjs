@@ -1,20 +1,21 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://cystems.ec',
   output: 'server',
   security: {
-    checkOrigin: false,
+    checkOrigin: true,
   },
   adapter: node({
     mode: 'standalone',
   }),
-  integrations: [tailwind()],
   vite: {
+    plugins: [tailwindcss()],
+    build: { assetsInlineLimit: 0 },
     ssr: {
       noExternal: ['nodemailer'],
     },

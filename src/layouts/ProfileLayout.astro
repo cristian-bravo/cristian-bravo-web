@@ -15,13 +15,14 @@ const {
   description = 'Perfil profesional, experiencia y enfoque técnico en CYSTEMS.',
   lang = 'es',
 } = Astro.props;
+const cspNonce = Astro.locals.cspNonce ?? '';
 ---
 <BaseLayout title={title} description={description} lang={lang}>
   <Header transparent lang={lang} />
-  <main id="main-content" class="min-h-[60vh]">
+  <main id="main-content" tabindex="-1" class="min-h-[60vh]">
     <slot />
   </main>
-  <script is:inline>
+  <script is:inline nonce={cspNonce}>
     (() => {
       const setupProfileNavbar = () => {
         window.__profileNavbarCleanup?.();

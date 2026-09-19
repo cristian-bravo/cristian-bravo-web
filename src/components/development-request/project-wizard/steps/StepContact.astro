@@ -3,12 +3,35 @@ import type { DevelopmentProjectContactStepContent } from '../../../../data';
 
 interface Props {
   panelId: string;
+  tabId: string;
   copy: DevelopmentProjectContactStepContent;
 }
 
-const { panelId, copy } = Astro.props;
+const { panelId, tabId, copy } = Astro.props;
+const fieldIds = {
+  fullName: `${panelId}-full-name`,
+  email: `${panelId}-email`,
+  company: `${panelId}-company`,
+  phone: `${panelId}-phone`,
+  country: `${panelId}-country`,
+  projectDescription: `${panelId}-project-description`,
+};
+const errorIds = {
+  fullName: `${fieldIds.fullName}-error`,
+  email: `${fieldIds.email}-error`,
+  company: `${fieldIds.company}-error`,
+  phone: `${fieldIds.phone}-error`,
+  country: `${fieldIds.country}-error`,
+  projectDescription: `${fieldIds.projectDescription}-error`,
+};
 ---
-<section id={panelId} class="development-step-panel is-forward" data-step-panel="1">
+<section
+  id={panelId}
+  class="development-step-panel is-forward"
+  data-step-panel="1"
+  role="tabpanel"
+  aria-labelledby={tabId}
+>
   <div class="development-step-stack">
     <div class="development-step-grid development-step-grid--two">
       <label class="development-field">
@@ -16,8 +39,20 @@ const { panelId, copy } = Astro.props;
           {copy.fields.fullName.label}
           {copy.fields.fullName.required && <span class="development-required-mark" aria-hidden="true">*</span>}
         </span>
-        <input class="development-input" type="text" name="fullName" autoComplete="name" data-field="fullName" />
-        <span class="development-field-error" data-error-for="fullName" hidden></span>
+        <input
+          id={fieldIds.fullName}
+          class="development-input"
+          type="text"
+          name="fullName"
+          maxlength="120"
+          autocomplete="name"
+          required={copy.fields.fullName.required}
+          aria-required={copy.fields.fullName.required ? 'true' : 'false'}
+          aria-invalid="false"
+          aria-describedby={errorIds.fullName}
+          data-field="fullName"
+        />
+        <span id={errorIds.fullName} class="development-field-error" data-error-for="fullName" role="alert" hidden></span>
       </label>
 
       <label class="development-field">
@@ -25,14 +60,36 @@ const { panelId, copy } = Astro.props;
           {copy.fields.email.label}
           {copy.fields.email.required && <span class="development-required-mark" aria-hidden="true">*</span>}
         </span>
-        <input class="development-input" type="email" name="email" autoComplete="email" data-field="email" />
-        <span class="development-field-error" data-error-for="email" hidden></span>
+        <input
+          id={fieldIds.email}
+          class="development-input"
+          type="email"
+          name="email"
+          maxlength="254"
+          autocomplete="email"
+          required={copy.fields.email.required}
+          aria-required={copy.fields.email.required ? 'true' : 'false'}
+          aria-invalid="false"
+          aria-describedby={errorIds.email}
+          data-field="email"
+        />
+        <span id={errorIds.email} class="development-field-error" data-error-for="email" role="alert" hidden></span>
       </label>
 
       <label class="development-field">
         <span>{copy.fields.company.label}</span>
-        <input class="development-input" type="text" name="company" autoComplete="organization" data-field="company" />
-        <span class="development-field-error" data-error-for="company" hidden></span>
+        <input
+          id={fieldIds.company}
+          class="development-input"
+          type="text"
+          name="company"
+          maxlength="120"
+          autocomplete="organization"
+          aria-invalid="false"
+          aria-describedby={errorIds.company}
+          data-field="company"
+        />
+        <span id={errorIds.company} class="development-field-error" data-error-for="company" role="alert" hidden></span>
       </label>
 
       <label class="development-field">
@@ -40,14 +97,37 @@ const { panelId, copy } = Astro.props;
           {copy.fields.phone.label}
           {copy.fields.phone.required && <span class="development-required-mark" aria-hidden="true">*</span>}
         </span>
-        <input class="development-input" type="text" name="phone" autoComplete="tel" data-field="phone" />
-        <span class="development-field-error" data-error-for="phone" hidden></span>
+        <input
+          id={fieldIds.phone}
+          class="development-input"
+          type="tel"
+          name="phone"
+          maxlength="40"
+          inputmode="tel"
+          autocomplete="tel"
+          required={copy.fields.phone.required}
+          aria-required={copy.fields.phone.required ? 'true' : 'false'}
+          aria-invalid="false"
+          aria-describedby={errorIds.phone}
+          data-field="phone"
+        />
+        <span id={errorIds.phone} class="development-field-error" data-error-for="phone" role="alert" hidden></span>
       </label>
 
       <label class="development-field development-field--full">
         <span>{copy.fields.country.label}</span>
-        <input class="development-input" type="text" name="country" autoComplete="country-name" data-field="country" />
-        <span class="development-field-error" data-error-for="country" hidden></span>
+        <input
+          id={fieldIds.country}
+          class="development-input"
+          type="text"
+          name="country"
+          maxlength="80"
+          autocomplete="country-name"
+          aria-invalid="false"
+          aria-describedby={errorIds.country}
+          data-field="country"
+        />
+        <span id={errorIds.country} class="development-field-error" data-error-for="country" role="alert" hidden></span>
       </label>
 
       <label class="development-field development-field--full">
@@ -58,13 +138,25 @@ const { panelId, copy } = Astro.props;
           )}
         </span>
         <textarea
+          id={fieldIds.projectDescription}
           class="development-textarea"
           name="projectDescription"
+          maxlength="6000"
           rows={8}
+          required={copy.fields.projectDescription.required}
+          aria-required={copy.fields.projectDescription.required ? 'true' : 'false'}
+          aria-invalid="false"
+          aria-describedby={errorIds.projectDescription}
           data-field="projectDescription"
           placeholder={copy.fields.projectDescription.placeholder}
         ></textarea>
-        <span class="development-field-error" data-error-for="projectDescription" hidden></span>
+        <span
+          id={errorIds.projectDescription}
+          class="development-field-error"
+          data-error-for="projectDescription"
+          role="alert"
+          hidden
+        ></span>
       </label>
     </div>
   </div>

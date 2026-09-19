@@ -34,33 +34,33 @@ export interface ServicesModalContent {
 }
 
 export const servicesPageMeta: PageMetadata = {
-  title: 'Servicios | CYSTEMS',
-  description: 'Servicios tecnológicos para estrategia, desarrollo de plataformas y operación continua.',
+  title: 'Software a medida, automatización e IA | CYSTEMS Ecuador',
+  description: 'Desarrollo de plataformas empresariales, MVPs, APIs, automatización e inteligencia artificial. Auditoría, rescate y mantenimiento de software en Ecuador.',
 };
 
 export const servicesIntro: ServicesIntroContent = {
   kicker: 'Servicios',
-  title: 'Desde el primer paso hasta una plataforma lista para crecer.',
-  subtitle: 'No solo desarrollamos software: caminamos contigo en todo el proceso.',
+  title: 'Construir, conectar y hacer que funcione.',
+  subtitle: 'Software a medida, inteligencia artificial y soporte técnico. El punto de partida es lo que tu empresa necesita resolver.',
 };
 
 export const serviceCards: ServiceCardContent[] = [
   {
     title: 'APIs y backend',
     description:
-      'Diseño y desarrollo APIs y lógica backend con enfoque en rendimiento, escalabilidad y estructuras bien definidas.',
+      'Conectamos tus herramientas, datos y procesos con APIs y una lógica de negocio bien definida.',
     modalId: 'modal-consultoria',
   },
   {
     title: 'Plataformas y sistemas',
     description:
-      'Construyo plataformas en producción integrando frontend, backend y arquitectura para resolver necesidades reales.',
+      'Construimos aplicaciones web y sistemas internos que reúnen usuarios, información y procesos.',
     modalId: 'modal-plataformas',
   },
   {
     title: 'Evolución y mantenimiento',
     description:
-      'Mantengo y mejoro sistemas en producción, asegurando estabilidad, rendimiento y evolución constante.',
+      'Mantenemos y mejoramos sistemas existentes: despliegues, rendimiento, monitoreo y nuevas funciones.',
     modalId: 'modal-operacion',
   },
 ];
@@ -75,7 +75,7 @@ export const servicesAccompaniment: ServicesAccompanimentContent = {
   insightPoints: [
   'Arquitectura preparada para escalar sin rehacer el sistema en el futuro.',
   'Integraciones seguras que conectan tus procesos, datos y herramientas en un solo flujo.',
-  'Métricas claras, monitoreo constante y soporte activo para que tu operación nunca se detenga.',
+  'Monitoreo, prioridades y soporte acordados según las necesidades de tu operación.',
 ],
   insightModalId: 'modal-acompanamiento',
 };

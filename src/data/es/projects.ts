@@ -77,27 +77,6 @@ export interface ProjectsPortfolioContent {
   finalCta: ProjectsFinalCtaContent;
 }
 
-const SHARED_PUBLIC_GALLERY: ProjectGalleryItemContent[] = [
-  {
-    src: '/hero/yuki-light.png',
-    alt: 'Vista de dashboard en modo claro',
-    caption: 'Dashboard operativo',
-    variant: 'wide',
-  },
-  {
-    src: '/hero/yuki-light2.png',
-    alt: 'Vista secundaria de interfaz de plataforma',
-    caption: 'Flujos de gestion',
-    variant: 'square',
-  },
-  {
-    src: '/hero/yuki-dark.png',
-    alt: 'Vista de plataforma en modo oscuro',
-    caption: 'Monitoreo y datos',
-    variant: 'tall',
-  },
-];
-
 const confidentialGallery = (domain: string): ProjectGalleryItemContent[] => [
   {
     alt: `Vista protegida de ${domain}`,

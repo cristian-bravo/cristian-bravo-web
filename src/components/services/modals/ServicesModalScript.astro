@@ -1,4 +1,8 @@
-<script is:inline>
+---
+const cspNonce = Astro.locals.cspNonce ?? '';
+---
+
+<script is:inline nonce={cspNonce}>
   (() => {
     if (window.__servicesModalsBound) return;
     window.__servicesModalsBound = true;

@@ -11,8 +11,8 @@ export const sendProjectRequest = async (
 ) => {
   const payload = new FormData();
 
-  Object.entries(formData).forEach(([fieldName, value]) => {
-    if (fieldName === 'features' || fieldName === 'integrations') {
+  Object.entries(formData).forEach(([fieldName, value]: [string, string | string[]]) => {
+    if ((fieldName === 'features' || fieldName === 'integrations') && Array.isArray(value)) {
       value.forEach((item) => payload.append(fieldName, item));
       return;
     }
@@ -21,7 +21,7 @@ export const sendProjectRequest = async (
       return;
     }
 
-    payload.append(fieldName, value);
+    if (typeof value === 'string') payload.append(fieldName, value);
   });
 
   if (attachment) {

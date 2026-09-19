@@ -24,6 +24,7 @@ const {
     class="development-step-nav"
     role="tablist"
     aria-label={stepNavigationLabel}
+    aria-orientation="horizontal"
     style={`grid-template-columns: repeat(${stepTitles.length}, minmax(0, 1fr))`}
   >
     {stepTitles.map((stepTitle, index) => {
@@ -31,10 +32,12 @@ const {
 
       return (
         <button
+          id={`${wizardId}-step-tab-${stepNumber}`}
           type="button"
           role="tab"
           aria-selected={stepNumber === 1 ? 'true' : 'false'}
           aria-controls={`${wizardId}-step-panel-${stepNumber}`}
+          tabindex={stepNumber === 1 ? 0 : -1}
           class={`development-step-chip${stepNumber === 1 ? ' is-active' : ''}`}
           data-step-chip={stepNumber}
         >

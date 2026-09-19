@@ -6,8 +6,15 @@ interface Props {
 }
 
 const { content } = Astro.props;
+// Only named, localized intents can affect the form. Never reflect raw URL text.
+const intentKey = Astro.url.searchParams.get('intent');
+const intent =
+  intentKey && Object.hasOwn(content.intents, intentKey)
+    ? content.intents[intentKey as keyof typeof content.intents]
+    : undefined;
 
-const applyTemplate = (template: string) => template.replace('{email}', content.emailValue);
+const applyTemplate = (template: string) =>
+  template.replace('{email}', content.emailValue);
 const formConfig = {
   consultationOptions: content.consultationOptions,
   submitLabel: content.submitLabel,
@@ -21,15 +28,34 @@ const directEmailLabel = applyTemplate(content.form.directEmailLabel);
 const footerNoteParts = content.footerNote.split(content.emailValue);
 
 const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
+const fieldIds = {
+  name: `${formId}-name`,
+  email: `${formId}-email`,
+  phone: `${formId}-phone`,
+  consultationType: `${formId}-consultation-type`,
+  message: `${formId}-message`,
+};
+const safeFormConfig = JSON.stringify(formConfig).replace(/</g, '\\u003c');
+const errorIds = {
+  name: `${fieldIds.name}-error`,
+  email: `${fieldIds.email}-error`,
+  phone: `${fieldIds.phone}-error`,
+  consultationType: `${fieldIds.consultationType}-error`,
+  message: `${fieldIds.message}-error`,
+};
 ---
+
 <div
   class="development-form-card development-form-card--simple"
   data-simple-request-root
   data-form-id={formId}
 >
-  <script type="application/json" data-simple-request-config set:html={JSON.stringify(formConfig)}></script>
-
-  <form data-simple-request-form noValidate>
+  <script
+    type="application/json"
+    data-simple-request-config
+    set:html={safeFormConfig}
+  ></script>
+  <form data-simple-request-form data-analytics-form="simple_form" novalidate>
     <div class="development-form-card-head">
       <div>
         <p class="development-paper-kicker">{content.form.cardKicker}</p>
@@ -38,53 +64,154 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
       <p class="development-form-copy">{cardDescription}</p>
     </div>
 
+    {intent && (
+      <div class="development-intent" data-project-intent>
+        <strong>{intent.title}</strong>
+        <p id={`${formId}-intent-help`}>{intent.prompt}</p>
+      </div>
+    )}
+
     <div class="development-submit-alert" data-submit-error hidden>
-      <p class="development-inline-status development-inline-status--error" data-submit-error-text></p>
+      <p
+        class="development-inline-status development-inline-status--error"
+        data-submit-error-text
+        role="alert"
+      ></p>
     </div>
 
-    <p class="development-inline-status" data-submit-pending hidden>{content.form.pendingStatus}</p>
+    <p
+      class="development-inline-status"
+      data-submit-pending
+      hidden
+      role="status"
+      aria-live="polite"
+    >
+      {content.form.pendingStatus}
+    </p>
 
     <div class="development-form-grid">
       <label class="development-field">
         <span>{content.form.fields.name}</span>
-        <input class="development-input" type="text" name="name" autoComplete="name" data-field="name" />
-        <span class="development-field-error" data-error-for="name" hidden></span>
+        <input
+          id={fieldIds.name}
+          class="development-input"
+          type="text"
+          name="name"
+          maxlength="120"
+          autocomplete="name"
+          required
+          aria-required="true"
+          aria-invalid="false"
+          aria-describedby={errorIds.name}
+          data-field="name"
+        />
+        <span
+          id={errorIds.name}
+          class="development-field-error"
+          data-error-for="name"
+          role="alert"
+          hidden
+        ></span>
       </label>
 
       <label class="development-field">
         <span>{content.form.fields.email}</span>
-        <input class="development-input" type="email" name="email" autoComplete="email" data-field="email" />
-        <span class="development-field-error" data-error-for="email" hidden></span>
+        <input
+          id={fieldIds.email}
+          class="development-input"
+          type="email"
+          name="email"
+          maxlength="254"
+          autocomplete="email"
+          required
+          aria-required="true"
+          aria-invalid="false"
+          aria-describedby={errorIds.email}
+          data-field="email"
+        />
+        <span
+          id={errorIds.email}
+          class="development-field-error"
+          data-error-for="email"
+          role="alert"
+          hidden
+        ></span>
       </label>
 
       <label class="development-field">
         <span>{content.form.fields.company}</span>
         <input
+          id={fieldIds.phone}
           class="development-input"
-          type="text"
+          type="tel"
           name="company"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          autoComplete="tel-national"
+          maxlength="32"
+          inputmode="tel"
+          autocomplete="tel"
+          aria-invalid="false"
+          aria-describedby={errorIds.phone}
           data-field="company"
         />
-        <span class="development-field-error" data-error-for="company" hidden></span>
+        <span
+          id={errorIds.phone}
+          class="development-field-error"
+          data-error-for="company"
+          role="alert"
+          hidden
+        ></span>
       </label>
 
       <label class="development-field">
         <span>{content.form.fields.consultationType}</span>
-        <select class="development-input" name="consultationType" data-field="consultationType">
+        <select
+          id={fieldIds.consultationType}
+          class="development-input"
+          name="consultationType"
+          required
+          aria-required="true"
+          aria-invalid="false"
+          aria-describedby={errorIds.consultationType}
+          data-field="consultationType"
+        >
           {content.consultationOptions.map((option) => (
-            <option value={option}>{option}</option>
+            <option
+              value={option}
+              selected={option === intent?.consultationType}
+            >
+              {option}
+            </option>
           ))}
         </select>
-        <span class="development-field-error" data-error-for="consultationType" hidden></span>
+        <span
+          id={errorIds.consultationType}
+          class="development-field-error"
+          data-error-for="consultationType"
+          role="alert"
+          hidden
+        ></span>
       </label>
 
       <label class="development-field development-field--full">
         <span>{content.form.fields.message}</span>
-        <textarea class="development-textarea" name="message" rows={6} data-field="message"></textarea>
-        <span class="development-field-error" data-error-for="message" hidden></span>
+        <textarea
+          id={fieldIds.message}
+          class="development-textarea"
+          name="message"
+          maxlength="5000"
+          rows={6}
+          required
+          aria-required="true"
+          aria-invalid="false"
+          aria-describedby={`${errorIds.message}${intent ? ` ${formId}-intent-help` : ''}`}
+          data-field="message"
+        ></textarea>
+        <span
+          id={errorIds.message}
+          class="development-field-error"
+          data-error-for="message"
+          role="alert"
+          hidden
+        ></span>
       </label>
     </div>
 
@@ -98,7 +225,13 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
         <span class="development-primary-link__copy">
           <span data-submit-label>{content.submitLabel}</span>
         </span>
-        <span class="development-primary-link__icon" aria-hidden="true" data-submit-icon>-&gt;</span>
+        <span
+          class="development-primary-link__icon"
+          aria-hidden="true"
+          data-submit-icon
+        >
+          -&gt;
+        </span>
       </button>
 
       <p class="development-footer-note">
@@ -114,9 +247,15 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
     <h2 class="font-display text-3xl font-semibold tracking-tight text-slate-900 dark:text-brand-text">
       {content.form.successTitle}
     </h2>
-    <p class="text-sm leading-7 text-slate-600 dark:text-brand-muted">{successDescription}</p>
+    <p class="text-sm leading-7 text-slate-600 dark:text-brand-muted">
+      {successDescription}
+    </p>
     <div class="development-success-actions">
-      <button class="development-secondary-link development-secondary-link--button" type="button" data-reset-button>
+      <button
+        class="development-secondary-link development-secondary-link--button"
+        type="button"
+        data-reset-button
+      >
         {content.form.resetLabel}
       </button>
       <a class="development-primary-link" href={`mailto:${content.emailValue}`}>
@@ -128,12 +267,25 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
 </div>
 
 <script>
+  import { emitAnalyticsEvent } from '../../../lib/analytics';
+  import type { DevelopmentSimpleContent } from '../../../data';
+
+  const FIELD_NAMES = [
+    'name',
+    'email',
+    'company',
+    'consultationType',
+    'message',
+  ] as const;
+  type SimpleFieldName = (typeof FIELD_NAMES)[number];
+  type SimpleFormData = Record<SimpleFieldName, string>;
   const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const DIGITS_PATTERN = /^[0-9]+$/;
+  const PHONE_PATTERN = /^[+\d().\s-]+$/;
   const EMPTY_COPY = '';
 
-  const initSimpleRequestForm = (root) => {
-    if (!(root instanceof HTMLElement) || root.dataset.initialized === 'true') return;
+  const initSimpleRequestForm = (root: Element) => {
+    if (!(root instanceof HTMLElement) || root.dataset.initialized === 'true')
+      return;
     root.dataset.initialized = 'true';
 
     const configNode = root.querySelector('[data-simple-request-config]');
@@ -161,31 +313,40 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
       return;
     }
 
-    const config = configNode instanceof HTMLScriptElement ? JSON.parse(configNode.textContent || '{}') : {};
-    const validationCopy = config.form?.validation ?? {};
+    const config = (
+      configNode instanceof HTMLScriptElement
+        ? JSON.parse(configNode.textContent || '{}')
+        : {}
+    ) as Partial<Pick<DevelopmentSimpleContent, 'form'>>;
+    const validationCopy: Partial<
+      DevelopmentSimpleContent['form']['validation']
+    > = config.form?.validation ?? {};
     const defaultSubmitLabel = submitLabel.textContent ?? EMPTY_COPY;
     const sendingLabel = config.form?.sendingLabel ?? defaultSubmitLabel;
 
-    const getFormData = () => ({
-      name: (form.elements.namedItem('name') instanceof HTMLInputElement ? form.elements.namedItem('name').value : '').trim(),
-      email: (form.elements.namedItem('email') instanceof HTMLInputElement ? form.elements.namedItem('email').value : '').trim(),
-      company: (form.elements.namedItem('company') instanceof HTMLInputElement ? form.elements.namedItem('company').value : '').trim(),
-      consultationType:
-        form.elements.namedItem('consultationType') instanceof HTMLSelectElement
-          ? form.elements.namedItem('consultationType').value.trim()
-          : '',
-      message:
-        form.elements.namedItem('message') instanceof HTMLTextAreaElement
-          ? form.elements.namedItem('message').value.trim()
-          : '',
+    const getFieldValue = (fieldName: SimpleFieldName) => {
+      const field = form.elements.namedItem(fieldName);
+      return field instanceof HTMLInputElement ||
+        field instanceof HTMLSelectElement ||
+        field instanceof HTMLTextAreaElement
+        ? field.value.trim()
+        : '';
+    };
+    const getFormData = (): SimpleFormData => ({
+      name: getFieldValue('name'),
+      email: getFieldValue('email'),
+      company: getFieldValue('company'),
+      consultationType: getFieldValue('consultationType'),
+      message: getFieldValue('message'),
     });
 
-    const setFieldError = (fieldName, message = '') => {
+    const setFieldError = (fieldName: string, message = '') => {
       const field = form.querySelector(`[data-field="${fieldName}"]`);
       const error = form.querySelector(`[data-error-for="${fieldName}"]`);
 
       if (field instanceof HTMLElement) {
         field.classList.toggle('is-invalid', Boolean(message));
+        field.setAttribute('aria-invalid', String(Boolean(message)));
       }
 
       if (error instanceof HTMLElement) {
@@ -200,29 +361,40 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
       errorText.textContent = '';
     };
 
-    const setSubmitting = (value) => {
+    const setSubmitting = (value: boolean) => {
       submitButton.disabled = value;
+      form.setAttribute('aria-busy', String(value));
       submitLabel.textContent = value ? sendingLabel : defaultSubmitLabel;
       submitIcon.hidden = value;
       pendingStatus.hidden = !value;
     };
 
-    const validate = (formData) => {
-      const nextErrors = {};
+    const validate = (formData: SimpleFormData) => {
+      const nextErrors: Partial<Record<SimpleFieldName, string>> = {};
 
-      if (!formData.name) nextErrors.name = validationCopy.nameRequired ?? EMPTY_COPY;
+      if (!formData.name)
+        nextErrors.name = validationCopy.nameRequired ?? EMPTY_COPY;
       if (!formData.email) {
         nextErrors.email = validationCopy.emailRequired ?? EMPTY_COPY;
       } else if (!EMAIL_PATTERN.test(formData.email)) {
         nextErrors.email = validationCopy.emailInvalid ?? EMPTY_COPY;
       }
-      if (formData.company && !DIGITS_PATTERN.test(formData.company)) {
+      const phoneDigits = formData.company.replace(/\D/g, '').length;
+      if (
+        formData.company &&
+        (!PHONE_PATTERN.test(formData.company) ||
+          phoneDigits < 7 ||
+          phoneDigits > 15)
+      ) {
         nextErrors.company = validationCopy.companyInvalid ?? EMPTY_COPY;
       }
-      if (!formData.consultationType) nextErrors.consultationType = validationCopy.consultationTypeRequired ?? EMPTY_COPY;
-      if (!formData.message) nextErrors.message = validationCopy.messageRequired ?? EMPTY_COPY;
+      if (!formData.consultationType)
+        nextErrors.consultationType =
+          validationCopy.consultationTypeRequired ?? EMPTY_COPY;
+      if (!formData.message)
+        nextErrors.message = validationCopy.messageRequired ?? EMPTY_COPY;
 
-      ['name', 'email', 'company', 'consultationType', 'message'].forEach((fieldName) => {
+      FIELD_NAMES.forEach((fieldName) => {
         setFieldError(fieldName, nextErrors[fieldName] ?? '');
       });
 
@@ -235,7 +407,7 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
 
       const fieldName = target.getAttribute('data-field');
       if (fieldName === 'company' && target instanceof HTMLInputElement) {
-        target.value = target.value.replace(/\D+/g, '');
+        target.value = target.value.replace(/[^+\d().\s-]+/g, '');
       }
       if (fieldName) {
         setFieldError(fieldName, '');
@@ -250,7 +422,7 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
       form.reset();
       clearFeedback();
       setSubmitting(false);
-      ['name', 'email', 'company', 'consultationType', 'message'].forEach((fieldName) => setFieldError(fieldName, ''));
+      FIELD_NAMES.forEach((fieldName) => setFieldError(fieldName, ''));
       successCard.hidden = true;
       form.hidden = false;
     });
@@ -262,6 +434,8 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
 
       const nextErrors = validate(formData);
       if (Object.keys(nextErrors).length) {
+        const firstInvalid = form.querySelector('[aria-invalid="true"]');
+        if (firstInvalid instanceof HTMLElement) firstInvalid.focus();
         return;
       }
 
@@ -283,15 +457,21 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
         const result = await response.json().catch(() => null);
 
         if (!response.ok || !result?.success) {
-          throw new Error(result?.message || validationCopy.submitError || EMPTY_COPY);
+          throw new Error(
+            result?.message || validationCopy.submitError || EMPTY_COPY,
+          );
         }
 
         form.hidden = true;
         successCard.hidden = false;
+        emitAnalyticsEvent('form_complete', 'simple_form');
         form.reset();
       } catch (error) {
         console.error('Simple request send failed', error);
-        errorText.textContent = error instanceof Error ? error.message : validationCopy.submitError || EMPTY_COPY;
+        errorText.textContent =
+          error instanceof Error
+            ? error.message
+            : validationCopy.submitError || EMPTY_COPY;
         errorBlock.hidden = false;
       } finally {
         setSubmitting(false);
@@ -300,11 +480,15 @@ const formId = `simple-request-${Math.random().toString(36).slice(2, 10)}`;
   };
 
   const initAllSimpleRequestForms = () => {
-    document.querySelectorAll('[data-simple-request-root]').forEach((root) => initSimpleRequestForm(root));
+    document
+      .querySelectorAll('[data-simple-request-root]')
+      .forEach((root) => initSimpleRequestForm(root));
   };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAllSimpleRequestForms, { once: true });
+    document.addEventListener('DOMContentLoaded', initAllSimpleRequestForms, {
+      once: true,
+    });
   } else {
     initAllSimpleRequestForms();
   }
