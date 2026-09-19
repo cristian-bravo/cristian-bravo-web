@@ -19,6 +19,7 @@ jobs:
       - run: npm run build
       - run: npm run test:email
       - run: npm run test:security
+      - run: npm run test:yuki:gateway
       - run: npm run audit:deps
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:e2e

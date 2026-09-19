@@ -1,0 +1,30 @@
+# CYSTEMS origin: only Cloudflare may supply the visitor IP trusted by Astro.
+# Reuses the existing reviewed Cloudflare allowlist in Coolify's file provider.
+# The existing ACME challenge router has higher priority (1000).
+http:
+  routers:
+    cystems-site-cloudflare-http:
+      entryPoints:
+        - http
+      rule: "Host(`cystems.ec`) || Host(`www.cystems.ec`)"
+      priority: 900
+      middlewares:
+        - coolify-cloudflare-only
+        - redirect-to-https@docker
+      service: cystems-site-origin
+    cystems-site-cloudflare-https:
+      entryPoints:
+        - https
+      rule: "Host(`cystems.ec`) || Host(`www.cystems.ec`)"
+      priority: 900
+      middlewares:
+        - coolify-cloudflare-only
+        - gzip@docker
+      service: cystems-site-origin
+      tls:
+        certResolver: letsencrypt
+  services:
+    cystems-site-origin:
+      loadBalancer:
+        servers:
+          - url: "http://web-edkudkydmldnkvfswxizh8fw:4321"

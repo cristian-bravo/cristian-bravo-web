@@ -19,7 +19,9 @@ El propietario rechazó el rediseño editorial publicado en `ae7aa75` y pidió r
 
 - Revisión visual de inicio claro/oscuro a 1440 px, inicio móvil a 390 px y portafolio de escritorio. Evidencia local: `.cache/restoration/`.
 - Animaciones reales con `prefers-reduced-motion: no-preference`: scanline, órbita, flotación, burbujas y escenas. Pruebas con CSP estricta, navegación por teclado, scroll y cambios escritorio/móvil/reduced-motion.
-- Primera matriz completa: 309/311 aprobadas. Los dos fallos eran expectativas QA del rediseño (título de perfil) y una espera de foco insuficiente en WebKit. Tras corregirlas, los cuatro casos dirigidos pasaron (perfil y modal en tres motores). El workflow de GitHub vuelve a ejecutar la matriz completa sobre el commit publicado.
+- Primera matriz completa: 309/311 aprobadas. Los dos fallos eran expectativas QA del rediseño (título de perfil) y una espera de foco insuficiente en WebKit. Tras corregirlas, los cuatro casos dirigidos pasaron (perfil y modal en tres motores). El workflow completo de GitHub aprobó la restauración `91d8592`.
+- La corrección «Sobre mí» / «About me» añadió cobertura de navegación móvil/escritorio y vídeos, flotación y parallax del perfil. Las 57 pruebas dirigidas pasaron; el workflow completo de `8d2e624` aprobó las 325 pruebas E2E en Chromium, Firefox y WebKit: [Quality](https://github.com/cristian-bravo/cristian-bravo-web/actions/runs/35476669148).
+- Producción comprobada: menú sin Contacto, enlaces y estado activo de Sobre mí/About me, vídeo reproduciéndose en temas claro/oscuro, animaciones CSS activas y ausencia de desbordamiento horizontal en las vistas verificadas.
 - `npm run typecheck`, las dos fixtures de correo y la fixture de límites/proxy aprobaron. Las pruebas no enviaron correos externos.
 
 Las mejoras visuales futuras deben conservar esta composición, animaciones y personalidad. Cambios de tipografía, paleta, estructura o sustitución del portafolio requieren una nueva petición del propietario.

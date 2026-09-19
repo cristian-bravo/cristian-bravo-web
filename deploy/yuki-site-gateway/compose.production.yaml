@@ -1,0 +1,52 @@
+name: cystems-yuki-site
+services:
+  gateway:
+    image: cystems/yuki-site:20260919-1
+    build:
+      context: .
+    container_name: cystems-yuki-site
+    restart: unless-stopped
+    init: true
+    user: "1000:1000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 128m
+    cpus: 0.5
+    pids_limit: 64
+    labels:
+      traefik.enable: "false"
+    env_file:
+      - /opt/cystems-yuki-site/gateway.env
+    volumes:
+      - /opt/cystems-yuki-site/tls/cert.pem:/run/secrets/cystems-yuki-site/cert.pem:ro
+      - /opt/cystems-yuki-site/tls/key.pem:/run/secrets/cystems-yuki-site/key.pem:ro
+      - /opt/cystems-yuki-site/tls/ca.pem:/run/secrets/cystems-yuki-site/ca.pem:ro
+    tmpfs:
+      - /tmp:size=8m,noexec,nosuid,nodev
+    networks:
+      site:
+        aliases: [cystems-yuki-site]
+      model: {}
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "require('https').get({hostname:'127.0.0.1',port:3443,path:'/health',servername:'cystems-yuki-site',ca:require('fs').readFileSync('/run/secrets/cystems-yuki-site/ca.pem'),timeout:3000},r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1)).on('timeout',()=>process.exit(1))"
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: "2"
+networks:
+  site:
+    external: true
+    name: edkudkydmldnkvfswxizh8fw
+  model:
+    external: true
+    name: cystems-yuki-model

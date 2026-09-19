@@ -90,6 +90,151 @@ test('Yuki handles safe rendering, history opt-in and keyboard dismissal', async
   expect(results.violations).toEqual([]);
 });
 
+for (const width of [390, 1440]) {
+  test(`Yuki dynamic messages retain their styling and respect reduced motion at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    let finishReply = () => {};
+    const responseReady = new Promise<void>((resolve) => {
+      finishReply = resolve;
+    });
+    const answer = `Respuesta de prueba: ${'X'.repeat(180)}`;
+    await page.route('**/api/yuki-chat', async (route) => {
+      await responseReady;
+      await route.fulfill({ json: { success: true, response: answer } });
+    });
+    await page.goto('/');
+    await page.locator('[data-yuki-open]').click();
+    const messages = page.locator('[data-yuki-messages]');
+    const greeting = messages.locator('.yuki-message--assistant').first();
+    const greetingStyles = await greeting.evaluate((node) => {
+      const bubble = getComputedStyle(node);
+      const label = getComputedStyle(
+        node.querySelector('.yuki-message__label')!,
+      );
+      const paragraph = getComputedStyle(node.querySelector('p')!);
+      return {
+        bubble: {
+          padding: bubble.padding,
+          borderRadius: bubble.borderRadius,
+          backgroundColor: bubble.backgroundColor,
+          lineHeight: bubble.lineHeight,
+        },
+        label: {
+          fontSize: label.fontSize,
+          fontWeight: label.fontWeight,
+          textTransform: label.textTransform,
+          display: label.display,
+        },
+        paragraph: {
+          fontSize: paragraph.fontSize,
+          margin: paragraph.margin,
+          overflowWrap: paragraph.overflowWrap,
+        },
+      };
+    });
+    expect(greetingStyles.bubble.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+    expect(greetingStyles.paragraph.overflowWrap).toBe('anywhere');
+    await page
+      .locator('[data-yuki-input]')
+      .fill(`Una consulta ${'Z'.repeat(140)}`);
+    await page.locator('[data-yuki-send]').click();
+    const pending = messages.locator('.is-pending');
+    try {
+      await expect(pending).toBeVisible();
+      await expect(page.locator('[data-yuki-form]')).toHaveAttribute(
+        'aria-busy',
+        'true',
+      );
+      await expect(page.locator('[data-yuki-input]')).toBeDisabled();
+      await expect(page.locator('[data-yuki-send]')).toBeDisabled();
+      const user = messages.locator('.yuki-message--user');
+      await expect(user).toHaveCSS('justify-self', 'end');
+      expect(
+        await user.evaluate((node) => getComputedStyle(node).backgroundColor),
+      ).not.toBe(greetingStyles.bubble.backgroundColor);
+      await expect(user.locator('p')).toHaveCSS('overflow-wrap', 'anywhere');
+      await expect(user.locator('.yuki-message__label')).toHaveCSS(
+        'text-transform',
+        greetingStyles.label.textTransform,
+      );
+      for (const [property, value] of Object.entries(greetingStyles.label)) {
+        expect(
+          await pending
+            .locator('.yuki-message__label')
+            .evaluate(
+              (node, key) =>
+                getComputedStyle(node)[key as keyof CSSStyleDeclaration],
+              property,
+            ),
+        ).toBe(value);
+      }
+      expect(
+        await pending
+          .locator('p')
+          .evaluate((node) => getComputedStyle(node, '::after').animationName),
+      ).not.toBe('none');
+      expect(
+        await pending
+          .locator('p')
+          .evaluate((node) =>
+            parseFloat(getComputedStyle(node, '::after').width),
+          ),
+      ).toBeGreaterThan(0);
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await expect
+        .poll(() =>
+          pending
+            .locator('p')
+            .evaluate(
+              (node) => getComputedStyle(node, '::after').animationName,
+            ),
+        )
+        .toBe('none');
+
+      finishReply();
+      await expect(pending).toHaveCount(0);
+      const reply = messages.locator('.yuki-message--assistant').last();
+      await expect(reply).toContainText(answer);
+      await expect(page.locator('[data-yuki-form]')).toHaveAttribute(
+        'aria-busy',
+        'false',
+      );
+      await expect(page.locator('[data-yuki-input]')).toBeEnabled();
+      await expect(page.locator('[data-yuki-send]')).toBeEnabled();
+      for (const [property, value] of Object.entries(greetingStyles.bubble)) {
+        expect(
+          await reply.evaluate(
+            (node, key) =>
+              getComputedStyle(node)[key as keyof CSSStyleDeclaration],
+            property,
+          ),
+        ).toBe(value);
+      }
+      for (const [property, value] of Object.entries(
+        greetingStyles.paragraph,
+      )) {
+        expect(
+          await reply
+            .locator('p')
+            .evaluate(
+              (node, key) =>
+                getComputedStyle(node)[key as keyof CSSStyleDeclaration],
+              property,
+            ),
+        ).toBe(value);
+      }
+      expect(
+        await messages.evaluate((node) => node.scrollWidth - node.clientWidth),
+      ).toBeLessThanOrEqual(1);
+    } finally {
+      finishReply();
+    }
+  });
+}
+
 for (const prefix of ['', '/en']) {
   for (const width of [390, 1440]) {
     test(`about navigation opens the original profile ${prefix || 'es'} at ${width}px`, async ({

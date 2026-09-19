@@ -588,7 +588,8 @@ const copy = isEnglish
     scrollbar-width: thin;
   }
 
-  .yuki-message {
+  /* Message nodes created by the client script have no Astro scope attribute. */
+  .yuki-messages :global(.yuki-message) {
     max-width: 92%;
     padding: 0.75rem 0.84rem;
     border: 1px solid var(--yuki-line);
@@ -597,7 +598,7 @@ const copy = isEnglish
     line-height: 1.5;
   }
 
-  .yuki-message--user {
+  .yuki-messages :global(.yuki-message--user) {
     justify-self: end;
     border-color: #26383d;
     border-radius: 0.9rem 0.9rem 0.28rem 0.9rem;
@@ -605,7 +606,7 @@ const copy = isEnglish
     color: #f8fbf6;
   }
 
-  .yuki-message.is-pending p::after {
+  .yuki-messages :global(.yuki-message.is-pending p)::after {
     content: '';
     display: inline-block;
     width: 0.36rem;
@@ -616,7 +617,7 @@ const copy = isEnglish
     animation: yuki-pulse 840ms ease-in-out infinite;
   }
 
-  .yuki-message__label {
+  .yuki-messages :global(.yuki-message__label) {
     display: block;
     margin-bottom: 0.18rem;
     color: #69747a;
@@ -626,10 +627,10 @@ const copy = isEnglish
     text-transform: uppercase;
   }
 
-  .yuki-message--user .yuki-message__label {
+  .yuki-messages :global(.yuki-message--user .yuki-message__label) {
     color: rgba(248, 251, 246, 0.66);
   }
-  .yuki-message p {
+  .yuki-messages :global(.yuki-message p) {
     margin: 0;
     font-size: 0.84rem;
     overflow-wrap: anywhere;
@@ -882,7 +883,7 @@ const copy = isEnglish
     .yuki-quick-actions button,
     .yuki-send,
     .yuki-launcher__pulse,
-    .yuki-message.is-pending p::after {
+    .yuki-messages :global(.yuki-message.is-pending p)::after {
       animation: none;
       transition: none;
     }
