@@ -1,10 +1,600 @@
 ---
-import CystemsLayout from '../layouts/CystemsLayout.astro';
-import ProjectsGallery from '../components/projects/ProjectsGallery.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import ProjectFeaturedHero from '../components/projects/sections/ProjectFeaturedHero.astro';
 import { getData } from '../data';
+import { getUiCopy } from '../lib/i18n';
+import '../styles/proyectos-scene.css';
+import '../styles/hero-animations.css';
+
 const lang = Astro.props.lang === 'en' ? 'en' : 'es';
-const { projectsPageMeta } = getData(lang).projects;
+const { projects } = getData(lang);
+const portfolioCopy = getUiCopy(lang).portfolio;
+const { projectsPageMeta, projectsPortfolioContent } = projects;
+const finalCtaCards = projectsPortfolioContent.finalCta.cards ?? [];
+
+const allProjects = projectsPortfolioContent.groups.flatMap((group, gi) =>
+  group.references.map((project, pi) => ({
+    project,
+    groupTitle: group.title,
+    stepIndex: projectsPortfolioContent.groups
+      .slice(0, gi)
+      .reduce((acc, g) => acc + g.references.length, 0) + pi,
+  }))
+);
+
+const totalProjects = allProjects.length;
+const totalScenes = 1 + totalProjects + 1;
+
+const toneForStep = (i: number) => i % 6;
+const githubMarkPath =
+  'M8 0C3.58 0 0 3.58 0 8a8.001 8.001 0 005.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.001 8.001 0 0016 8c0-4.42-3.58-8-8-8z';
 ---
-<CystemsLayout title={projectsPageMeta.title} description={projectsPageMeta.description} lang={lang}>
-  <ProjectsGallery lang={lang} />
-</CystemsLayout>
+<BaseLayout title={projectsPageMeta.title} description={projectsPageMeta.description} lang={lang}>
+  <div class="ps-root">
+    <!-- Scroll spacer: height set by JS = totalScenes x 100vh -->
+    <div data-ps-spacer style="height: 100vh;"></div>
+
+    <!-- Fixed stage -->
+    <main id="main-content" tabindex="-1" class="ps-stage" data-ps-stage>
+      <!-- SCENE 0: HERO -->
+      <div
+        class="ps-scene ps-scene--hero"
+        data-ps-scene
+        data-scene-index="0"
+        aria-label={portfolioCopy.portfolioLabel}
+      >
+        <div class="ps-scene__inner">
+          <div class="ps-hero">
+            <div class="ps-hero__copy">
+              <p class="ps-hero__kicker" data-reveal>
+                {projectsPortfolioContent.intro.kicker}
+              </p>
+              <h1 class="ps-hero__title" data-reveal>
+                {projectsPortfolioContent.intro.title}
+              </h1>
+              {projectsPortfolioContent.intro.description && (
+                <p class="ps-hero__desc" data-reveal>
+                  {projectsPortfolioContent.intro.description}
+                </p>
+              )}
+              <div class="ps-hero__scroll-hint" data-reveal>
+                <span class="ps-hero__scroll-icon" aria-hidden="true"></span>
+                {portfolioCopy.scrollHint}
+              </div>
+            </div>
+
+            <div class="ps-hero__avatar" data-reveal>
+              <div class="ps-hero__avatar-shell">
+                <div class="ps-hero__avatar-card">
+                  <div class="ps-hero__avatar-topline">{portfolioCopy.profileLabel}</div>
+                  <div class="ps-hero__avatar-orb">
+                    <div class="ps-hero__avatar-ring" aria-hidden="true"></div>
+                    <div class="ps-hero__avatar-ring ps-hero__avatar-ring--inner" aria-hidden="true"></div>
+                    <span class="ps-hero__avatar-pulse ps-hero__avatar-pulse--a" aria-hidden="true"></span>
+                    <span class="ps-hero__avatar-pulse ps-hero__avatar-pulse--b" aria-hidden="true"></span>
+                    {projectsPortfolioContent.heroAvatar.imageSrc ? (
+                      <img
+                        src={projectsPortfolioContent.heroAvatar.imageSrc}
+                        alt={projectsPortfolioContent.heroAvatar.imageAlt ?? ''}
+                        class="ps-hero__avatar-img"
+                        width="400"
+                        height="400"
+                        loading="eager"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span class="ps-hero__avatar-fallback">
+                        {projectsPortfolioContent.heroAvatar.label}
+                      </span>
+                    )}
+                  </div>
+
+                  <div class="ps-hero__avatar-panel">
+                    <div class="ps-hero__avatar-badge">
+                      <span class="ps-hero__avatar-badge-label">
+                        {projectsPortfolioContent.heroAvatar.label}
+                      </span>
+                      <span class="ps-hero__avatar-badge-caption">
+                        {projectsPortfolioContent.heroAvatar.caption}
+                      </span>
+                    </div>
+
+                    <div class="ps-hero__avatar-meta" aria-label="Enfoque del portafolio">
+                      {portfolioCopy.chips.map((chip) => (
+                        <span class="ps-hero__avatar-chip">{chip}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENES 1..N: PROJECTS -->
+      {allProjects.map(({ project, groupTitle, stepIndex }) => {
+        const tone = toneForStep(stepIndex);
+        const isReverse = stepIndex % 2 === 1;
+        const wideItem = project.gallery.find((item) => item.variant === 'wide');
+        const squareItem = project.gallery.find((item) => item.variant === 'square');
+        const tallItem = project.gallery.find((item) => item.variant === 'tall');
+        const coverMedia =
+          project.gallery.find((item) => item.variant === 'wide' && item.src) ??
+          project.gallery.find((item) => item.src) ??
+          project.gallery.find((item) => item.variant === 'wide') ??
+          project.gallery[0];
+        const projectActions = project.actions ?? [];
+        const featuredHero = project.featuredHero;
+        const featuredSceneTone =
+          featuredHero?.variant === 'industrial-corporate'
+            ? 'industrial'
+            : featuredHero?.variant === 'retail-commerce'
+              ? 'retail'
+            : featuredHero?.variant === 'academic-platform'
+              ? 'academic'
+            : featuredHero?.variant === 'confidential-private'
+              ? 'confidential'
+            : featuredHero?.variant === 'edu-saas'
+              ? 'edu'
+              : undefined;
+        const hasActionBar = projectActions.length > 0 || Boolean(project.githubUrl);
+
+        return (
+          <div
+            class:list={[
+              'ps-scene',
+              'ps-scene--project',
+              featuredHero && 'ps-scene--project-featured',
+              featuredSceneTone && `ps-scene--project-featured-${featuredSceneTone}`,
+            ]}
+            data-ps-scene
+            data-scene-index={stepIndex + 1}
+            data-tone={featuredHero ? undefined : String(tone)}
+            aria-label={`${portfolioCopy.projectLabel}: ${project.title}`}
+          >
+            <div class="ps-scene__inner">
+              <div class="ps-project-shell">
+                {featuredHero ? (
+                  <ProjectFeaturedHero
+                    project={project}
+                    projectActions={projectActions}
+                    featuredHero={featuredHero}
+                    groupTitle={groupTitle}
+                    stepIndex={stepIndex}
+                    totalProjects={totalProjects}
+                    wideItem={wideItem}
+                    squareItem={squareItem}
+                    tallItem={tallItem}
+                    lang={lang}
+                  />
+                ) : (
+                  <>
+                <div class:list={['ps-project', isReverse && 'ps-project--reverse']}>
+                  <div class="ps-project__left">
+                    <div class="ps-project__meta" data-reveal>
+                      <span class="ps-project__step">
+                        {String(stepIndex + 1).padStart(2, '0')} / {String(totalProjects).padStart(2, '0')}
+                      </span>
+                      <span class="ps-project__separator" aria-hidden="true">&middot;</span>
+                      <span class="ps-project__group">{groupTitle}</span>
+                      <span
+                        class:list={[
+                          'ps-project__visibility',
+                          project.isConfidential
+                            ? 'ps-project__visibility--private'
+                            : 'ps-project__visibility--public',
+                        ]}
+                      >
+                        {project.visibility}
+                      </span>
+                    </div>
+
+                    <h2 class="ps-project__title" data-reveal>
+                      {project.title}
+                    </h2>
+
+                    <p class="ps-project__desc" data-reveal>
+                      {project.description}
+                    </p>
+
+                    {project.isConfidential && (
+                      <p class="ps-project__confidential" data-reveal>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V8Z" />
+                        </svg>
+                        {project.confidentialLabel ?? portfolioCopy.confidentialFallback}
+                      </p>
+                    )}
+
+                    <ul class="ps-project__tags" data-reveal aria-label="Tecnologias y areas">
+                      {project.tags.map((tag) => (
+                        <li class="ps-project__tag">{tag}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div class="ps-project__right" data-reveal>
+                    <div class="ps-project__gallery">
+                      {wideItem && (
+                        <figure class="ps-project__gallery-item ps-project__gallery-item--wide">
+                          {wideItem.src ? (
+                            <img
+                              src={wideItem.src}
+                              alt={wideItem.alt}
+                              class="ps-project__gallery-img"
+                              loading="lazy"
+                              decoding="async"
+                              width="800"
+                              height="350"
+                            />
+                          ) : (
+                            <div class="ps-project__gallery-placeholder">{wideItem.caption}</div>
+                          )}
+                          {project.isConfidential && (
+                            <div class="ps-project__lock-overlay" aria-hidden="true">
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                                <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z" />
+                              </svg>
+                            </div>
+                          )}
+                        </figure>
+                      )}
+
+                      {squareItem && (
+                        <figure class="ps-project__gallery-item">
+                          {squareItem.src ? (
+                            <img
+                              src={squareItem.src}
+                              alt={squareItem.alt}
+                              class="ps-project__gallery-img"
+                              loading="lazy"
+                              decoding="async"
+                              width="400"
+                              height="250"
+                            />
+                          ) : (
+                            <div class="ps-project__gallery-placeholder">{squareItem.caption}</div>
+                          )}
+                          {project.isConfidential && (
+                            <div class="ps-project__lock-overlay" aria-hidden="true">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                                <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z" />
+                              </svg>
+                            </div>
+                          )}
+                        </figure>
+                      )}
+
+                      {tallItem && (
+                        <figure class="ps-project__gallery-item">
+                          {tallItem.src ? (
+                            <img
+                              src={tallItem.src}
+                              alt={tallItem.alt}
+                              class="ps-project__gallery-img"
+                              loading="lazy"
+                              decoding="async"
+                              width="400"
+                              height="250"
+                            />
+                          ) : (
+                            <div class="ps-project__gallery-placeholder">{tallItem.caption}</div>
+                          )}
+                          {project.isConfidential && (
+                            <div class="ps-project__lock-overlay" aria-hidden="true">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                                <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Z" />
+                              </svg>
+                            </div>
+                          )}
+                        </figure>
+                      )}
+                    </div>
+
+                    {hasActionBar && (
+                      <div class="ps-project__actions">
+                        <div class="ps-project__action-row ps-project__action-row--single">
+                          {projectActions.map((action, actionIndex) => (
+                            <a
+                              href={action.href}
+                              class:list={[
+                                'ps-project__action',
+                                action.variant === 'primary' && actionIndex === 0
+                                  ? 'ps-project__action--primary'
+                                  : 'ps-project__action--secondary',
+                              ]}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${action.label} de ${project.title}`}
+                            >
+                              {action.label}
+                            </a>
+                          ))}
+
+                          {project.githubUrl && (
+                            <a
+                              href={project.githubUrl}
+                              class="ps-project__github-link"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${portfolioCopy.openCode} ${project.title}`}
+                            >
+                              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                <path d={githubMarkPath} />
+                              </svg>
+                              <span>{portfolioCopy.codeLabel}</span>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div class="ps-project-mobile">
+                  <div class="ps-project__media" aria-hidden="true">
+                    {coverMedia?.src ? (
+                      <img
+                        src={coverMedia.src}
+                        alt=""
+                        class="ps-project__image"
+                        loading="lazy"
+                        decoding="async"
+                        width="1600"
+                        height="900"
+                      />
+                    ) : (
+                      <div class="ps-project__media-placeholder">
+                        <span>{coverMedia?.caption ?? 'Vista reservada'}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div
+                    class:list={[
+                      'ps-project__scrim',
+                      project.isConfidential && 'ps-project__scrim--confidential',
+                    ]}
+                    aria-hidden="true"
+                  ></div>
+                  <div class="ps-project__glow" aria-hidden="true"></div>
+
+                  {project.isConfidential && (
+                    <div class="ps-project__lock-overlay" aria-hidden="true">
+                      <div class="ps-project__lock-chip">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V8Z" />
+                        </svg>
+                        <span>{project.confidentialLabel ?? portfolioCopy.confidentialFallback}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div class="ps-project__content">
+                    <div class="ps-project__meta" data-reveal>
+                      <span class="ps-project__step">
+                        {String(stepIndex + 1).padStart(2, '0')} / {String(totalProjects).padStart(2, '0')}
+                      </span>
+                      <span class="ps-project__separator" aria-hidden="true">&middot;</span>
+                      <span class="ps-project__group">{groupTitle}</span>
+                      <span
+                        class:list={[
+                          'ps-project__visibility',
+                          project.isConfidential
+                            ? 'ps-project__visibility--private'
+                            : 'ps-project__visibility--public',
+                        ]}
+                      >
+                        {project.visibility}
+                      </span>
+                    </div>
+
+                    <h2 class="ps-project__title" data-reveal>
+                      {project.title}
+                    </h2>
+
+                    <p class="ps-project__desc" data-reveal>
+                      {project.description}
+                    </p>
+
+                    {project.isConfidential && (
+                      <p class="ps-project__confidential" data-reveal>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M17 10h-1V8a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V8Z" />
+                        </svg>
+                        {project.confidentialLabel ?? portfolioCopy.confidentialFallback}
+                      </p>
+                    )}
+
+                    <ul class="ps-project__tags" data-reveal aria-label="Tecnologias y areas">
+                      {project.tags.map((tag) => (
+                        <li class="ps-project__tag">{tag}</li>
+                      ))}
+                    </ul>
+
+                    {hasActionBar && (
+                      <div class="ps-project__actions" data-reveal>
+                        <div class="ps-project__action-row">
+                          {projectActions.map((action, actionIndex) => (
+                            <a
+                              href={action.href}
+                              class:list={[
+                                'ps-project__action',
+                                action.variant === 'primary' && actionIndex === 0
+                                  ? 'ps-project__action--primary'
+                                  : 'ps-project__action--secondary',
+                              ]}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${action.label} de ${project.title}`}
+                            >
+                              {action.label}
+                            </a>
+                          ))}
+
+                          {project.githubUrl && (
+                            <a
+                              href={project.githubUrl}
+                              class="ps-project__github-link"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${portfolioCopy.openCode} ${project.title}`}
+                            >
+                              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                <path d={githubMarkPath} />
+                              </svg>
+                              <span>{portfolioCopy.codeLabel}</span>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
+      <!-- FINAL SCENE: CTA -->
+      <div
+        class="ps-scene ps-scene--cta"
+        data-ps-scene
+        data-scene-index={totalProjects + 1}
+        aria-label={portfolioCopy.finalLabel}
+      >
+        <div class="ps-scene__inner">
+          <div class="ps-cta hero-motion-root">
+            <div class="ps-cta__bg hero-bg-breathing pointer-events-none absolute inset-0 bg-hero-glow" aria-hidden="true"></div>
+            <div class="ps-cta__shell hero-motion-shell">
+              <p class="ps-cta__kicker ps-cta__kicker--lead" data-reveal>
+                {projectsPortfolioContent.finalCta.kicker}
+              </p>
+
+              <div class="ps-cta__grid">
+                {finalCtaCards.map((card, cardIndex) => {
+                  const isGithubCard = card.action.href.includes('github.com');
+
+                  return (
+                    <article class="ps-cta__card" data-reveal>
+                      <div class="ps-cta__card-glow" aria-hidden="true"></div>
+                      <div class="ps-cta__card-copy">
+                        <h2 class="ps-cta__card-title">
+                          {card.title}
+                        </h2>
+                        {card.description && (
+                          <p class="ps-cta__card-desc">
+                            {card.description}
+                          </p>
+                        )}
+                      </div>
+
+                      <a
+                        class:list={[
+                          'ps-cta__button',
+                          cardIndex === 0 ? 'ps-cta__button--secondary' : 'ps-cta__button--primary',
+                        ]}
+                        href={card.action.href}
+                        data-reveal
+                        target={isGithubCard ? '_blank' : undefined}
+                        rel={isGithubCard ? 'noopener noreferrer' : undefined}
+                      >
+                        {isGithubCard && (
+                          <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                            <path d={githubMarkPath} />
+                          </svg>
+                        )}
+                        <span>{card.action.label}</span>
+                        {!isGithubCard && (
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 12h14M13 6l6 6-6 6" />
+                          </svg>
+                        )}
+                      </a>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Header -->
+    <div class="ps-header-wrap">
+      <Header lang={lang} />
+    </div>
+
+    <!-- Dot navigation -->
+    <nav class="ps-dots" aria-label={portfolioCopy.dotsLabel}>
+      {Array.from({ length: totalScenes }).map((_, i) => (
+        <button
+          type="button"
+          class="ps-dot"
+          data-ps-dot
+          data-dot-index={i}
+          title={
+            i === 0 ? portfolioCopy.portfolioLabel :
+            i <= totalProjects ? `${portfolioCopy.projectLabel} ${i}` :
+            portfolioCopy.finalLabel
+          }
+          aria-label={
+            i === 0 ? portfolioCopy.goCover :
+            i <= totalProjects ? `${portfolioCopy.goProject} ${i}` :
+            portfolioCopy.goFinal
+          }
+        ></button>
+      ))}
+    </nav>
+
+    <!-- Bottom progress bar -->
+    <div class="ps-progress" aria-hidden="true">
+      <div class="ps-progress__fill" data-ps-progress-fill></div>
+    </div>
+
+    <!-- Scene counter -->
+    <div class="ps-counter" aria-live="polite" aria-label="Escena actual">
+      <span class="ps-counter__current" data-ps-counter-current>1</span>
+      <span>/</span>
+      <span data-ps-counter-total>{totalScenes}</span>
+    </div>
+  </div>
+
+  <script>
+    import { initProjectsScrollAnimation } from '../scripts/projectsScrollAnimation';
+
+    let cleanup = () => {};
+
+    const init = () => {
+      cleanup();
+      cleanup = initProjectsScrollAnimation() ?? (() => {});
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+      init();
+    }
+
+    window.addEventListener('astro:page-load', init);
+    window.addEventListener('astro:before-swap', () => {
+      cleanup();
+    }, { once: true });
+  </script>
+</BaseLayout>

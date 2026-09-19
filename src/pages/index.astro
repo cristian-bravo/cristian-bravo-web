@@ -1,13 +1,25 @@
 ---
 import CystemsLayout from '../layouts/CystemsLayout.astro';
-import StudioHome from '../components/home/StudioHome.astro';
+import HomeHeroSection from '../components/home/sections/HomeHeroSection.astro';
+import HomeServicesPreviewSection from '../components/home/sections/HomeServicesPreviewSection.astro';
+import HomeMethodSection from '../components/home/sections/HomeMethodSection.astro';
+import HomeNextStepSection from '../components/home/sections/HomeNextStepSection.astro';
 import { getData } from '../data';
+import '../styles/home.css';
 
 const lang = Astro.props.lang === 'en' ? 'en' : 'es';
 const { home } = getData(lang);
-const { homePageMeta } = home;
+const {
+  homeHeroContent,
+  homeMethodContent,
+  homeNextStepContent,
+  homePageMeta,
+  homeServicesPreviewContent,
+} = home;
 ---
 <CystemsLayout title={homePageMeta.title} description={homePageMeta.description} lang={lang}>
-  <StudioHome lang={lang} />
+  <HomeHeroSection content={homeHeroContent} />
+  <HomeServicesPreviewSection content={homeServicesPreviewContent} />
+  <HomeMethodSection content={homeMethodContent} />
+  <HomeNextStepSection content={homeNextStepContent} />
 </CystemsLayout>
-

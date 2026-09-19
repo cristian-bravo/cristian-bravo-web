@@ -1427,7 +1427,7 @@
 }
 
 .development-checkbox-card:has(input:focus-visible) {
-  outline: 3px solid #b7442b;
+  outline: 3px solid #7c3aed;
   outline-offset: 3px;
 }
 
@@ -1569,10 +1569,6 @@ html.development-confirm-open [data-site-header] {
 }
 
 @media (min-width: 1024px) {
-  .development-paper-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .development-simple-layout {
     grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
     align-items: start;

@@ -21,7 +21,7 @@ const { content } = Astro.props;
         <p class="home-hero__subtitle">{content.subtitle}</p>
 
         <div class="home-hero__actions">
-          <a class="home-hero__button home-hero__button--primary" href={content.primaryAction.href}>
+          <a class="home-hero__button home-hero__button--primary" href={content.primaryAction.href} data-analytics-event="hero_cta" data-analytics-location="hero">
             {content.primaryAction.label}
           </a>
           <a class="home-hero__button home-hero__button--secondary" href={content.secondaryAction.href}>

@@ -30,74 +30,44 @@ export const developmentRequestApiContent: DevelopmentRequestApiContent = {
   rateLimitError: 'You have sent too many requests. Try again later.',
 };
 
-export const developmentRequestLandingContent: DevelopmentRequestLandingContent =
-  {
-    header: {
-      kicker: 'Start here',
-      title: 'Where is your project today?',
-      description:
-        'Build from scratch, improve what already works or recover a struggling system. Start with the problem you need to solve.',
+export const developmentRequestLandingContent: DevelopmentRequestLandingContent = {
+  header: {
+    kicker: 'Start here',
+    title: 'Tell me what you want to build',
+    description:
+      'Choose how you want to begin. You can send a quick message or complete a structured request.',
+  },
+  cards: [
+    {
+      kicker: 'Option 1',
+      title: 'Quick consultation',
+      description: 'For simple ideas or questions.',
+      detail: 'If the idea is clear and you want to move fast, this is the most direct path.',
+      bullets: ['Fast and simple', 'Ideal to start', 'Quick response'],
+      action: {
+        label: 'Start',
+        href: '/en/empezar-proyecto/simple',
+      },
+      rotation: '-1.5deg',
     },
-    cards: [
-      {
-        kicker: '01 / Build',
-        title: 'I have a new idea',
-        description: 'Turn a business need into a concrete product.',
-        detail:
-          'Tell us who will use it and what problem it should solve. We will define an initial scope together.',
-        bullets: [
-          'MVP and validation',
-          'Custom software',
-          'Integrations from the start',
-        ],
-        action: {
-          label: 'Explore my idea',
-          href: '/en/empezar-proyecto/simple?intent=new',
-        },
-        rotation: '0deg',
+    {
+      kicker: 'Option 2',
+      title: 'Complete project',
+      description: 'For larger or more detailed work.',
+      detail: 'If you want to explain the idea better and receive a clearer proposal.',
+      bullets: ['Step by step', 'More detail', 'Better planning'],
+      action: {
+        label: 'Create request',
+        href: '/en/empezar-proyecto/proyecto',
       },
-      {
-        kicker: '02 / Improve',
-        title: 'My system needs to evolve',
-        description: 'Your operations changed. Your software can evolve too.',
-        detail:
-          'Let’s identify manual tasks, missing connections and the features your team needs.',
-        bullets: ['Automation', 'New features', 'Performance and experience'],
-        action: {
-          label: 'Plan the improvement',
-          href: '/en/empezar-proyecto/simple?intent=improve',
-        },
-        rotation: '0deg',
-      },
-      {
-        kicker: '03 / Recover',
-        title: 'I need to recover a project',
-        description:
-          'Bugs, unfinished deliveries or a system that is difficult to maintain.',
-        detail:
-          'We review its condition first, then prioritize repairs, risks and a path forward.',
-        bullets: [
-          'Technical diagnosis',
-          'Stability and security',
-          'Project continuity',
-        ],
-        action: {
-          label: 'Review my situation',
-          href: '/en/empezar-proyecto/simple?intent=rescue',
-        },
-        rotation: '0deg',
-      },
-    ],
-    supportKicker: 'Already have a scope?',
-    supportTitle: 'Share a more detailed brief',
-    supportDescription:
-      'If you already know the features and integrations you need, use the guided request. Review everything before sending.',
-    supportChips: ['Discovery', 'Scope', 'Priorities', 'Risks', 'Next steps'],
-    supportAction: {
-      label: 'Complete the brief',
-      href: '/en/empezar-proyecto/proyecto',
+      rotation: '1.5deg',
     },
-  };
+  ],
+  supportKicker: 'Clear process',
+  supportTitle: 'Everything starts simple',
+  supportDescription: 'The goal is to understand your context and answer with a practical next step.',
+  supportChips: ['Easy to use', 'Clear', 'Fast', 'No friction', 'Better response'],
+};
 
 export const developmentRequestSimpleContent: DevelopmentSimpleContent = {
   header: {

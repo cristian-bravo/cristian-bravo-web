@@ -27,7 +27,7 @@ export interface DevelopmentRequestLandingContent {
   supportTitle: string;
   supportDescription: string;
   supportChips: string[];
-  supportAction: LinkActionContent;
+  supportAction?: LinkActionContent;
 }
 
 export interface DevelopmentSimpleFormFieldsContent {
@@ -248,86 +248,47 @@ export const developmentRequestApiContent: DevelopmentRequestApiContent = {
   rateLimitError: 'Has enviado muchas solicitudes. Intenta más tarde.',
 };
 
-export const developmentRequestLandingContent: DevelopmentRequestLandingContent =
-  {
-    header: {
-      kicker: 'Empieza aquí',
-      title: '¿En qué punto está tu proyecto?',
-      description:
-        'Crear desde cero, mejorar lo que ya funciona o recuperar un sistema con problemas. Empecemos por lo que necesitas resolver.',
+export const developmentRequestLandingContent: DevelopmentRequestLandingContent = {
+  header: {
+    kicker: 'Empieza aquí',
+    title: 'Solicita una solución digital',
+    description:
+      'Elige el flujo adecuado según tu etapa: una consulta rápida o un brief completo para estimar mejor alcance, prioridad y siguientes pasos.',
+  },
+  cards: [
+    {
+      kicker: 'Opción 1',
+      title: 'Consulta rápida',
+      description: 'Para validar una idea o resolver dudas iniciales.',
+      detail:
+        'Ideal si necesitas una primera orientación técnica o quieres saber si tu idea es viable.',
+      bullets: ['Respuesta directa', 'Diagnóstico inicial', 'Sin fricción'],
+      action: {
+        label: 'Empezar',
+        href: '/empezar-proyecto/simple',
+      },
+      rotation: '-1.5deg',
     },
-    cards: [
-      {
-        kicker: '01 / Crear',
-        title: 'Tengo una idea nueva',
-        description:
-          'Convierte una necesidad de negocio en un producto concreto.',
-        detail:
-          'Cuéntanos quién lo usará y qué problema debe resolver. Definiremos juntos un primer alcance.',
-        bullets: [
-          'MVP y validación',
-          'Software a medida',
-          'Integraciones desde el inicio',
-        ],
-        action: {
-          label: 'Explorar mi idea',
-          href: '/empezar-proyecto/simple?intent=new',
-        },
-        rotation: '0deg',
+    {
+      kicker: 'Opción 2',
+      title: 'Proyecto completo',
+      description: 'Para una propuesta con más contexto técnico y comercial.',
+      detail:
+        'Recomendado cuando necesitas estimar alcance, funcionalidades, integraciones y tiempos.',
+      bullets: ['Brief estructurado', 'Mejor estimación', 'Planificación clara'],
+      action: {
+        label: 'Crear solicitud',
+        href: '/empezar-proyecto/proyecto',
       },
-      {
-        kicker: '02 / Mejorar',
-        title: 'Quiero mejorar mi sistema',
-        description:
-          'Tu operación cambió. Tu software también puede evolucionar.',
-        detail:
-          'Identifiquemos tareas manuales, conexiones que faltan y funciones que tu equipo necesita.',
-        bullets: [
-          'Automatización',
-          'Nuevas funcionalidades',
-          'Rendimiento y experiencia',
-        ],
-        action: {
-          label: 'Planear la mejora',
-          href: '/empezar-proyecto/simple?intent=improve',
-        },
-        rotation: '0deg',
-      },
-      {
-        kicker: '03 / Rescatar',
-        title: 'Necesito recuperar un proyecto',
-        description:
-          'Errores, entregas incompletas o un sistema difícil de mantener.',
-        detail:
-          'Primero revisamos su estado. Después priorizamos reparaciones, riesgos y una ruta de continuidad.',
-        bullets: [
-          'Diagnóstico técnico',
-          'Estabilidad y seguridad',
-          'Continuidad del proyecto',
-        ],
-        action: {
-          label: 'Revisar mi caso',
-          href: '/empezar-proyecto/simple?intent=rescue',
-        },
-        rotation: '0deg',
-      },
-    ],
-    supportKicker: '¿Ya tienes un alcance?',
-    supportTitle: 'Comparte un brief más completo',
-    supportDescription:
-      'Si ya conoces las funciones e integraciones que necesitas, puedes detallarlas en una solicitud guiada. Revisas todo antes de enviar.',
-    supportChips: [
-      'Discovery',
-      'Alcance',
-      'Prioridades',
-      'Riesgos',
-      'Siguientes pasos',
-    ],
-    supportAction: {
-      label: 'Completar el brief',
-      href: '/empezar-proyecto/proyecto',
+      rotation: '1.5deg',
     },
-  };
+  ],
+  supportKicker: 'Proceso comercial',
+  supportTitle: 'Más claridad desde el primer contacto',
+  supportDescription:
+    'La información correcta permite responder con una ruta de trabajo más precisa y realista.',
+  supportChips: ['Discovery', 'Alcance', 'Prioridades', 'Riesgos', 'Siguientes pasos'],
+};
 
 export const developmentRequestSimpleContent: DevelopmentSimpleContent = {
   header: {

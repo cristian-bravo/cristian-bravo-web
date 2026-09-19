@@ -167,66 +167,38 @@ test('service details dialog traps keyboard focus and closes with Escape', async
   const dialog = page.locator(`[id="${modalId}"]`);
   await expect(dialog).toBeVisible();
   await expect(dialog).toHaveAttribute('role', 'dialog');
+  await expect(dialog.locator('.services-modal-close')).toBeFocused();
   await page.keyboard.press('Tab');
-  expect(
-    await dialog.evaluate((node) => node.contains(document.activeElement)),
-  ).toBe(true);
+  await expect
+    .poll(() =>
+      dialog.evaluate((node) => node.contains(document.activeElement)),
+    )
+    .toBe(true);
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
 });
 
 for (const prefix of ['', '/en']) {
-  test(`portfolio filters and interface disclosure are keyboard operable ${prefix || 'es'}`, async ({
+  test(`original portfolio stays readable with reduced motion ${prefix || 'es'}`, async ({
     page,
   }) => {
     await page.setViewportSize({ width: prefix ? 1440 : 390, height: 900 });
     await page.goto(`${prefix}/proyectos`);
-    const cards = page.locator('[data-project-category]');
-    await expect(
-      cards.first().locator('.portfolio-project__cover img'),
-    ).toHaveAttribute('loading', 'eager');
-    await expect(
-      cards.first().locator('.portfolio-project__cover img'),
-    ).toHaveAttribute('fetchpriority', 'high');
-    await expect(
-      cards.nth(1).locator('.portfolio-project__cover img'),
-    ).toHaveAttribute('loading', 'lazy');
-    const total = await cards.count();
-    expect(total).toBeGreaterThan(3);
-    for (const category of ['education', 'business', 'commerce']) {
-      const filter = page.locator(`[data-project-filter="${category}"]`);
-      await filter.focus();
-      await filter.press('Enter');
-      await expect(filter).toHaveAttribute('aria-pressed', 'true');
-      const visible = page.locator('[data-project-category]:visible');
-      const count = await visible.count();
-      expect(count).toBeGreaterThan(0);
-      expect(count).toBeLessThan(total);
-      for (const card of await visible.all())
-        await expect(card).toHaveAttribute('data-project-category', category);
-      await expect(page.locator('[data-project-count]')).toContainText(
-        String(count),
-      );
-    }
-    await page.locator('[data-project-filter="all"]').click();
-    await expect(page.locator('[data-project-category]:visible')).toHaveCount(
-      total,
+    await expect(page.locator('.ps-root')).toHaveAttribute(
+      'data-ps-mode',
+      'native',
     );
-    const disclosure = page.locator('.portfolio-gallery').first();
-    const summary = disclosure.locator('summary');
-    await summary.focus();
-    await summary.press('Enter');
-    await expect(disclosure).toHaveAttribute('open', '');
-    await expect(disclosure.locator('figure').first()).toBeVisible();
-    await summary.press('Enter');
-    await expect(disclosure).not.toHaveAttribute('open', '');
-    for (const privateCard of await page
-      .locator('.portfolio-project--private')
-      .all()) {
-      await expect(
-        privateCard.locator('.portfolio-gallery, img, a[target="_blank"]'),
-      ).toHaveCount(0);
+    const scenes = page.locator('[data-ps-scene]');
+    const total = await scenes.count();
+    expect(total).toBeGreaterThan(4);
+    for (const scene of await scenes.all()) {
+      await expect(scene).toHaveClass(/is-active/);
+      await expect(scene).not.toHaveAttribute('aria-hidden', 'true');
+      await expect(scene).not.toHaveAttribute('inert', '');
+      await scene.scrollIntoViewIfNeeded();
+      await expect(scene).toBeInViewport();
     }
+    await expect(page.locator('.ps-scene--cta a').first()).toBeVisible();
   });
 }

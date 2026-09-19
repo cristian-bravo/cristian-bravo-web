@@ -8,10 +8,10 @@
 - [Yuki](yuki-integration.md): arquitectura, arranque conectado, configuración y estado real de la integración.
 - La integración pública de Yuki se documenta en `../yuki-bot/docs/integrations/SITE_CHAT.md` (repositorio hermano). No colocar sus credenciales en variables públicas ni en JavaScript del navegador.
 
-Home usa `StudioHome.astro`; proyectos usa `ProjectsGallery.astro`. El contenido sigue separado del renderizado y mantiene ES/EN. La skill de diseño está en `.agents/skills/product-frontend-design`.
+El diseño vigente es el original de `cb8c21d`, restaurado por petición expresa del propietario. Home usa las cuatro secciones de `src/components/home/sections/` y `home.css`; proyectos vuelve al portafolio animado por escenas. Se conservan las protecciones de seguridad, las mejoras funcionales y el widget de Yuki. Véase [restauración del diseño](design-restoration.md). No volver a sustituir su identidad visual por una plantilla editorial.
 
 ## Referencias históricas
 
-`home-hero-visual-system.md`, `proyectos-modifier-guide.md`, `proyectos-refactor-2026.md` y `proyectos-scroll-architecture.md` describen implementaciones anteriores. El motor de escenas y el hero de vídeo ya no se cargan en las rutas actuales. No aplicar sus instrucciones como si fueran el sistema vigente.
+`home-hero-visual-system.md`, `proyectos-modifier-guide.md`, `proyectos-refactor-2026.md` y `proyectos-scroll-architecture.md` contienen antecedentes del diseño original. El motor de escenas vuelve a estar activo; el hero actual usa logo, órbitas y flotación CSS, sin vídeo de fondo.
 
-`NEWPLAN.md` conserva el plan editorial original como referencia de intención.
+`NEWPLAN.md` conserva el plan del rediseño rechazado como registro histórico, no como dirección vigente.

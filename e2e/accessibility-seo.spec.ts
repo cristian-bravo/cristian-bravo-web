@@ -4,7 +4,7 @@ import { test, expect, routes } from './fixtures';
 for (const route of routes) {
   test(`SEO document contract ${route}`, async ({ page }) => {
     await page.goto(route);
-    await expect(page).toHaveTitle(/CYSTEMS/i);
+    await expect(page).toHaveTitle(route.endsWith('/perfil/cristian-bravo') ? /Cristian/i : /CYSTEMS/i);
     const description = await page.locator('meta[name="description"]').getAttribute('content');
     expect(description?.length).toBeGreaterThan(40);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://cystems.ec${route === '/' ? '/' : route}`);

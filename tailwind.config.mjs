@@ -19,9 +19,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"DM Sans"', ...defaultTheme.fontFamily.sans],
-        display: ['"Space Grotesk"', ...defaultTheme.fontFamily.sans],
-        mono: ['"IBM Plex Mono"', ...defaultTheme.fontFamily.mono],
+        sans: ['Manrope', ...defaultTheme.fontFamily.sans],
+        display: ['Sora', ...defaultTheme.fontFamily.sans],
       },
       boxShadow: {
         glow: '0 24px 60px rgba(124, 60, 255, 0.22)',

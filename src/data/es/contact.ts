@@ -11,8 +11,8 @@ export interface ContactOverviewContent {
 }
 
 export const contactPageMeta: PageMetadata = {
-  title: 'Conversemos sobre tu proyecto | CYSTEMS Ecuador',
-  description: 'Cuéntanos qué necesita tu empresa. Contacta a CYSTEMS para desarrollar software, automatizar procesos, integrar IA o recuperar un sistema existente.',
+  title: 'Contacto | CYSTEMS',
+  description: 'Canales de contacto para propuestas estratégicas, soporte y alianzas.',
 };
 
 export const contactOverviewContent: ContactOverviewContent = {
@@ -20,12 +20,12 @@ export const contactOverviewContent: ContactOverviewContent = {
     kicker: 'Contacto',
     title: 'Hablemos sobre tu próximo proyecto',
     description:
-      'Cuéntanos qué quieres construir o qué debería funcionar mejor. Revisamos tu contexto y definimos contigo el siguiente paso.',
+      'Escríbenos para propuestas estratégicas, soporte o alianzas. Coordinamos sesiones de discovery y consultoría.',
   },
   badges: ['Respuestas rápidas', 'Confidencialidad', 'Enfoque en resultados'],
   emailLabel: 'Email',
   emailValue: 'cristianhbravo@outlook.es',
-  panelDescription: 'Una conversación directa sobre tu negocio, tus usuarios y el problema que necesitas resolver.',
+  panelDescription: 'Agenda reuniones ejecutivas y sesiones de discovery con el equipo CYSTEMS.',
   primaryAction: {
     label: 'Empezar proyecto',
     href: '/empezar-proyecto',

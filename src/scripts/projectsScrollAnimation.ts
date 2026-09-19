@@ -42,8 +42,16 @@ export function initProjectsScrollAnimation(): Cleanup {
   const setNativeMode = () => {
     root.dataset.psMode = 'native';
     spacer.style.height = '0px';
-    scenes.forEach((scene) => scene.classList.add('is-active'));
-    dots.forEach((dot, index) => dot.classList.toggle('is-active', index === 0));
+    scenes.forEach((scene) => {
+      scene.classList.add('is-active');
+      scene.removeAttribute('aria-hidden');
+      scene.inert = false;
+    });
+    currentIndex = -1;
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('is-active', index === 0);
+      dot.toggleAttribute('aria-current', index === 0);
+    });
     if (progressFill) progressFill.style.transform = 'scaleX(0)';
     if (counterCurrent) counterCurrent.textContent = '1';
   };
@@ -56,10 +64,13 @@ export function initProjectsScrollAnimation(): Cleanup {
     scenes.forEach((scene, sceneIndex) => {
       scene.classList.toggle('is-active', sceneIndex === clamped);
       scene.setAttribute('aria-hidden', String(sceneIndex !== clamped));
+      scene.inert = sceneIndex !== clamped;
     });
 
     dots.forEach((dot, dotIndex) => {
       dot.classList.toggle('is-active', dotIndex === clamped);
+      if (dotIndex === clamped) dot.setAttribute('aria-current', 'step');
+      else dot.removeAttribute('aria-current');
     });
 
     if (progressFill) {
@@ -87,8 +98,9 @@ export function initProjectsScrollAnimation(): Cleanup {
   const enableDesktopMode = () => {
     root.dataset.psMode = 'scene';
     updateSpacerHeight();
-    scenes.forEach((scene) => scene.setAttribute('aria-hidden', 'true'));
-    goToScene(Math.max(0, currentIndex));
+    const nextIndex = Math.max(0, currentIndex);
+    currentIndex = -1;
+    goToScene(nextIndex);
     requestSync();
   };
 
@@ -111,11 +123,13 @@ export function initProjectsScrollAnimation(): Cleanup {
     }, 120);
   };
 
-  dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
+  const dotHandlers = dots.map((dot, index) => {
+    const onClick = () => {
       if (!desktopQuery.matches) return;
       window.scrollTo({ top: index * getScrollDistance(), behavior: 'smooth' });
-    });
+    };
+    dot.addEventListener('click', onClick);
+    return () => dot.removeEventListener('click', onClick);
   });
 
   window.addEventListener('scroll', requestSync, { passive: true });
@@ -130,5 +144,6 @@ export function initProjectsScrollAnimation(): Cleanup {
     window.removeEventListener('scroll', requestSync);
     window.removeEventListener('resize', onResize);
     desktopQuery.removeEventListener?.('change', syncMode);
+    dotHandlers.forEach((removeListener) => removeListener());
   };
 }

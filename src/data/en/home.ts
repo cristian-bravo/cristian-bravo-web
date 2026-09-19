@@ -7,9 +7,9 @@ import type {
 import type { PageMetadata } from '../../types/content';
 
 export const homePageMeta: PageMetadata = {
-  title: 'Custom software and AI in Ecuador | CYSTEMS',
+  title: 'CYSTEMS | Software development and business platforms',
   description:
-    'Custom software, automation and applied AI for businesses in Ecuador and beyond. We build platforms, MVPs and integrations and improve existing systems.',
+    'Web development, software architecture and custom systems for companies that need reliable technology to grow.',
 };
 
 export const homeHeroContent: HomeHeroContent = {

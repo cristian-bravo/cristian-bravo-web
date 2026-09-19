@@ -14,28 +14,33 @@ for (const prefix of ['', '/en']) {
         rescue: 'Rescatar software',
       };
 
-  test(`three project paths preserve the complete brief ${language}`, async ({
+  test(`original consultation and complete-project paths remain available ${language}`, async ({
     page,
   }) => {
     await page.goto(`${prefix}/empezar-proyecto`);
-    await expect(page.locator('.development-paper-card-link')).toHaveCount(3);
+    await expect(page.locator('.development-paper-card-link')).toHaveCount(2);
     await expect(
       page.locator(
-        `.development-support-band a[href="${prefix}/empezar-proyecto/proyecto"]`,
+        `.development-paper-card-link[href="${prefix}/empezar-proyecto/proyecto"]`,
       ),
     ).toBeVisible();
-    for (const intent of Object.keys(types)) {
-      await expect(
-        page.locator(
-          `.development-paper-card-link[href="${prefix}/empezar-proyecto/simple?intent=${intent}"]`,
-        ),
-      ).toHaveCount(1);
-    }
-    await page.goto(prefix || '/');
-    await page.locator('.studio-rescue a').click();
+    await page
+      .locator(
+        `.development-paper-card-link[href="${prefix}/empezar-proyecto/simple"]`,
+      )
+      .click();
     await expect(page).toHaveURL(
-      new RegExp(`${prefix}/empezar-proyecto/simple\\?intent=rescue$`),
+      new RegExp(`${prefix}/empezar-proyecto/simple$`),
     );
+    await expect(page.locator('[data-simple-request-form]')).toBeVisible();
+    await page.goto(`${prefix}/empezar-proyecto/proyecto`);
+    await expect(page.locator('[data-project-wizard-form]')).toBeVisible();
+  });
+
+  test(`bookmarked project intent survives language switching ${language}`, async ({
+    page,
+  }) => {
+    await page.goto(`${prefix}/empezar-proyecto/simple?intent=rescue`);
     await expect(page.locator('[data-project-intent]')).toBeVisible();
     await page.locator('.header-lang-toggle').click();
     const alternate = prefix ? '' : '/en';

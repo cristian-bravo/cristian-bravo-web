@@ -7,14 +7,14 @@ import type {
 import type { PageMetadata } from '../../types/content';
 
 export const servicesPageMeta: PageMetadata = {
-  title: 'Custom software, automation and AI services | CYSTEMS',
-  description: 'Business platforms, MVPs, APIs and applied AI from Ecuador. Software audits, project recovery, maintenance and technical support.',
+  title: 'Services | CYSTEMS',
+  description: 'Technology services for strategy, platform development and continuous operations.',
 };
 
 export const servicesIntro: ServicesIntroContent = {
   kicker: 'Services',
-  title: 'Build it, connect it, make it work.',
-  subtitle: 'Custom software, artificial intelligence and technical support. We start with the problem your business needs to solve.',
+  title: 'From the first decision to a platform ready to scale.',
+  subtitle: 'I do more than write code: I help shape the technical path and build it with business context.',
 };
 
 export const serviceCards: ServiceCardContent[] = [
@@ -42,7 +42,7 @@ export const servicesAccompaniment: ServicesAccompanimentContent = {
   kicker: 'Partnership',
   title: 'Technology that evolves with your company at every stage',
   description:
-    'We work with you from the first idea to ongoing operations, with clear scope and visible progress.',
+    'I plug into your process from the first idea to continuous operation, turning strategy into measurable outcomes.',
   badges: ['Clear path from day one', 'Step-by-step growth'],
   insightTitle: 'Results that support growth',
   insightPoints: [
@@ -87,7 +87,7 @@ export const serviceModals: ServicesModalContent[] = [
     kicker: 'Operations and support',
     title: 'It is not only built: it is kept running',
     description:
-      'We help with deployment, security and performance, including server setup, backups and ongoing improvements.',
+      'I take care of deployment, uptime, security and performance, including server setup, backups and continuous improvements.',
     bullets: [
       'Deployments, VPS setup, domains, SSL and production environments.',
       'Performance optimization and production issue resolution.',
@@ -101,7 +101,7 @@ export const serviceModals: ServicesModalContent[] = [
     kicker: 'End-to-end partnership',
     title: 'More than development: a strategic technology partner',
     description:
-      'We work on the product from the first idea through launch and ongoing improvements, with direct communication along the way.',
+      'I get involved in the vision from the first idea until your platform is operating, growing and creating real business impact.',
     bullets: [
       'One technical owner connecting business strategy with technology.',
       'Direct communication, measurable progress and agile decisions at every stage.',

@@ -49,8 +49,8 @@ export interface HomeNextStepContent {
 }
 
 export const homePageMeta: PageMetadata = {
-  title: 'Desarrollo de software e IA en Ecuador | CYSTEMS',
-  description: 'Software a medida, automatización e inteligencia artificial para empresas en Ecuador. Construimos plataformas, MVPs e integraciones y mejoramos sistemas existentes.',
+  title: 'CYSTEMS | Desarrollo de software y plataformas empresariales',
+  description: 'Desarrollo web, arquitectura de software y sistemas a medida para empresas que necesitan crecer con tecnología confiable.',
 };
 
 export const homeHeroContent: HomeHeroContent = {
