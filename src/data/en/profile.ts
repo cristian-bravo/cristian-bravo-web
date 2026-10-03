@@ -84,19 +84,16 @@ export const profileStoryContent: ProfileStoryContent = {
   ...esStory,
   header: {
     kicker: 'About me',
-    title: 'Who I am and how CYSTEMS started',
-    description:
-      'CYSTEMS comes from my love for programming, learning, improving and building something of my own from that path.',
+    title: 'How CYSTEMS began',
+    description: '',
   },
-  introTitle: 'Programming is more than code for me',
+  introTitle: 'It started with curiosity',
   introParagraphs: [
-    'I started with curiosity about how things work, and over time it became a passion.',
-    'Today programming is my way to build, learn constantly and turn ideas into something real.',
+    'I started programming to understand how things worked. I still enjoy that process of discovery and giving shape to an idea.',
   ],
-  originTitle: 'CYSTEMS is part of that journey',
+  originTitle: 'A path of my own',
   originParagraphs: [
-    'It was not born as a traditional company, but as a way to grow as a developer and live from this craft.',
-    'It is also a solution for startups: technical guidance from zero, helping build real systems step by step.',
+    'CYSTEMS brings together my growth as a developer and technical guidance for startups that need help getting started.',
   ],
   quote: 'I want to live from what I like: programming and building.',
   points: [
@@ -120,56 +117,53 @@ export const profileStoryContent: ProfileStoryContent = {
     },
   ],
   companions: [
-    { ...esStory.companions[0], alt: 'Constant curiosity', title: 'Constant curiosity', description: 'I always want to understand more and learn something new.' },
+    { ...esStory.companions[0], alt: 'Curiosity', title: 'Curiosity', description: 'I always want to understand more and learn something new.' },
     { ...esStory.companions[1], alt: 'Detail', title: 'Detail', description: 'I like doing things well, even the small ones.' },
-    { ...esStory.companions[2], alt: 'Iteration', title: 'Iterate and improve', description: 'I improve step by step, project after project.' },
-    { ...esStory.companions[3], alt: 'Real motivation', title: 'Real motivation', description: 'My goal is clear: live from this and keep building.' },
+    { ...esStory.companions[2], alt: 'Iteration', title: 'Iteration', description: 'I improve step by step, project after project.' },
+    { ...esStory.companions[3], alt: 'Motivation', title: 'Motivation', description: 'My goal is clear: live from this and keep building.' },
   ],
 };
 
 export const profileExpertiseContent: ProfileExpertiseContent = {
   ...esExpertise,
   header: {
-    kicker: 'Professional profile',
-    title: 'What I have built and where I create value',
+    kicker: 'My work',
+    title: 'From idea to production',
     description:
-      'I have worked from analysis and architecture to interface, integrations and the operation that keeps each production system alive.',
+      'Architecture, interfaces and integrations that work together.',
   },
   cards: [
     {
       ...esExpertise.cards[0],
-      badge: 'Focus and structure',
-      title: 'I organize ideas, processes and decisions',
+      badge: 'Planning',
+      title: 'Shape the idea',
       description:
-        'When a project starts without clarity, I turn it into a coherent and viable technical/product roadmap.',
+        'I turn needs and processes into a practical technical plan.',
       bullets: [
-        'Technical and product review to identify risks, friction and opportunities.',
-        'Phased roadmaps that allow progress without improvisation.',
-        'Architecture decisions aligned with goals, context and growth.',
+        'Risk and priority assessment.',
+        'Architecture and phased delivery.',
       ],
     },
     {
       ...esExpertise.cards[1],
-      badge: 'Platforms and systems',
-      title: 'I build solutions designed to grow',
+      badge: 'Development',
+      title: 'Connect the whole system',
       description:
-        'I develop production systems where frontend, backend and architecture work clearly, modularly and scalably.',
+        'I integrate frontend and backend into platforms built to evolve.',
       bullets: [
-        'Real projects supporting this approach: NY Campus Virtual, Fualtec, Alkosto, Education platforms.',
-        'Experience in dashboards, management portals and digital platforms.',
-        'API integrations, automation and structures prepared for evolution.',
+        'Dashboards, portals and e-commerce.',
+        'APIs and process automation.',
       ],
     },
     {
       ...esExpertise.cards[2],
-      badge: 'Evolution and support',
-      title: 'I support systems in production',
+      badge: 'Operations',
+      title: 'Keep production running',
       description:
-        'I focus on stability, continuous improvement and evolution after the system is running.',
+        'I keep systems stable and support their next improvements.',
       bullets: [
-        'VPS, domains, SSL and production environments configured with technical judgment.',
-        'Monitoring, adjustments and improvements to maintain performance and stability.',
-        'Participation in initiatives such as 360IO and Club Guias.',
+        'VPS, domains and SSL.',
+        'Monitoring and performance tuning.',
       ],
     },
   ],
@@ -182,9 +176,8 @@ export const profileInterestsContent: ProfileInterestsContent = {
   ...esInterests,
   header: {
     kicker: 'Interests and influences',
-    title: 'What is also part of who I am',
-    description:
-      'Anime, videogames and Japanese culture influence the way I think, learn and build.',
+    title: 'Outside work',
+    description: '',
   },
   narrativeTitle: 'Not everything is code',
   narrativeParagraphs: [
@@ -193,25 +186,25 @@ export const profileInterestsContent: ProfileInterestsContent = {
   ],
   tags: ['Anime', 'Videogames', 'Japanese culture', 'LoL', 'Programming', 'Continuous learning'],
   clusters: [
-    { ...esInterests.clusters[0], title: 'Stories that inspire', description: 'Anime resonates with me because it communicates growth, discipline and goals that seem impossible.' },
-    { ...esInterests.clusters[1], title: 'Compete and improve', description: 'Videogames shape how I think: learn, make mistakes and keep improving.' },
-    { ...esInterests.clusters[2], label: 'Culture', title: 'Discipline and consistency', description: 'Japanese culture inspires me through continuous improvement and attention to detail.' },
-    { ...esInterests.clusters[3], label: 'Code', title: 'Programming as a hobby', description: 'Even outside work, I keep programming. I really enjoy it.' },
+    { ...esInterests.clusters[0], title: 'Stories that inspire', description: 'I am drawn to characters who persevere against impossible odds.' },
+    { ...esInterests.clusters[1], title: 'Learning through play', description: 'I enjoy competing, trying strategies and learning from every game.' },
+    { ...esInterests.clusters[2], label: 'Culture', title: 'Attention to detail', description: 'I admire the discipline and care in everyday life found in Japanese culture.' },
+    { ...esInterests.clusters[3], label: 'Code', title: 'Creating for fun', description: 'I also program in my free time, simply because I enjoy it.' },
   ],
 };
 
 export const profileVisionContent: ProfileVisionContent = {
   ...esVision,
   header: {
-    kicker: 'Vision',
-    title: 'Where I want to go',
+    kicker: 'What comes next',
+    title: 'Keep building with CYSTEMS',
     description:
-      'I want to keep growing as a developer, build better systems and live fully from this craft.',
+      'My next challenge is to work on larger-scale systems.',
   },
   motto:
-    'My goal is not only to deliver software, but to build systems that help companies grow and prove that technology can also have soul.',
+    'If a system is hard to understand, it is not finished yet.',
   mottoDetail:
-    'CYSTEMS is part of that path: a project that grows with me while I learn, build and gain real experience.',
+    'That idea guides my decisions, from architecture to interface.',
   phraseColumn: {
     ...esVision.phraseColumn,
     title: 'What I believe',
@@ -240,11 +233,10 @@ export const profileVisionContent: ProfileVisionContent = {
       'Developing CYSTEMS as part of my path.',
     ],
   },
-  ctaTitle: 'If you have an idea or project, we can build it.',
-  ctaDescription:
-    'I am interested in real work where I can contribute, learn and keep growing as a developer.',
+  ctaTitle: 'Ready to build your next idea?',
+  ctaDescription: 'Tell me what you need to solve.',
   primaryAction: {
-    label: 'Start',
+    label: 'Start a project',
     href: '/en/empezar-proyecto',
   },
   secondaryAction: {

@@ -59,7 +59,7 @@ const mobilePanelId = 'site-mobile-menu';
   data-menu-open-label={copy.menuOpenLabel}
   data-menu-close-label={copy.menuCloseLabel}
 >
-  <div class="header-container mx-auto w-full max-w-[1120px] px-4 sm:px-6">
+  <div class="header-container mx-auto w-full max-w-[1240px] px-4 sm:px-6">
     <div class="header-row">
       <div class="header-toggle-spacer" aria-hidden="true"></div>
 
@@ -299,7 +299,7 @@ const mobilePanelId = 'site-mobile-menu';
     const mobileLinks = Array.from(
       header.querySelectorAll('[data-header-mobile-link]'),
     );
-    const desktopQuery = window.matchMedia('(min-width: 768px)');
+    const desktopQuery = window.matchMedia('(min-width: 1120px)');
     const openLabel =
       header.getAttribute('data-menu-open-label') || 'Open main menu';
     const closeLabel =
@@ -331,7 +331,11 @@ const mobilePanelId = 'site-mobile-menu';
     };
 
     const updateScrolledState = () => {
-      header.classList.toggle('is-scrolled', window.scrollY > 16);
+      // Shrinking this in-flow header can move the scroll anchor upwards.
+      // Separate entry/exit thresholds prevent that adjustment from repeatedly
+      // expanding and shrinking the page while a form control is focused.
+      const wasScrolled = header.classList.contains('is-scrolled');
+      header.classList.toggle('is-scrolled', window.scrollY > (wasScrolled ? 8 : 48));
       syncIndicator();
     };
 
@@ -512,6 +516,7 @@ const mobilePanelId = 'site-mobile-menu';
     position: relative;
     display: flex;
     flex-direction: column;
+    max-width: 1240px;
   }
 
   [data-site-header] .header-row {
@@ -655,6 +660,8 @@ const mobilePanelId = 'site-mobile-menu';
   [data-site-header] .header-nav {
     position: relative;
     display: inline-flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
     align-items: center;
     justify-content: center;
     gap: 0.7rem;
@@ -1038,7 +1045,7 @@ const mobilePanelId = 'site-mobile-menu';
     box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.1);
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 1119px) {
     [data-site-header].header-shell {
       padding-top: 0.54rem;
     }
@@ -1177,7 +1184,38 @@ const mobilePanelId = 'site-mobile-menu';
     }
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) and (max-width: 1119px) {
+    [data-site-header] .header-row { gap: 0.6rem; }
+    [data-site-header] .header-frame {
+      display: flex;
+      padding: 0.5rem 0.75rem;
+      gap: 1rem;
+    }
+    [data-site-header] .brand-logo-link { width: 10rem; }
+    [data-site-header] .header-actions {
+      position: static;
+      margin-left: auto;
+      transform: none;
+      gap: 0.6rem;
+    }
+    [data-site-header] .header-cta,
+    [data-site-header] .header-theme-toggle { display: inline-flex; }
+    [data-site-header] .header-lang-toggle { display: inline-grid; }
+    [data-site-header] .header-cta-label { display: inline; }
+    [data-site-header] .header-cta-label-short { display: none; }
+    [data-site-header] .header-menu-toggle { width: 2.75rem; height: 2.75rem; }
+  }
+
+  @media (min-width: 1120px) and (max-width: 1279px) {
+    [data-site-header] .header-frame { gap: 0.85rem; }
+    [data-site-header] .brand-logo-link { width: 12rem; }
+    [data-site-header] .brand-logo-img { width: 100%; }
+    [data-site-header] .brand-logo-dark { width: calc(100% - 1.2rem); }
+    [data-site-header] .header-nav { gap: 0.3rem; }
+    [data-site-header] .header-actions { gap: 0.6rem; }
+  }
+
+  @media (min-width: 1120px) {
     [data-site-header] .header-mobile-panel {
       display: none !important;
     }

@@ -4,6 +4,7 @@
 
 - [Handoff técnico](ai-handoff-cystems.md): arquitectura y decisiones actuales; consultar primero la sección de septiembre de 2026.
 - [QA](qa-report.md): cobertura, resultados reproducibles y limitaciones de las pruebas.
+- [Ampliación de Proyectos](proyectos-refresh-2026-10-03.md): orden, capturas reales, CV y QA de octubre de 2026.
 - [Correo](email-delivery.md): configuración SMTP, seguridad y pruebas de entrega.
 - [Yuki](yuki-integration.md): arquitectura, arranque conectado, configuración y estado real de la integración.
 - La integración pública de Yuki se documenta en `../yuki-bot/docs/integrations/SITE_CHAT.md` (repositorio hermano). No colocar sus credenciales en variables públicas ni en JavaScript del navegador.

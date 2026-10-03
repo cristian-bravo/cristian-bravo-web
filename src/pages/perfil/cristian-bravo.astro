@@ -1,8 +1,7 @@
 ---
 import ProfileLayout from '../../layouts/ProfileLayout.astro';
+import ProfileJourney from '../../components/profile/ProfileJourney.astro';
 import ProfileHeroSection from '../../components/profile/sections/ProfileHeroSection.astro';
-import ProfileAvatarSection from '../../components/profile/sections/ProfileAvatarSection.astro';
-import ProfileProfessionalLeadSection from '../../components/profile/sections/ProfileProfessionalLeadSection.astro';
 import ProfileStorySection from '../../components/profile/sections/ProfileStorySection.astro';
 import ProfileExpertiseSection from '../../components/profile/sections/ProfileExpertiseSection.astro';
 import ProfileInterestsSection from '../../components/profile/sections/ProfileInterestsSection.astro';
@@ -25,15 +24,20 @@ const {
 <ProfileLayout title={profilePageMeta.title} description={profilePageMeta.description} lang={lang}>
   <div class="profile-page">
     <div class="profile-hero-stack">
-      <ProfileHeroSection content={profileHeroContent}>
-        <ProfileAvatarSection content={profileAvatarContent} />
-      </ProfileHeroSection>
+      <ProfileHeroSection content={profileHeroContent} introduction={profileAvatarContent} />
+      <a class="profile-scroll-cue" href="#perfil-recorrido">
+        {lang === 'en' ? 'Keep exploring' : 'Sigue explorando'}
+        <svg width="16" height="20" viewBox="0 0 16 20" fill="none" aria-hidden="true">
+          <path d="M8 2v15m-5-5 5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
     </div>
-    <ProfileProfessionalLeadSection content={profileHeroContent} pet={profileVisionContent.pet} />
-    <ProfileExpertiseSection content={profileExpertiseContent} />
-    <ProfileStorySection content={profileStoryContent} />
-    <ProfileInterestsSection content={profileInterestsContent} />
-    <ProfileVisionSection content={profileVisionContent} />
+    <ProfileJourney lang={lang}>
+      <ProfileExpertiseSection slot="work" content={profileExpertiseContent} lang={lang} />
+      <ProfileStorySection slot="story" content={profileStoryContent} />
+      <ProfileInterestsSection slot="interests" content={profileInterestsContent} />
+      <ProfileVisionSection slot="vision" content={profileVisionContent} lang={lang} />
+    </ProfileJourney>
   </div>
 </ProfileLayout>
 

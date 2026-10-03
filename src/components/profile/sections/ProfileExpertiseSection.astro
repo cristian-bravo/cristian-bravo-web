@@ -4,9 +4,10 @@ import type { ProfileExpertiseContent } from '../../../data';
 
 interface Props {
   content: ProfileExpertiseContent;
+  lang: 'es' | 'en';
 }
 
-const { content } = Astro.props;
+const { content, lang } = Astro.props;
 ---
 <section class="profile-expertise-section border-y border-slate-200/70 bg-slate-50/80 py-16 dark:border-brand-purple/15 dark:bg-white/5 sm:py-20 lg:py-24">
   <div class="mx-auto w-full max-w-[1180px] px-4 sm:px-6">
@@ -18,7 +19,7 @@ const { content } = Astro.props;
       descriptionClassName="max-w-3xl text-base text-slate-600 dark:text-brand-muted sm:text-lg"
     />
 
-    <div class="grid gap-6 xl:grid-cols-3">
+    <div class="grid gap-5 lg:grid-cols-3">
       {content.cards.map((card, index) => (
         <article class="profile-expertise-card">
           <img
@@ -48,32 +49,12 @@ const { content } = Astro.props;
       ))}
     </div>
 
-    <div class="profile-expertise-band">
-      <div class="profile-chip-section">
-        <p class="profile-story-label">Servicios base</p>
-        <div class="profile-chip-row">
-          {content.serviceLabels.map((label) => (
-            <span class="profile-signal-chip">{label}</span>
-          ))}
-        </div>
-      </div>
-
-      <div class="profile-chip-section">
-        <p class="profile-story-label">Referencias</p>
-        <div class="profile-chip-row">
-          {content.projectLabels.map((label) => (
-            <span class="profile-signal-chip">{label}</span>
-          ))}
-        </div>
-      </div>
-
-      <div class="profile-chip-section">
-        <p class="profile-story-label">Dominios y capacidades</p>
-        <div class="profile-chip-row">
-          {content.domainLabels.map((label) => (
-            <span class="profile-signal-chip">{label}</span>
-          ))}
-        </div>
+    <div class="profile-project-references">
+      <p class="profile-story-label">{lang === 'en' ? 'Selected work' : 'Proyectos destacados'}</p>
+      <div class="profile-chip-row">
+        {content.projectLabels.map((label) => (
+          <span class="profile-signal-chip">{label}</span>
+        ))}
       </div>
     </div>
   </div>

@@ -3,7 +3,7 @@ type Cleanup = () => void;
 const qs = <T extends HTMLElement>(root: ParentNode, sel: string) => root.querySelector<T>(sel);
 const qsAll = <T extends HTMLElement>(root: ParentNode, sel: string) => Array.from(root.querySelectorAll<T>(sel));
 
-const DESKTOP_QUERY = '(min-width: 860px) and (prefers-reduced-motion: no-preference)';
+const DESKTOP_QUERY = '(min-width: 1120px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)';
 
 const setSceneRevealIndexes = (scenes: HTMLElement[]) => {
   scenes.forEach((scene) => {
@@ -126,7 +126,8 @@ export function initProjectsScrollAnimation(): Cleanup {
   const dotHandlers = dots.map((dot, index) => {
     const onClick = () => {
       if (!desktopQuery.matches) return;
-      window.scrollTo({ top: index * getScrollDistance(), behavior: 'smooth' });
+      // Jump to the chosen project; its existing scene transition supplies the motion.
+      window.scrollTo({ top: index * getScrollDistance(), behavior: 'instant' });
     };
     dot.addEventListener('click', onClick);
     return () => dot.removeEventListener('click', onClick);

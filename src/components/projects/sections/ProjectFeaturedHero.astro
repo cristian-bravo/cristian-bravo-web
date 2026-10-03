@@ -72,7 +72,7 @@ const visualsLabel = isConfidentialFeature
   : lang === 'en'
     ? `${project.title} gallery`
     : `Galeria de ${project.title}`;
-const confidentialHeroPanels =
+const standardConfidentialHeroPanels =
   lang === 'en'
     ? {
         lead: {
@@ -126,6 +126,65 @@ const confidentialHeroPanels =
           meta: 'Sistema interno',
         },
       };
+
+const bankingHeroPanels =
+  lang === 'en'
+    ? {
+        lead: {
+          chip: 'PRIVATE',
+          primaryLabel: 'Sector',
+          primaryValue: 'Financial',
+          secondaryLabel: 'Information',
+          secondaryValue: 'Reserved',
+          meta: 'Restricted access',
+        },
+        square: {
+          chip: 'PRIVATE',
+          primaryLabel: 'Information',
+          primaryValue: 'Reserved',
+          secondaryLabel: 'Information',
+          secondaryValue: 'Reserved',
+          meta: 'Confidential information',
+        },
+        tall: {
+          chip: 'PRIVATE',
+          primaryLabel: 'Sector',
+          primaryValue: 'Financial',
+          secondaryLabel: 'Details',
+          secondaryValue: 'Reserved',
+          meta: 'Not publicly available',
+        },
+      }
+    : {
+        lead: {
+          chip: 'PRIVADO',
+          primaryLabel: 'Sector',
+          primaryValue: 'Financiero',
+          secondaryLabel: 'Información',
+          secondaryValue: 'Reservada',
+          meta: 'Acceso restringido',
+        },
+        square: {
+          chip: 'PRIVADO',
+          primaryLabel: 'Información',
+          primaryValue: 'Reservada',
+          secondaryLabel: 'Información',
+          secondaryValue: 'Reservada',
+          meta: 'Información confidencial',
+        },
+        tall: {
+          chip: 'PRIVADO',
+          primaryLabel: 'Sector',
+          primaryValue: 'Financiero',
+          secondaryLabel: 'Detalles',
+          secondaryValue: 'Reservados',
+          meta: 'No disponible públicamente',
+        },
+      };
+
+const confidentialHeroPanels = project.brand === 'banking'
+  ? bankingHeroPanels
+  : standardConfidentialHeroPanels;
 ---
 
 <section
@@ -261,7 +320,11 @@ const confidentialHeroPanels =
                 src={wideItem.src}
                 alt={wideItem.alt}
                 class="ps-project-feature__image"
-                loading="eager"
+                loading="lazy"
+                width={wideItem.width}
+                height={wideItem.height}
+                srcset={wideItem.srcSet}
+                sizes={wideItem.srcSet ? '(max-width: 859px) calc(100vw - 64px), (max-width: 1280px) 48vw, 600px' : undefined}
                 decoding="async"
               />
             ) : isConfidentialFeature ? (
@@ -328,13 +391,22 @@ const confidentialHeroPanels =
         <div class="ps-project-feature__card-shell ps-project-feature__card-shell--secondary" data-reveal>
           <figure class="ps-project-feature__card">
             {squareItem.src ? (
-              <img
-                src={squareItem.src}
-                alt={squareItem.alt}
-                class="ps-project-feature__image"
-                loading="eager"
-                decoding="async"
-              />
+              <>
+                <img
+                  src={squareItem.src}
+                  alt={squareItem.alt}
+                  class="ps-project-feature__image"
+                  loading="lazy"
+                  width={squareItem.width}
+                  height={squareItem.height}
+                  srcset={squareItem.srcSet}
+                  sizes={squareItem.srcSet ? '(max-width: 859px) calc((100vw - 80px) / 2), (max-width: 1280px) 24vw, 300px' : undefined}
+                  decoding="async"
+                />
+                {squareItem.note && (
+                  <figcaption class="ps-project-feature__image-note">{squareItem.note}</figcaption>
+                )}
+              </>
             ) : isConfidentialFeature ? (
               <div class="ps-project-feature__placeholder ps-project-feature__placeholder--confidential">
                 <div class="ps-project-feature__private-layout" aria-hidden="true">
@@ -403,7 +475,11 @@ const confidentialHeroPanels =
                 src={tallItem.src}
                 alt={tallItem.alt}
                 class="ps-project-feature__image"
-                loading="eager"
+                loading="lazy"
+                width={tallItem.width}
+                height={tallItem.height}
+                srcset={tallItem.srcSet}
+                sizes={tallItem.srcSet ? '(max-width: 859px) calc((100vw - 80px) / 2), (max-width: 1280px) 24vw, 300px' : undefined}
                 decoding="async"
               />
             ) : isConfidentialFeature ? (

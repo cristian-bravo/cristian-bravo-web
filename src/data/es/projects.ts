@@ -1,9 +1,18 @@
 import type { LinkActionContent, PageMetadata, SectionHeaderContent } from '../../types/content';
+import { projectsAfterCampus, projectsAfterEducation } from './project-additions';
 
 export type ProjectGalleryItemVariant = 'wide' | 'square' | 'tall';
+export type ProjectBrand =
+  | 'ny-campus' | 'fundacion' | 'berlina' | 'telollevamos' | 'depaso'
+  | 'riocargo' | 'fualtec' | 'alkosto' | 'education' | 'idec' | 'nexus'
+  | 'sh-fast-recover' | 'integrations' | 'editorial' | 'banking';
 
 export interface ProjectGalleryItemContent {
   src?: string;
+  srcSet?: string;
+  width?: number;
+  height?: number;
+  note?: string;
   alt: string;
   caption: string;
   variant?: ProjectGalleryItemVariant;
@@ -35,6 +44,7 @@ export interface ProjectFeaturedHeroContent {
 
 export interface ProjectReferenceContent {
   title: string;
+  brand?: ProjectBrand;
   description: string;
   visibility: string;
   tags: string[];
@@ -110,7 +120,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
   heroAvatar: {
     label: 'Cristian Bravo',
     caption: 'Digital Systems Portfolio',
-    imageSrc: '/avatar/avatar_HD2.webp',
+    imageSrc: '/avatar/avatar_1.webp',
     imageAlt: 'Avatar principal para la portada del portafolio',
   },
   groups: [
@@ -119,6 +129,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
       references: [
         {
           title: 'NY Campus Virtual',
+          brand: 'ny-campus',
           description:
             'Campus virtual para gestion academica, aulas online y operacion institucional. Disenado para multiples roles, alta concurrencia y crecimiento sostenido.',
           visibility: 'Publico',
@@ -160,8 +171,10 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
             forceDark: true,
           },
         },
+        ...projectsAfterCampus,
         {
           title: 'Fualtec',
+          brand: 'fualtec',
           description:
             'Plataforma institucional y acceso seguro para clientes con documentacion tecnica centralizada y operacion empresarial confiable.',
           visibility: 'Publico',
@@ -212,6 +225,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
         },
         {
           title: 'Alkosto',
+          brand: 'alkosto',
           description:
             'E-commerce con banners promocionales, catalogo digital e integracion de productos para venta continua y operacion comercial escalable.',
           visibility: 'Publico',
@@ -261,6 +275,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
         },
         {
           title: 'Plataformas educativas',
+          brand: 'education',
           description:
             'Desarrollo de dos soluciones educativas: un sitio institucional para un colegio y una plataforma universitaria que incluye landing page, biblioteca digital y aula virtual administrada en Moodle, orientada a la gestión académica.',
           visibility: 'Publico',
@@ -318,6 +333,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
             forceDark: true,
           },
         },
+        ...projectsAfterEducation,
       ],
     },
     {
@@ -327,6 +343,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
       references: [
         {
           title: '360IO',
+          brand: 'integrations',
           description:
             'Participación en un proyecto de integraciones empresariales dentro de un entorno seguro para una empresa estadounidense. Trabajo en equipo bajo metodologías ágiles, enfocado en la comunicación entre sistemas y la automatización de procesos.',
           visibility: 'Privado',
@@ -347,6 +364,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
         },
         {
           title: 'Club Guias',
+          brand: 'editorial',
           description:
             'Primer proyecto profesional, orientado a una empresa de publicidad. Desarrollo de sitios web comerciales utilizando WordPress, con enfoque en posicionamiento SEO y presencia digital para distintos clientes.',
           visibility: 'Privado',
@@ -363,6 +381,29 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
             tags: ['WordPress', 'Integraciones', 'SEO tecnico', 'Automatizacion', 'Mantenimiento'],
             statusPills: ['Proyecto confidencial', 'Acceso restringido'],
             visualTone: 'violet',
+            forceDark: true,
+          },
+        },
+        {
+          title: 'Entidad bancaria',
+          brand: 'banking',
+          description: 'Participación en un proyecto para una entidad bancaria. Los detalles se mantienen reservados por confidencialidad.',
+          visibility: 'Privado',
+          tags: ['Sector financiero', 'Confidencialidad'],
+          gallery: [
+            {
+              alt: 'Referencia confidencial de una entidad bancaria',
+              caption: 'Información reservada',
+              variant: 'wide',
+            },
+          ],
+          isConfidential: true,
+          confidentialLabel: 'Proyecto confidencial',
+          featuredHero: {
+            variant: 'confidential-private',
+            badge: 'Sector financiero',
+            shortDescription: 'Participación en un proyecto para una entidad bancaria.\nDetalles reservados por confidencialidad.',
+            statusPills: ['Proyecto confidencial', 'Información reservada'],
             forceDark: true,
           },
         },

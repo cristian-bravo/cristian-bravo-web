@@ -1,11 +1,12 @@
 ---
-import type { ProfileHeroContent } from '../../../data';
+import type { ProfileAvatarContent, ProfileHeroContent } from '../../../data';
 
 interface Props {
   content: ProfileHeroContent;
+  introduction?: Pick<ProfileAvatarContent, 'role' | 'description'>;
 }
 
-const { content } = Astro.props;
+const { content, introduction } = Astro.props;
 const lightMediaType = content.lightMediaSrc.endsWith('.html')
   ? 'html'
   : /\.(mp4|webm|ogg)$/i.test(content.lightMediaSrc)
@@ -33,7 +34,10 @@ const getQuickLinkIcon = (icon: 'github' | 'linkedin' | 'email' | 'cv') => {
   return '/icons/PDF_file_icon.svg';
 };
 ---
-<section class="profile-hero-section" data-profile-hero>
+<section
+  class:list={['profile-hero-section', !Astro.slots.has('default') && 'profile-hero-section--wallpaper']}
+  data-profile-hero
+>
   <div class="profile-hero-layout">
     {lightMediaType === 'html' ? (
       <iframe
@@ -106,42 +110,127 @@ const getQuickLinkIcon = (icon: 'github' | 'linkedin' | 'email' | 'cv') => {
   <div class="profile-hero-avatar-layer">
     <div class="profile-hero-shell">
       <slot />
+      <div class="profile-hero-intro" data-profile-intro>
+        {introduction && (<>
+          <p class="profile-hero-intro__eyebrow" data-intro-reveal>{content.kicker}</p>
+          <h1 class="profile-hero-intro__title" data-intro-reveal>{content.title}</h1>
+          <p class="profile-hero-intro__role" data-intro-reveal>{introduction.role}</p>
+          <p class="profile-hero-intro__description" data-intro-reveal>{introduction.description}</p>
+          <a class="profile-hero-intro__link" href={content.secondaryAction.href} data-intro-reveal>
+            {content.secondaryAction.label}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+        </>)}
       {content.quickLinks.length > 0 && (
-        <nav class="profile-hero-quick-links" aria-label="Accesos rapidos del perfil">
-          {content.quickLinks.map((link, index) => {
+        <nav class="profile-contact-links" aria-label="Social / CV">
+          {content.quickLinks.map((link) => {
             const external = isExternalLink(link.href);
             const iconAsset = getQuickLinkIcon(link.icon);
 
             return (
               <a
-                class:list={['profile-hero-quick-link', `is-${link.position}`, `is-icon-${link.icon}`]}
+                class="profile-contact-link"
                 href={link.href}
                 aria-label={link.ariaLabel}
                 data-profile-quick-link
-                data-profile-quick-link-depth={String(index + 1)}
                 target={external ? '_blank' : undefined}
                 rel={external ? 'noopener noreferrer' : undefined}
                 download={link.download ? true : undefined}
-                style={`--profile-quick-link-delay: ${index * -0.8}s;`}
               >
-                <span class="profile-hero-quick-link__surface">
-                  <span class="profile-hero-quick-link__icon" aria-hidden="true">
+                <span class="profile-contact-link__icon" aria-hidden="true">
                     <img
                       src={iconAsset}
                       alt=""
-                      class="profile-hero-quick-link__img"
+                      width="30"
+                      height="30"
                       loading="eager"
                       decoding="async"
                     />
-                  </span>
                 </span>
-                <span class="profile-hero-quick-link__tooltip" aria-hidden="true">{link.label}</span>
+                <span aria-hidden="true">{{ github: 'GitHub', email: 'Email', cv: 'CV', linkedin: 'LinkedIn' }[link.icon]}</span>
               </a>
             );
           })}
         </nav>
       )}
+      </div>
     </div>
   </div>
 </section>
+
+<script>
+  import { animate } from 'animejs/animation';
+
+  let currentIntro: HTMLElement | null = null;
+  let cleanup = () => {};
+
+  const setupIntro = () => {
+    const intro = document.querySelector<HTMLElement>('[data-profile-intro]');
+    if (intro === currentIntro) return;
+    cleanup();
+    if (!intro) return;
+    currentIntro = intro;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let animations: ReturnType<typeof animate>[] = [];
+    let iconAnimations: ReturnType<typeof animate>[] = [];
+    let inView = true;
+    const syncIcons = () => {
+      iconAnimations.forEach((animation) => {
+        if (inView && !document.hidden) animation.resume();
+        else animation.pause();
+      });
+    };
+    const reveal = () => {
+      animations.forEach((animation) => animation.revert());
+      iconAnimations.forEach((animation) => animation.revert());
+      animations = [];
+      iconAnimations = [];
+      if (reducedMotion.matches) return;
+      animations = Array.from(intro.querySelectorAll<HTMLElement>('[data-intro-reveal]'))
+        .map((element, index) => animate(element, {
+          opacity: [0, 1],
+          translateY: [14, 0],
+          duration: 650,
+          delay: 80 + index * 70,
+          ease: 'outCubic',
+        }));
+      iconAnimations = Array.from(intro.querySelectorAll<HTMLImageElement>('.profile-contact-link__icon img'))
+        .map((element, index) => animate(element, {
+          translateY: [-2, 2],
+          rotate: [-2, 2],
+          duration: 2400 + index * 350,
+          delay: index * 180,
+          alternate: true,
+          loop: true,
+          ease: 'inOutSine',
+          autoplay: false,
+        }));
+      syncIcons();
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      syncIcons();
+    });
+    observer.observe(intro);
+    reveal();
+    document.addEventListener('visibilitychange', syncIcons);
+    reducedMotion.addEventListener('change', reveal);
+    cleanup = () => {
+      animations.forEach((animation) => animation.revert());
+      iconAnimations.forEach((animation) => animation.revert());
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', syncIcons);
+      reducedMotion.removeEventListener('change', reveal);
+      currentIntro = null;
+    };
+  };
+
+  setupIntro();
+  document.addEventListener('astro:page-load', setupIntro);
+  document.addEventListener('astro:before-swap', () => cleanup());
+</script>
 

@@ -1,5 +1,6 @@
 ---
 import type { ProfileAvatarContent } from '../../../data';
+import ProfileIdentityCard from '../ProfileIdentityCard.astro';
 
 interface Props {
   content: ProfileAvatarContent;
@@ -15,25 +16,7 @@ const { content } = Astro.props;
       <div class="profile-avatar-orb is-avatar-orb-3" aria-hidden="true"></div>
 
       <div class="profile-avatar-grid">
-        <article class="profile-avatar-card">
-          <div class="profile-avatar-image-wrap">
-            <img
-              src={content.imageSrc}
-              alt={content.imageAlt}
-              width="720"
-              height="960"
-              loading="eager"
-              decoding="async"
-            />
-          </div>
-
-          <p class="profile-avatar-role">{content.role}</p>
-          <div class="profile-avatar-traits">
-            {content.traits.map((trait) => (
-              <span class="profile-avatar-chip">{trait}</span>
-            ))}
-          </div>
-        </article>
+        <ProfileIdentityCard content={content} />
 
         <div class="profile-avatar-showcase">
           <div class="profile-avatar-copy">

@@ -1,0 +1,227 @@
+/* A project's website sets the palette; the portfolio supplies the layout. */
+.ps-root .ps-scene[data-project-brand] {
+  --project-light: #eff3f7;
+  --project-dark: #172334;
+  --project-accent: #345477;
+  --project-highlight: #a0bad8;
+  --brand-canvas: var(--project-light);
+  --brand-ink: #182330;
+  --brand-copy: #4b5866;
+  --brand-muted: #566574;
+  --brand-detail: var(--project-accent);
+  --brand-panel: color-mix(in srgb, white 82%, var(--project-light));
+  --brand-line: color-mix(in srgb, var(--project-accent) 19%, transparent);
+  --brand-tint: color-mix(in srgb, var(--project-accent) 7%, var(--brand-panel));
+  --brand-shadow: 0 24px 70px rgb(23 35 52 / 8%);
+  background: var(--brand-canvas);
+}
+
+.ps-root .ps-scene[data-project-brand='ny-campus'] {
+  --project-light: #edf2fa;
+  --project-dark: #101d39;
+  --project-accent: #214b9b;
+  --project-highlight: #a3c1f1;
+}
+.ps-root .ps-scene[data-project-brand='fundacion'] {
+  --project-light: #f2f6f9;
+  --project-dark: #0d263c;
+  --project-accent: #103d66;
+  --project-highlight: #b6d0e6;
+}
+.ps-root .ps-scene[data-project-brand='berlina'] {
+  --project-light: #efebf6;
+  --project-dark: #211d31;
+  --project-accent: #6c4b91;
+  --project-highlight: #c8b4e2;
+}
+.ps-root .ps-scene[data-project-brand='telollevamos'] {
+  --project-light: #edf3ff;
+  --project-dark: #101d42;
+  --project-accent: #1748db;
+  --project-highlight: #a6bfff;
+}
+.ps-root .ps-scene[data-project-brand='depaso'] {
+  --project-light: #e9eceb;
+  --project-dark: #0b0c10;
+  --project-accent: #202424;
+  --project-highlight: #a6c8bc;
+}
+.ps-root .ps-scene[data-project-brand='riocargo'] {
+  --project-light: #eef2f6;
+  --project-dark: #14223c;
+  --project-accent: #294876;
+  --project-highlight: #adc3e6;
+}
+.ps-root .ps-scene[data-project-brand='fualtec'] {
+  --project-light: #eff3f6;
+  --project-dark: #162336;
+  --project-accent: #234767;
+  --project-highlight: #b1c7dd;
+}
+.ps-root .ps-scene[data-project-brand='alkosto'] {
+  --project-light: #edf3fa;
+  --project-dark: #102d4c;
+  --project-accent: #07539b;
+  --project-highlight: #a4cef5;
+}
+.ps-root .ps-scene[data-project-brand='education'] {
+  --project-light: #eef5fa;
+  --project-dark: #102d47;
+  --project-accent: #1266a5;
+  --project-highlight: #a6d0ee;
+}
+.ps-root .ps-scene[data-project-brand='idec'] {
+  --project-light: #f7f7f5;
+  --project-dark: #232628;
+  --project-accent: #3e464b;
+  --project-highlight: #c8ced2;
+}
+.ps-root .ps-scene[data-project-brand='nexus'] {
+  --project-light: #eef6ef;
+  --project-dark: #102c23;
+  --project-accent: #087734;
+  --project-highlight: #9cd9b5;
+}
+.ps-root .ps-scene[data-project-brand='sh-fast-recover'] {
+  --project-light: #edf8fc;
+  --project-dark: #122e3e;
+  --project-accent: #08729d;
+  --project-highlight: #a0ddf5;
+}
+.ps-root .ps-scene[data-project-brand='integrations'] {
+  --project-light: #edf1f6;
+  --project-dark: #172436;
+  --project-accent: #405c80;
+  --project-highlight: #b0c6e1;
+}
+.ps-root .ps-scene[data-project-brand='editorial'] {
+  --project-light: #f2eff7;
+  --project-dark: #262037;
+  --project-accent: #6b547f;
+  --project-highlight: #cdbbdf;
+}
+.ps-root .ps-scene[data-project-brand='banking'] {
+  --project-light: #f0f3f6;
+  --project-dark: #1a2533;
+  --project-accent: #3d526c;
+  --project-highlight: #bccbdd;
+}
+
+.dark .ps-root .ps-scene[data-project-brand] {
+  --brand-canvas: var(--project-dark);
+  --brand-ink: #f4f6f9;
+  --brand-copy: #c8d0d9;
+  --brand-muted: #b4bfcd;
+  --brand-detail: var(--project-highlight);
+  --brand-panel: color-mix(in srgb, var(--project-dark) 78%, #0c1018);
+  --brand-line: color-mix(in srgb, var(--project-highlight) 20%, transparent);
+  --brand-tint: color-mix(in srgb, var(--project-highlight) 8%, var(--brand-panel));
+  --brand-shadow: 0 24px 70px rgb(0 0 0 / 16%);
+}
+
+/* DePaso's black storefront continues into its frame in either theme. */
+.ps-root .ps-scene[data-project-brand='depaso'] {
+  --brand-ink: #f4f6f5;
+  --brand-copy: #c8cfcc;
+  --brand-muted: #b2bdb8;
+  --brand-detail: #b4d5c8;
+  --brand-panel: #111415;
+  --brand-line: rgb(173 199 187 / 20%);
+  --brand-tint: #1d2422;
+}
+.dark .ps-root .ps-scene[data-project-brand='depaso'] {
+  --brand-panel: #111415;
+}
+
+.ps-root .ps-scene[data-project-brand]::before {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--brand-detail) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--brand-detail) 4%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(135deg, black, transparent 78%);
+}
+.ps-root .ps-scene[data-project-brand]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 78% 42%, var(--brand-detail), transparent 66%);
+  opacity: 0.045;
+}
+
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__surface {
+  background: var(--brand-panel);
+  border-color: var(--brand-line);
+  box-shadow: var(--brand-shadow);
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__surface::before {
+  background: linear-gradient(120deg, transparent 40%, color-mix(in srgb, var(--brand-detail) 4%, transparent));
+  opacity: 1;
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__surface::after {
+  border-color: color-mix(in srgb, var(--brand-detail) 9%, transparent);
+  background: none;
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__title {
+  color: var(--brand-ink);
+  text-shadow: none;
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__desc,
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__subtitle {
+  color: var(--brand-copy);
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project__step,
+html .ps-root .ps-scene[data-project-brand] .ps-project__separator {
+  color: var(--brand-muted);
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project__group {
+  color: var(--brand-detail);
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__badge,
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__tag,
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__status,
+html .ps-root .ps-scene[data-project-brand] .ps-project__visibility {
+  color: var(--brand-detail);
+  background: var(--brand-tint);
+  border-color: var(--brand-line);
+  box-shadow: none;
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__action--primary {
+  color: #fff;
+  background: var(--project-accent);
+  border-color: color-mix(in srgb, white 24%, var(--project-accent));
+  box-shadow: 0 5px 16px color-mix(in srgb, var(--project-accent) 14%, transparent);
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__action--secondary {
+  color: var(--brand-ink);
+  background: var(--brand-tint);
+  border-color: var(--brand-line);
+  box-shadow: none;
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__action:hover {
+  box-shadow: 0 7px 20px color-mix(in srgb, var(--project-accent) 22%, transparent);
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__action:focus-visible {
+  outline-color: var(--brand-detail);
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__visuals::before {
+  background: none;
+  box-shadow: none;
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__card {
+  background: var(--brand-panel);
+  border-color: var(--brand-line);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 9%);
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__card::after {
+  background: none;
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__card:hover {
+  border-color: var(--brand-detail);
+  box-shadow: 0 16px 38px rgb(0 0 0 / 13%);
+}
+html .ps-root .ps-scene[data-project-brand] .ps-project-feature__placeholder--confidential {
+  color: var(--brand-ink);
+  background: var(--brand-tint);
+}

@@ -1,0 +1,49 @@
+---
+import '../../styles/profile-journey.css';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const chapters = lang === 'en'
+  ? ['My work', 'My story', 'Interests', 'What’s next']
+  : ['Mi trabajo', 'Mi historia', 'Intereses', 'Lo que viene'];
+const slots = ['work', 'story', 'interests', 'vision'];
+---
+<div class="profile-journey" id="perfil-recorrido" data-profile-journey data-profile-mode="native">
+  <div class="profile-journey-stage" data-profile-stage>
+    {slots.map((name) => (
+      <div class="profile-scene" data-profile-scene id={`perfil-${name}`} tabindex="-1">
+        <div class="profile-scene-content">
+          <slot name={name} />
+        </div>
+      </div>
+    ))}
+    <nav class="profile-journey-controls" aria-label={lang === 'en' ? 'Explore my profile' : 'Recorrer mi perfil'}>
+      <div class="profile-journey-steps">
+        {chapters.map((chapter, index) => (
+          <button type="button" class="profile-journey-step" data-profile-step aria-controls={`perfil-${slots[index]}`}>
+            <span class="profile-journey-step__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+            <span>{chapter}</span>
+          </button>
+        ))}
+      </div>
+      <div class="profile-journey-track" aria-hidden="true"><span data-profile-progress></span></div>
+    </nav>
+  </div>
+</div>
+
+<script>
+  import { initProfileScrollAnimation } from '../../scripts/profileScrollAnimation';
+
+  let cleanup = () => {};
+  const init = () => {
+    cleanup();
+    cleanup = initProfileScrollAnimation();
+  };
+
+  init();
+  document.addEventListener('astro:page-load', init);
+  document.addEventListener('astro:before-swap', () => cleanup());
+</script>

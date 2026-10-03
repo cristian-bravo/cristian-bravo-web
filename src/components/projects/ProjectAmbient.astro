@@ -1,0 +1,75 @@
+---
+import type { ProjectBrand } from '../../data/es/projects';
+
+interface Props {
+  brand?: ProjectBrand;
+  placement?: 'intro' | 'project' | 'closing';
+}
+
+const { brand, placement = 'project' } = Astro.props;
+type Motif = 'orbit' | 'route' | 'architecture' | 'contour' | 'wave';
+const motifs: Record<ProjectBrand, Motif> = {
+  'ny-campus': 'orbit',
+  fundacion: 'contour',
+  berlina: 'orbit',
+  telollevamos: 'route',
+  depaso: 'route',
+  riocargo: 'route',
+  fualtec: 'architecture',
+  alkosto: 'architecture',
+  education: 'orbit',
+  idec: 'architecture',
+  nexus: 'contour',
+  'sh-fast-recover': 'wave',
+  integrations: 'route',
+  editorial: 'orbit',
+  banking: 'architecture',
+};
+const motif = placement === 'closing' ? 'wave' : brand ? motifs[brand] : 'orbit';
+const paths: Record<Motif, [string, string]> = {
+  orbit: [
+    'M-180 470C-80 115 225 25 625 70S1250 60 1510-100',
+    'M-80 950C220 780 605 925 1030 845S1540 565 1610 300',
+  ],
+  route: [
+    'M-50 380C100 380 68 115 235 115H1010C1255 115 1170-10 1470-10',
+    'M-50 920C195 920 120 805 355 805H1200C1380 805 1330 540 1500 540',
+  ],
+  architecture: [
+    'M-60 500H52V160Q52 95 117 95H1100L1265-70',
+    'M210 980L355 835H1315Q1380 835 1380 770V405H1495',
+  ],
+  contour: [
+    'M-130 580C-55 290 80 45 420 75S925 210 1260 15L1530-140',
+    'M-65 930C310 760 475 965 800 830S1300 860 1470 470',
+  ],
+  wave: [
+    'M-60 215C210-25 345 230 640 110S1140-35 1490 155',
+    'M-65 835C240 615 350 1020 770 815S1140 910 1500 720',
+  ],
+};
+---
+
+<div
+  class:list={['ps-ambient', `ps-ambient--${motif}`, `ps-ambient--${placement}`]}
+  data-project-ambient
+  data-ambient-state="idle"
+  aria-hidden="true"
+>
+  <div class="ps-ambient__wash ps-ambient__wash--top"></div>
+  <div class="ps-ambient__wash ps-ambient__wash--bottom"></div>
+  <svg class="ps-ambient__drawing" viewBox="0 0 1440 900" preserveAspectRatio="none" focusable="false">
+    {paths[motif].map((path, index) => (
+      <g data-ambient-drift>
+        <path class="ps-ambient__track" d={path} />
+        <path class="ps-ambient__echo" d={path} transform={`translate(${index ? -28 : 28} ${index ? 26 : -26})`} />
+        <path class="ps-ambient__trace" data-ambient-trace d={path} pathLength="1" />
+      </g>
+    ))}
+    <g class="ps-ambient__landmarks">
+      <circle cx="95" cy="120" r="4" />
+      <circle cx="1342" cy="790" r="4" />
+      <path d="M83 120h24M95 108v24M1330 790h24M1342 778v24" />
+    </g>
+  </svg>
+</div>

@@ -1,0 +1,92 @@
+.profile-interest-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: clamp(2rem, 5vw, 4.5rem);
+}
+
+.profile-interest-entry {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+  padding-block: 1.35rem;
+  border-top: 1px solid rgba(100, 116, 139, 0.24);
+}
+
+.profile-interest-art {
+  position: relative;
+  isolation: isolate;
+  width: 5rem;
+  aspect-ratio: 1;
+}
+
+.profile-interest-art::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--profile-interest-accent), transparent 70%);
+  opacity: 0.75;
+}
+
+.profile-interest-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(15, 23, 42, 0.12));
+}
+
+.profile-interest-copy {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.profile-interest-copy h3,
+.profile-interest-copy p {
+  margin: 0;
+}
+
+.profile-interest-copy h3 {
+  font-size: clamp(1.05rem, 1.65vw, 1.25rem);
+  line-height: 1.35;
+}
+
+.profile-interest-copy p {
+  max-width: 36ch;
+}
+
+.profile-interest-label {
+  color: #64748b;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.dark .profile-interest-entry {
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.dark .profile-interest-label {
+  color: #94a3b8;
+}
+
+@media (min-width: 768px) {
+  .profile-interest-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .profile-interest-entry {
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .profile-interest-art {
+    width: 6rem;
+  }
+}

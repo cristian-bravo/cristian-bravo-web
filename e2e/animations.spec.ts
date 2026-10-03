@@ -4,7 +4,7 @@ test.describe('restored original animation experience', () => {
   test.use({ reducedMotion: 'no-preference' });
 
   for (const prefix of ['', '/en']) {
-    test(`original profile videos and floating details play in both themes ${prefix || 'es'}`, async ({
+    test(`profile videos and contact icons animate in both themes ${prefix || 'es'}`, async ({
       page,
     }) => {
       const errors: string[] = [];
@@ -69,42 +69,32 @@ test.describe('restored original animation experience', () => {
           )
           .not.toBe(initialTime);
 
-        for (const selector of [
-          '[data-profile-quick-link]',
-          '.profile-avatar-orb',
-          '.profile-avatar-sticker-tile img',
-        ]) {
-          const animated = page.locator(selector).first();
-          const initial = await animated.evaluate((node) => ({
-            name: getComputedStyle(node).animationName,
-            transform: getComputedStyle(node).transform,
-          }));
-          expect(initial.name).not.toBe('none');
-          await expect
-            .poll(() =>
-              animated.evaluate((node) => getComputedStyle(node).transform),
-            )
-            .not.toBe(initial.transform);
+        const contacts = page.locator('[data-profile-quick-link]');
+        const before = await contacts.evaluateAll((nodes) => nodes.map((node) => ({
+          animation: getComputedStyle(node).animationName,
+          transform: getComputedStyle(node).transform,
+          x: node.getBoundingClientRect().x,
+          y: node.getBoundingClientRect().y,
+        })));
+        expect(before.every((link) => link.animation === 'none' && link.transform === 'none')).toBe(true);
+        await page.mouse.move(100, 100);
+        await page.mouse.move(1300, 750);
+        await expect.poll(() => contacts.evaluateAll((nodes) => nodes.map((node) => ({
+          animation: getComputedStyle(node).animationName,
+          transform: getComputedStyle(node).transform,
+          x: node.getBoundingClientRect().x,
+          y: node.getBoundingClientRect().y,
+        })))).toEqual(before);
+        for (const icon of await page.locator('.profile-contact-link__icon img').all()) {
+          const transform = await icon.evaluate((node) => getComputedStyle(node).transform);
+          await expect.poll(() => icon.evaluate((node) => getComputedStyle(node).transform)).not.toBe(transform);
         }
       }
 
-      const surface = page.locator('.profile-hero-quick-link__surface').first();
-      await page.mouse.move(100, 100);
-      const initialParallax = await surface.evaluate((node) =>
-        getComputedStyle(node).getPropertyValue(
-          '--profile-quick-link-parallax-x',
-        ),
-      );
-      await page.mouse.move(1300, 750);
-      await expect
-        .poll(() =>
-          surface.evaluate((node) =>
-            getComputedStyle(node).getPropertyValue(
-              '--profile-quick-link-parallax-x',
-            ),
-          ),
-        )
-        .not.toBe(initialParallax);
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await expect.poll(() => page.locator('.profile-contact-link__icon img').evaluateAll((nodes) =>
+        nodes.every((node) => getComputedStyle(node).transform === 'none')
+      )).toBe(true);
       await page.locator('.profile-story-section').scrollIntoViewIfNeeded();
       await expect(page.locator('[data-profile-navbar]')).toHaveClass(
         /is-scrolled/,
@@ -200,6 +190,10 @@ test.describe('restored original animation experience', () => {
       await expect(page.locator('[data-ps-counter-current]')).toHaveText('3');
       await expect(scenes.first()).toHaveAttribute('aria-hidden', 'true');
       await expect(dots.nth(2)).toHaveClass(/is-active/);
+      // Verify the dot reached its destination before testing a wheel interaction.
+      await expect
+        .poll(() => page.evaluate(() => Math.abs(window.scrollY - 2 * window.innerHeight * 0.58)))
+        .toBeLessThan(1);
       await page.mouse.wheel(0, 540);
       await expect
         .poll(async () => Number(await active.getAttribute('data-scene-index')))

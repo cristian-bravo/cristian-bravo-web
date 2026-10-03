@@ -1,3 +1,4 @@
+import { projectsAfterCampus, projectsAfterEducation } from './project-additions';
 import {
   projectsPortfolioContent as esProjectsPortfolioContent,
   type ProjectReferenceContent,
@@ -24,7 +25,11 @@ const withProjectCopy = (
     : undefined,
 });
 
-const publicProjects = esProjectsPortfolioContent.groups[0].references;
+// Keep translations attached to their original project when entries are inserted.
+const originalTitles = ['NY Campus Virtual', 'Fualtec', 'Alkosto', 'Plataformas educativas'];
+const publicProjects = originalTitles.map((title) =>
+  esProjectsPortfolioContent.groups[0].references.find((project) => project.title === title)!
+);
 const privateProjects = esProjectsPortfolioContent.groups[1].references;
 
 export const projectsPageMeta: PageMetadata = {
@@ -70,6 +75,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
               'Virtual campus for academic management, online classrooms and institutional operations.\nDesigned for multiple roles, high concurrency and sustained growth.',
           },
         }),
+        ...projectsAfterCampus,
         withProjectCopy(publicProjects[1], {
           description:
             'Institutional platform and secure client access with centralized technical documentation and reliable business operations.',
@@ -144,6 +150,7 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
               'Education management, virtual classroom and institutional access in one platform.\nPrepared for a digital campus, library and academic growth.',
           },
         }),
+        ...projectsAfterEducation,
       ],
     },
     {
@@ -179,6 +186,23 @@ export const projectsPortfolioContent: ProjectsPortfolioContent = {
               'Work on a private web environment focused on editorial operation, integrations and technical continuity.\nImplemented with evolutionary maintenance, automations and restricted access.',
             tags: ['WordPress', 'Integrations', 'Technical SEO', 'Automation', 'Maintenance'],
             statusPills: ['Confidential project', 'Restricted access'],
+          },
+        }),
+        withProjectCopy(privateProjects[2], {
+          title: 'Banking institution',
+          description: 'Participation in a project for a banking institution. Details remain reserved due to confidentiality.',
+          visibility: 'Private',
+          tags: ['Financial sector', 'Confidentiality'],
+          confidentialLabel: 'Confidential project',
+          gallery: privateProjects[2].gallery.map((item) => ({
+            ...item,
+            alt: 'Confidential reference for a banking institution',
+            caption: 'Reserved information',
+          })),
+          featuredHero: {
+            badge: 'Financial sector',
+            shortDescription: 'Participation in a project for a banking institution.\nDetails reserved due to confidentiality.',
+            statusPills: ['Confidential project', 'Reserved information'],
           },
         }),
       ],

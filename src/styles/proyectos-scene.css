@@ -1597,6 +1597,7 @@
 .ps-project-feature__surface {
   position: relative;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(1.5rem, 2.8vw, 3rem);
   min-height: clamp(33rem, 76vh, 44rem);
   padding: clamp(1.4rem, 2.6vw, 2.35rem);
@@ -1659,6 +1660,7 @@
 .ps-project-feature__visuals {
   position: relative;
   z-index: 1;
+  min-width: 0;
 }
 
 .ps-project-feature__copy {
@@ -1887,7 +1889,7 @@
 
 .ps-project-feature__visuals {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-areas:
     'lead lead'
     'secondary tertiary';
@@ -1956,6 +1958,19 @@
   height: 100%;
   display: block;
   object-fit: cover;
+}
+
+.ps-project-feature__image-note {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0.35rem 0.65rem;
+  background: rgba(15, 23, 42, 0.94);
+  color: #f8fafc;
+  font-size: 0.65rem;
+  line-height: 1.4;
+  text-align: center;
 }
 
 .ps-project-feature__placeholder {
@@ -3091,6 +3106,14 @@ html:not(.dark) .ps-project-feature--industrial .ps-project-feature__subtitle {
   color: #1d4ed8;
 }
 
+html:not(.dark) .ps-project-feature--industrial .ps-project-feature__title {
+  color: #0f172a;
+}
+
+.dark .ps-project-feature--retail .ps-project-feature__title {
+  color: #f8fafc;
+}
+
 html:not(.dark) .ps-project-feature--industrial .ps-project-feature__desc {
   color: #475569;
 }
@@ -3691,6 +3714,12 @@ html:not(.dark) .ps-project-feature--confidential.ps-project-feature--tone-viole
 
   .ps-project-feature__actions {
     gap: 0.55rem;
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .ps-project-feature .ps-project-feature__action {
+    min-height: 2.75rem;
   }
 
   .ps-project-feature__visuals {
@@ -3757,6 +3786,17 @@ html:not(.dark) .ps-project-feature--confidential.ps-project-feature--tone-viole
   .ps-project-feature__surface {
     padding: 1rem;
     border-radius: 1.35rem;
+  }
+
+  /* Small reserved previews remain symbolic; don't crop tiny panel labels. */
+  .ps-project-feature--confidential .ps-project-feature__card-shell:not(.ps-project-feature__card-shell--lead) .ps-project-feature__private-chip,
+  .ps-project-feature--confidential .ps-project-feature__card-shell:not(.ps-project-feature__card-shell--lead) .ps-project-feature__private-surface,
+  .ps-project-feature--confidential .ps-project-feature__card-shell:not(.ps-project-feature__card-shell--lead) .ps-project-feature__private-copy {
+    display: none;
+  }
+
+  .ps-project-feature--confidential .ps-project-feature__card-shell:not(.ps-project-feature__card-shell--lead) .ps-project-feature__private-layout {
+    place-content: center;
   }
 
   .ps-project-feature__surface::after {
@@ -4547,10 +4587,21 @@ html:not(.dark) .ps-project-feature--confidential.ps-project-feature--tone-viole
   z-index: 100;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 8px 5px;
+  border: 1px solid rgba(100, 116, 139, 0.3);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.12);
+  backdrop-filter: blur(16px);
+}
+
+.dark .ps-dots {
+  border-color: rgba(203, 213, 225, 0.3);
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 8px 30px rgba(2, 6, 23, 0.3);
 }
 
 @media (max-width: 760px) {
@@ -4562,28 +4613,94 @@ html:not(.dark) .ps-project-feature--confidential.ps-project-feature--tone-viole
   appearance: none;
   padding: 0;
   cursor: pointer;
-  width: 0.44rem;
-  height: 0.44rem;
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: clamp(26px, 3.2vh, 32px);
+  border-radius: 8px;
+  background: transparent;
+  border: 0;
+  transition: background-color 180ms ease;
+}
+
+.ps-dot__marker {
+  width: 10px;
+  height: 10px;
   border-radius: 999px;
-  background: var(--ps-dot-bg);
-  border: 1px solid var(--ps-dot-border);
-  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.1);
-  transition:
-    transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 250ms ease,
-    box-shadow 300ms ease;
+  background: #64748b;
+  transition: height 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
 }
 
-.ps-dot:hover {
-  transform: scale(1.4);
-  background: var(--ps-dot-hover);
+.dark .ps-dot__marker { background: #94a3b8; }
+
+.ps-dot:hover,
+.ps-dot:focus-visible {
+  background: rgba(124, 58, 237, 0.12);
 }
 
-.ps-dot.is-active {
-  transform: scale(1.55);
+.ps-dot:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 1px;
+}
+
+.ps-dot.is-active .ps-dot__marker {
+  height: 20px;
   background: linear-gradient(135deg, #7c3aed, #3b82f6);
-  border-color: transparent;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15), 0 4px 10px rgba(124, 58, 237, 0.25);
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.13);
+}
+
+.dark .ps-dot.is-active .ps-dot__marker {
+  background: linear-gradient(135deg, #c4b5fd, #60a5fa);
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.15);
+}
+
+.ps-dot__label {
+  position: absolute;
+  right: calc(100% + 14px);
+  top: 50%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: max-content;
+  max-width: 260px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid rgba(100, 116, 139, 0.22);
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #0f172a;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+  transform: translate(4px, -50%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+}
+
+.dark .ps-dot__label {
+  background: #172033;
+  color: #f1f5f9;
+  border-color: rgba(203, 213, 225, 0.25);
+}
+
+.ps-dot__number {
+  color: #7c3aed;
+  font-size: 0.65rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.dark .ps-dot__number { color: #c4b5fd; }
+
+.ps-dot:hover .ps-dot__label,
+.ps-dot:focus-visible .ps-dot__label {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
 }
 
 /* ── Scene progress bar (bottom) ── */
@@ -4661,7 +4778,7 @@ html:not(.dark) .ps-project-feature--confidential.ps-project-feature--tone-viole
   transform: translateY(0);
 }
 
-@media (max-width: 859px), (prefers-reduced-motion: reduce) {
+@media (max-width: 859px), (max-height: 699px), (prefers-reduced-motion: reduce) {
   .ps-root {
     min-height: 100vh;
     background: #f8faff;

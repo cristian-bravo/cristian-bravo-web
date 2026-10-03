@@ -11,18 +11,16 @@ const companionPets = [
   '/pet/cystem-pet4.webp',
 ];
 
-const publicProjects =
-  projectsPortfolioContent.groups.find((group) => group.title.toLowerCase().includes('public'))?.references.map(
-    (reference) => reference.title
-  ) ?? [];
-
-const privateProjects =
-  projectsPortfolioContent.groups.find((group) => group.title.toLowerCase().includes('privad'))?.references.map(
-    (reference) => reference.title
-  ) ?? [];
+// Keep this existing profile selection stable as the full portfolio grows.
+const profileProjectTitles = ['NY Campus Virtual', 'Fualtec', 'Alkosto', 'Plataformas educativas'];
+const profileProjects = projectsPortfolioContent.groups
+  .flatMap((group) => group.references)
+  .filter((reference) => profileProjectTitles.includes(reference.title));
+const publicProjects = profileProjects.map((reference) => reference.title);
+const privateProjects = ['360IO', 'Club Guias'];
 
 const projectDomains = Array.from(
-  new Set(projectsPortfolioContent.groups.flatMap((group) => group.references.flatMap((reference) => reference.tags)))
+  new Set(profileProjects.flatMap((reference) => reference.tags))
 ).slice(0, 9);
 
 const serviceLabels = serviceCards.map((card) => card.title);
@@ -203,7 +201,7 @@ export const profileHeroContent: ProfileHeroContent = {
     },
     {
       label: 'Descargar mi CV',
-      href: '/cv/CV_Cristian_Hernan_Bravo.pdf',
+      href: '/cv/Cristian_Bravo_Full_Stack_Developer_CV.pdf',
       icon: 'cv',
       position: 'top-right',
       ariaLabel: 'Descargar CV de Cristian Bravo en PDF',
@@ -277,19 +275,16 @@ export const profileAvatarContent: ProfileAvatarContent = {
 export const profileStoryContent: ProfileStoryContent = {
   header: {
     kicker: 'Sobre mí',
-    title: 'Quién soy y cómo nace CYSTEMS',
-    description:
-      'CYSTEMS nace de mi amor por la programación, de mis ganas de aprender, mejorar y construir algo propio a partir de eso.',
+    title: 'El origen de CYSTEMS',
+    description: '',
   },
-  introTitle: 'Programar es más que código para mí',
+  introTitle: 'La curiosidad fue el inicio',
   introParagraphs: [
-    'Empecé con curiosidad por entender cómo funcionan las cosas, y con el tiempo se volvió una pasión.',
-    'Hoy programar es mi forma de construir, de aprender constantemente y de convertir ideas en algo real.',
+    'Empecé programando para entender cómo funcionaban las cosas. Hoy sigo disfrutando ese proceso de descubrir y dar forma a una idea.',
   ],
-  originTitle: 'CYSTEMS es parte de ese camino',
+  originTitle: 'Un camino propio',
   originParagraphs: [
-    'No nace como una empresa tradicional, sino como una forma de crecer como desarrollador y vivir de esto.',
-    'También es una solución para startups: acompañamiento técnico desde cero, ayudando a construir sistemas reales paso a paso.',
+    'CYSTEMS reúne mi crecimiento como desarrollador y el acompañamiento técnico a startups que necesitan empezar a construir.',
   ],
   quote: 'Solo quiero vivir de lo que me gusta: programar y construir.',
   quoteAuthor: 'Cristian',
@@ -319,8 +314,8 @@ export const profileStoryContent: ProfileStoryContent = {
   companions: [
     {
       src: companionPets[0],
-      alt: 'Curiosidad constante',
-      title: 'Curiosidad constante',
+      alt: 'Curiosidad',
+      title: 'Curiosidad',
       description:
         'Siempre quiero entender más y aprender algo nuevo.',
     },
@@ -334,14 +329,14 @@ export const profileStoryContent: ProfileStoryContent = {
     {
       src: companionPets[2],
       alt: 'Iteración',
-      title: 'Iterar y mejorar',
+      title: 'Iteración',
       description:
         'Voy mejorando poco a poco, proyecto tras proyecto.',
     },
     {
       src: companionPets[3],
       alt: 'Motivación',
-      title: 'Motivación real',
+      title: 'Motivación',
       description:
         'Mi objetivo es claro: vivir de esto y seguir construyendo.',
     },
@@ -350,45 +345,42 @@ export const profileStoryContent: ProfileStoryContent = {
 
 export const profileExpertiseContent: ProfileExpertiseContent = {
   header: {
-    kicker: 'Perfil profesional',
-    title: 'Lo que he construido y donde genero valor',
+    kicker: 'Mi trabajo',
+    title: 'De la idea a producción',
     description:
-      'He trabajado desde el análisis y la arquitectura hasta la interfaz, las integraciones y la operación que sostiene cada sistema en producción.',
+      'Arquitectura, interfaces e integraciones que funcionan juntas.',
   },
   cards: [
     {
-      badge: 'Enfoque y estructura',
-      title: 'Ordeno ideas, procesos y decisiones',
+      badge: 'Planificación',
+      title: 'Dar forma a la idea',
       description:
-        'Cuando un proyecto inicia sin claridad, lo transformo en una hoja de ruta técnica y de producto coherente y viable.',
+        'Convierto necesidades y procesos en un plan técnico viable.',
       bullets: [
-        'Revisión técnica y de producto para identificar riesgos, fricciones y oportunidades.',
-        'Definición de roadmaps por fases que permiten avanzar sin improvisar.',
-        'Decisiones de arquitectura alineadas a objetivos, contexto y crecimiento.',
+        'Análisis de riesgos y prioridades.',
+        'Arquitectura y entregas por fases.',
       ],
       sticker: allStickers[12],
     },
     {
-      badge: 'Plataformas y sistemas',
-      title: 'Construyo soluciones pensadas para crecer',
+      badge: 'Desarrollo',
+      title: 'Conectar todo el sistema',
       description:
-        'Desarrollo sistemas en producción donde frontend, backend y arquitectura trabajan de forma clara, modular y escalable.',
+        'Integro frontend y backend en plataformas preparadas para evolucionar.',
       bullets: [
-        `Proyectos reales que respaldan este enfoque: ${publicProjects.join(', ')}.`,
-        'Experiencia en dashboards, portales de gestión y plataformas digitales.',
-        'Integraciones con APIs, automatización y estructuras preparadas para evolución.',
+        'Dashboards, portales y comercio electrónico.',
+        'APIs y automatización de procesos.',
       ],
       sticker: allStickers[14],
     },
     {
-      badge: 'Evolución y soporte',
-      title: 'Acompaño el sistema en producción',
+      badge: 'Operación',
+      title: 'Cuidar la producción',
       description:
-        'Me enfoco en la estabilidad, mejora continua y evolución del sistema una vez que está en funcionamiento.',
+        'Mantengo los sistemas estables y acompaño sus siguientes mejoras.',
       bullets: [
-        'Configuración de VPS, dominios, SSL y entornos productivos con criterio técnico.',
-        'Monitoreo, ajustes y mejoras para mantener rendimiento y estabilidad.',
-        `Participación en iniciativas como ${privateProjects.join(', ')}.`,
+        'VPS, dominios y SSL.',
+        'Monitoreo y ajustes de rendimiento.',
       ],
       sticker: allStickers[17],
     },
@@ -401,9 +393,8 @@ export const profileExpertiseContent: ProfileExpertiseContent = {
 export const profileInterestsContent: ProfileInterestsContent = {
   header: {
     kicker: 'Gustos e influencias',
-    title: 'Lo que también forma parte de mí',
-    description:
-      'El anime, los videojuegos y la cultura japonesa influyen en cómo pienso, aprendo y construyo.',
+    title: 'Fuera del trabajo',
+    description: '',
   },
   narrativeTitle: 'No todo es código',
   narrativeParagraphs: [
@@ -417,31 +408,31 @@ export const profileInterestsContent: ProfileInterestsContent = {
       label: 'Anime',
       title: 'Historias que inspiran',
       description:
-        'El anime me gusta porque transmite crecimiento, disciplina y metas que parecen imposibles.',
+        'Me atraen los personajes que perseveran ante lo imposible.',
       stickers: allStickers.slice(0, 6),
     },
     {
       accent: 'rgba(59, 130, 246, 0.24)',
       label: 'Gaming',
-      title: 'Competir y mejorar',
+      title: 'Aprender jugando',
       description:
-        'Los videojuegos forman parte de cómo pienso: aprender, equivocarme y seguir mejorando.',
+        'Disfruto competir, probar estrategias y aprender de cada partida.',
       stickers: allStickers.slice(6, 12),
     },
     {
       accent: 'rgba(244, 114, 182, 0.2)',
       label: 'Cultura',
-      title: 'Disciplina y constancia',
+      title: 'Atención al detalle',
       description:
-        'La cultura japonesa me inspira por su enfoque en la mejora continua y el detalle.',
+        'De la cultura japonesa admiro la disciplina y el cuidado en lo cotidiano.',
       stickers: allStickers.slice(12, 18),
     },
     {
       accent: 'rgba(45, 212, 191, 0.2)',
       label: 'Código',
-      title: 'Programar como hobby',
+      title: 'Crear por gusto',
       description:
-        'Incluso fuera del trabajo sigo programando. Es algo que me gusta de verdad.',
+        'También programo en mi tiempo libre, sin que sea una obligación.',
       stickers: allStickers.slice(18, 24),
     },
   ],
@@ -449,15 +440,15 @@ export const profileInterestsContent: ProfileInterestsContent = {
 
 export const profileVisionContent: ProfileVisionContent = {
   header: {
-    kicker: 'Visión',
-    title: 'Hacia dónde quiero llegar',
+    kicker: 'Lo que viene',
+    title: 'Seguir construyendo con CYSTEMS',
     description:
-      'Quiero seguir creciendo como desarrollador, construir mejores sistemas y poder vivir completamente de esto.',
+      'Mi siguiente reto es trabajar en sistemas de mayor escala.',
   },
   motto:
-    'Mi meta no es solo entregar software, sino construir sistemas que ayuden a crecer y demuestren que la tecnología también puede tener alma.',
+    'Si un sistema no se entiende, todavía no está bien hecho.',
   mottoDetail:
-    'CYSTEMS también es parte de ese camino. Un proyecto que crece conmigo mientras aprendo, construyo y gano experiencia real.',
+    'Esa idea guía mis decisiones, desde la arquitectura hasta la interfaz.',
   phraseColumn: {
     title: 'Lo que pienso',
     items: [
@@ -486,11 +477,10 @@ export const profileVisionContent: ProfileVisionContent = {
     ],
     sticker: allStickers[22],
   },
-  ctaTitle: 'Si tienes una idea o proyecto, podemos construirlo.',
-  ctaDescription:
-    'Me interesa trabajar en cosas reales donde pueda aportar, aprender y seguir creciendo como desarrollador.',
+  ctaTitle: '¿Construimos tu próxima idea?',
+  ctaDescription: 'Cuéntame qué necesitas resolver.',
   primaryAction: {
-    label: 'Empezar',
+    label: 'Empezar proyecto',
     href: '/empezar-proyecto',
   },
   secondaryAction: {

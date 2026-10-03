@@ -1,5 +1,211 @@
 /* Profile view stylesheet */
 
+/* Keep the introduction and its contact row over the open wallpaper. */
+.profile-hero-stack:has(.profile-hero-section--wallpaper) {
+  min-height: 0;
+}
+
+.profile-hero-section.profile-hero-section--wallpaper {
+  --wallpaper-top-space: clamp(1.5rem, 4vw, 3rem);
+  --wallpaper-bottom-space: 6rem;
+  min-height: calc(100svh - var(--profile-header-height, 7rem));
+}
+
+.profile-hero-section--wallpaper .profile-hero-avatar-layer {
+  min-height: inherit;
+  padding-block: var(--wallpaper-top-space) var(--wallpaper-bottom-space);
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
+}
+
+.profile-hero-section--wallpaper .profile-hero-shell {
+  display: grid;
+  align-items: center;
+  min-height: max(18rem, calc(100svh - var(--profile-header-height, 7rem) - var(--wallpaper-top-space) - var(--wallpaper-bottom-space)));
+  max-width: 1180px;
+}
+
+.profile-hero-section--wallpaper .profile-hero-background {
+  filter: saturate(0.88) contrast(1.06) brightness(0.78);
+}
+
+.profile-hero-section--wallpaper .profile-hero-layout-overlay {
+  background:
+    linear-gradient(90deg, rgba(3, 7, 18, 0.78), rgba(3, 7, 18, 0.58) 42%, rgba(3, 7, 18, 0.12) 80%),
+    linear-gradient(180deg, rgba(3, 7, 18, 0.2), transparent 30%, rgba(2, 6, 23, 0.48));
+}
+
+.dark .profile-hero-section--wallpaper .profile-hero-layout-overlay {
+  background:
+    linear-gradient(90deg, rgba(3, 7, 18, 0.84), rgba(3, 7, 18, 0.64) 42%, rgba(3, 7, 18, 0.18) 80%),
+    linear-gradient(180deg, rgba(3, 7, 18, 0.24), transparent 30%, rgba(2, 6, 23, 0.56));
+}
+
+.profile-hero-intro {
+  position: relative;
+  width: min(34rem, calc(100% - 22rem));
+  margin-left: clamp(9rem, 12vw, 11rem);
+  padding-block: 0.5rem;
+  color: #fff;
+  text-shadow: 0 2px 20px rgba(2, 6, 23, 0.22);
+}
+
+.profile-hero-intro__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0 0 1.2rem;
+  color: #d6d0ff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.profile-hero-intro__eyebrow::before {
+  content: '';
+  width: 2rem;
+  height: 1px;
+  background: #b7a4ff;
+}
+
+.profile-hero-intro__title {
+  max-width: 8ch;
+  margin: 0;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: clamp(3.5rem, 6.2vw, 6.25rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+  color: #fff;
+}
+
+.profile-hero-intro__role {
+  margin: 1.5rem 0 0;
+  color: #d5caff;
+  font-size: clamp(0.73rem, 1vw, 0.85rem);
+  font-weight: 600;
+  line-height: 1.65;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.profile-hero-intro__description {
+  max-width: 35ch;
+  margin: 0.85rem 0 0;
+  color: #e2e8f0;
+  font-size: clamp(0.96rem, 1.3vw, 1.1rem);
+  line-height: 1.7;
+}
+
+.profile-hero-intro__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1rem;
+  min-height: 44px;
+  margin-top: 1.25rem;
+  border-bottom: 1px solid rgba(221, 214, 254, 0.55);
+  color: #fff;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 180ms ease, border-color 180ms ease;
+}
+
+.profile-hero-intro__link:hover {
+  color: #d5caff;
+  border-color: currentColor;
+}
+
+.profile-hero-intro__link:focus-visible {
+  outline: 2px solid #d5caff;
+  outline-offset: 5px;
+  border-radius: 2px;
+}
+
+.profile-contact-links {
+  display: flex;
+  gap: 0.85rem;
+  width: max-content;
+  max-width: 100%;
+  margin-top: 1.4rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(203, 213, 225, 0.18);
+}
+
+.profile-contact-link {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  color: #cbd5e1;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  border-radius: 0.85rem;
+}
+
+.profile-contact-link__icon {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 1px solid rgba(203, 213, 225, 0.22);
+  border-radius: 0.85rem;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.profile-contact-link__icon img {
+  display: block;
+  width: 1.875rem;
+  height: 1.875rem;
+  object-fit: contain;
+}
+
+.profile-contact-link:hover { color: #fff; }
+.profile-contact-link:hover .profile-contact-link__icon {
+  background: rgba(139, 119, 209, 0.18);
+  border-color: #b7a4ff;
+}
+.profile-contact-link:focus-visible {
+  outline: 2px solid #d5caff;
+  outline-offset: 5px;
+}
+
+@media (max-width: 767px) {
+  .profile-hero-section--wallpaper .profile-hero-shell {
+    padding-block: 0;
+  }
+
+  .profile-hero-intro {
+    width: 100%;
+    margin: 0;
+    padding: 0.5rem;
+  }
+
+  .profile-hero-intro__title {
+    font-size: clamp(2.8rem, 10vw, 4.5rem);
+  }
+
+  .profile-hero-intro__eyebrow {
+    margin-bottom: 1rem;
+    font-size: 0.61rem;
+  }
+
+  .profile-hero-intro__role { margin-top: 1.15rem; }
+  .profile-hero-intro__description { max-width: 30ch; }
+  .profile-hero-intro__link { margin-top: 0.8rem; }
+
+  .profile-hero-section--wallpaper .profile-hero-layout-overlay,
+  .dark .profile-hero-section--wallpaper .profile-hero-layout-overlay {
+    background:
+      linear-gradient(90deg, rgba(3, 7, 18, 0.74), rgba(3, 7, 18, 0.44)),
+      linear-gradient(180deg, rgba(3, 7, 18, 0.16), rgba(3, 7, 18, 0.34) 50%, rgba(2, 6, 23, 0.6));
+  }
+}
+
 .profile-page {
   --profile-nav-safe: 6.75rem;
   --profile-hero-bottom-space: clamp(2rem, 5vw, 3.5rem);
@@ -1052,7 +1258,7 @@
 
 .profile-story-panel {
   display: grid;
-  grid-template-rows: auto 1fr;
+  align-content: center;
   padding: clamp(1.25rem, 2.8vw, 1.8rem);
 }
 
@@ -1341,6 +1547,12 @@
   animation-delay: -1.6s;
 }
 
+.profile-story-layout {
+  display: grid;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .profile-story-columns {
   position: relative;
   z-index: 1;
@@ -1356,9 +1568,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 0.85rem;
-  min-height: 16rem;
-  height: 100%;
-  padding-block: 1rem 0;
+  padding-block: 1.25rem 0;
   border-top: 1px solid rgba(148, 163, 184, 0.22);
 }
 
@@ -1424,8 +1634,16 @@
 
 .profile-companion-card {
   display: grid;
-  gap: 1rem;
+  gap: 0.65rem;
   align-content: start;
+  padding: 0.7rem;
+}
+
+.profile-companion-title {
+  position: relative;
+  margin: 0;
+  text-align: center;
+  font-size: 0.95rem;
 }
 
 .profile-companion-media {
@@ -1494,8 +1712,18 @@
 
 .profile-expertise-card {
   display: grid;
+  align-content: start;
   gap: 1rem;
-  padding-right: clamp(4.2rem, 5vw, 5rem);
+}
+
+.profile-expertise-card .profile-expertise-badge {
+  margin-right: 3rem;
+}
+
+.profile-expertise-card .profile-card-sticker {
+  width: 3.2rem;
+  right: 0.45rem;
+  top: 0.35rem;
 }
 
 .profile-expertise-badge {
@@ -1567,6 +1795,14 @@
   margin-top: 1.5rem;
 }
 
+.profile-project-references {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 1.25rem;
+  margin-top: 1.5rem;
+}
+
 .profile-chip-section {
   position: relative;
   z-index: 1;
@@ -1582,6 +1818,7 @@
 .profile-sticker-cluster {
   display: grid;
   gap: 1rem;
+  grid-template-rows: 1fr auto;
 }
 
 .profile-sticker-cluster::before {
@@ -1788,9 +2025,17 @@
     margin-top: 0.75rem;
   }
 
-  .profile-story-columns,
-  .profile-vision-motto {
+  .profile-story-columns {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .profile-vision-motto {
+    grid-template-columns: minmax(0, 1fr) 13rem;
+    gap: 2.5rem;
+  }
+
+  .profile-companion-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .profile-story-points,
@@ -1804,6 +2049,18 @@
 }
 
 @media (min-width: 1024px) {
+  .profile-story-layout {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+
+  .profile-companion-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .profile-sticker-board {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   .profile-hero-grid {
     grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
     align-items: stretch;
@@ -1964,14 +2221,12 @@
     scrollbar-width: thin;
   }
 
-  .profile-companion-grid,
   .profile-story-points,
   .profile-vision-grid {
     grid-template-columns: 1fr;
   }
 
   .profile-story-point,
-  .profile-expertise-card,
   .profile-vision-column {
     padding-right: 4.2rem;
   }

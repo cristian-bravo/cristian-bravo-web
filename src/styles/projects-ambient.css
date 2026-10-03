@@ -1,0 +1,83 @@
+/* Decorative, brand-colored linework behind every portfolio scene. Motion is
+   controlled by anime.js so offscreen scenes never run continuous animations. */
+.ps-root .ps-scene {
+  --ambient-color: var(--project-accent, #7553bc);
+  --ambient-secondary: var(--project-accent, #3972c7);
+  --ambient-track-opacity: 0.2;
+  --ambient-trace-opacity: 0.44;
+  --ambient-wash-opacity: 0.085;
+}
+.dark .ps-root .ps-scene {
+  --ambient-color: var(--project-highlight, #bba3f0);
+  --ambient-secondary: var(--project-highlight, #87b6ee);
+  --ambient-track-opacity: 0.18;
+  --ambient-trace-opacity: 0.4;
+  --ambient-wash-opacity: 0.075;
+}
+.ps-root .ps-scene[data-project-brand='depaso'] {
+  --ambient-color: #49685e;
+  --ambient-secondary: #49685e;
+}
+.dark .ps-root .ps-scene[data-project-brand='depaso'] {
+  --ambient-color: #86aa9b;
+  --ambient-secondary: #86aa9b;
+}
+
+.ps-root .ps-scene::before {
+  opacity: 0.4;
+}
+.ps-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  contain: paint;
+  pointer-events: none;
+  user-select: none;
+}
+.ps-ambient__drawing {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  color: var(--ambient-color);
+}
+.ps-ambient__drawing path,
+.ps-ambient__drawing circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.ps-ambient__track { opacity: var(--ambient-track-opacity); }
+.ps-ambient__echo { opacity: 0.065; }
+.ps-ambient__drawing .ps-ambient__trace {
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 0.08 0.92;
+  stroke-dashoffset: 0.2;
+  opacity: var(--ambient-trace-opacity);
+}
+.ps-ambient__landmarks { opacity: 0.3; }
+.ps-ambient__wash {
+  position: absolute;
+  width: 70%;
+  height: 80%;
+  opacity: var(--ambient-wash-opacity);
+  background: radial-gradient(ellipse, var(--ambient-color), transparent 68%);
+}
+.ps-ambient__wash--top { top: -42%; left: -16%; }
+.ps-ambient__wash--bottom {
+  right: -22%;
+  bottom: -44%;
+  background: radial-gradient(ellipse, var(--ambient-secondary), transparent 68%);
+}
+.ps-ambient--closing .ps-ambient__landmarks { opacity: 0.15; }
+
+@media (max-width: 1119px) {
+  .ps-ambient__drawing { opacity: 0.8; }
+  .ps-ambient__wash { width: 110%; height: 65%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ps-ambient__trace { opacity: 0.2; }
+}
