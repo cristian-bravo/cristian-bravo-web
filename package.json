@@ -14,6 +14,7 @@
     "test:email": "node --test tests/email-fixture.test.mjs tests/email-endpoint-fixture.test.mjs",
     "test:security": "node --test tests/rate-limit-proxy.test.mjs",
     "test:yuki:gateway": "node --test deploy/yuki-site-gateway/test/gateway.test.mjs",
+    "test:yuki:proxy": "node --test tests/yuki-proxy.test.mjs",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:qa": "playwright test --project=chromium",

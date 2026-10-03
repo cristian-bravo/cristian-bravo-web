@@ -1,6 +1,26 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from './fixtures';
 
+test('header stays stable near its scroll threshold while using the inquiry form', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto('/empezar-proyecto/simple?intent=new');
+  const header = page.locator('[data-site-header]');
+  await page.evaluate(() => window.scrollTo(0, 60));
+  await expect(header).toHaveClass(/is-scrolled/);
+  await page.evaluate(() => window.scrollTo(0, 24));
+  const states = await header.evaluate(async (element) => {
+    const samples: boolean[] = [];
+    for (let frame = 0; frame < 12; frame++) {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      samples.push(element.classList.contains('is-scrolled'));
+    }
+    return samples;
+  });
+  expect(states.every(Boolean)).toBe(true);
+  await page.locator('[data-submit-button]').click();
+  await expect(page.locator('[name="name"]')).toHaveAttribute('aria-invalid', 'true');
+});
+
 test('mobile navigation supports keyboard, Escape and inert closed content', async ({
   page,
 }) => {
@@ -88,6 +108,28 @@ test('Yuki handles safe rendering, history opt-in and keyboard dismissal', async
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
     .analyze();
   expect(results.violations).toEqual([]);
+});
+
+test('the configured CRM entry is public navigation and never includes a session', async ({ page }) => {
+  await page.goto('/');
+  const links = page.locator('[data-crm-workspace-link]');
+  expect(await links.count()).toBeGreaterThanOrEqual(2);
+  for (const link of await links.all()) {
+    await expect(link).toHaveAttribute('href', 'https://crm.example.test/login');
+    await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    await expect(link).toHaveAttribute('referrerpolicy', 'no-referrer');
+  }
+});
+
+test('Yuki acknowledges a consented message awaiting review without showing private metadata', async ({ page }) => {
+  await page.route('**/api/yuki-chat', (route) => route.fulfill({ status: 202, json: { success: true, status: 'pending_review' } }));
+  await page.goto('/');
+  await page.locator('[data-yuki-open]').click();
+  await page.locator('[data-yuki-consent]').check();
+  await page.locator('[data-yuki-input]').fill('Quiero conversar sobre mi proyecto.');
+  await page.locator('[data-yuki-send]').click();
+  await expect(page.locator('[data-yuki-messages]')).toContainText('La respuesta está pendiente.');
+  await expect(page.locator('[data-yuki-send]')).toBeEnabled();
 });
 
 for (const width of [390, 1440]) {

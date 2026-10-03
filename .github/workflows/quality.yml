@@ -1,6 +1,7 @@
 name: Quality
 on:
   push:
+    branches: [main, master]
   pull_request:
 permissions:
   contents: read
@@ -20,8 +21,9 @@ jobs:
       - run: npm run test:email
       - run: npm run test:security
       - run: npm run test:yuki:gateway
-      - run: npm run audit:deps
       - run: npx playwright install --with-deps chromium firefox webkit
+      - name: Verify inquiry form and header regressions
+        run: npm run test:e2e -- --project=chromium --grep 'header stays stable|form signals|project intent .* reaches'
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: failure()
@@ -31,3 +33,15 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 7
+  dependencies:
+    name: Existing dependency audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run audit:deps

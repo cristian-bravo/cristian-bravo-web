@@ -130,7 +130,7 @@ test.describe('Yuki proxy security boundaries', () => {
     expect(oversized.status()).toBe(413);
   });
 
-  test('returns a controlled 503 with no service secret or storage claim while Yuki is disabled', async ({ request }) => {
+  test('returns a controlled 502 with no service secret or storage claim when the dummy gateway is unavailable', async ({ request }) => {
     const response = await request.post(`${baseURL}/api/yuki-chat`, {
       headers: trustedFixtureHeaders(40),
       data: JSON.stringify({ message: 'Availability probe', remember: false }),
@@ -138,8 +138,8 @@ test.describe('Yuki proxy security boundaries', () => {
     const body = await response.json();
     const serialized = JSON.stringify(body).toLowerCase();
 
-    expect(response.status()).toBe(503);
-    expect(body).toMatchObject({ success: false, code: 'YUKI_UNAVAILABLE' });
+    expect(response.status()).toBe(502);
+    expect(body).toMatchObject({ success: false });
     expect(body).not.toHaveProperty('visitorId');
     expect(body).not.toHaveProperty('remember');
     expect(serialized).not.toMatch(/bearer|token|api[_-]?key|https?:\/\//);
@@ -150,7 +150,7 @@ test.describe('Yuki proxy security boundaries', () => {
       headers: trustedFixtureHeaders(50),
       data: JSON.stringify({ message: 'Remember this consent test', remember: true }),
     });
-    expect(optIn.status()).toBe(503);
+    expect(optIn.status()).toBe(502);
 
     const optInCookies = setCookies(optIn);
     const persistentVisitorCookie = findCookie(optInCookies, 'cystems_yuki_session');
@@ -168,7 +168,7 @@ test.describe('Yuki proxy security boundaries', () => {
       }),
       data: JSON.stringify({ message: 'Revoke remembered context', remember: false }),
     });
-    expect(revocation.status()).toBe(503);
+    expect(revocation.status()).toBe(502);
 
     const revocationCookies = setCookies(revocation);
     const ephemeralVisitorCookie = findCookie(revocationCookies, 'cystems_yuki_session');

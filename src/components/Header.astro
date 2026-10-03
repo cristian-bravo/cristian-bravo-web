@@ -1,6 +1,7 @@
 ---
 import type { Lang } from '../data';
 import { getAlternateLangPath, getUiCopy, localizePath } from '../lib/i18n';
+import { getCrmWorkspaceUrl } from '../server/crm/workspace';
 
 type NavLink = { href: string; label: string };
 
@@ -46,6 +47,8 @@ const navItems = navLinks.map((item) => ({
 
 const isDevelopmentActive = isActivePath(projectStartHref);
 const mobilePanelId = 'site-mobile-menu';
+const crmWorkspaceUrl = getCrmWorkspaceUrl();
+const crmLabel = lang === 'en' ? 'My workspace' : 'Mi espacio';
 ---
 
 <header
@@ -123,6 +126,12 @@ const mobilePanelId = 'site-mobile-menu';
         </div>
 
         <div class="header-actions">
+          {crmWorkspaceUrl && (
+            <a class="header-crm-link" href={crmWorkspaceUrl} target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" aria-label={crmLabel} title={crmLabel} data-crm-workspace-link>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><path d="M9 3v18M9 10h12" /></svg>
+              <span>{crmLabel}</span>
+            </a>
+          )}
           <a
             class:list={[
               'header-cta',
@@ -219,6 +228,11 @@ const mobilePanelId = 'site-mobile-menu';
       inert
     >
       <nav class="header-mobile-nav" aria-label={copy.mobileNavLabel}>
+        {crmWorkspaceUrl && (
+          <a class="header-mobile-link" href={crmWorkspaceUrl} target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" data-header-mobile-link data-crm-workspace-link>
+            <span>{crmLabel}</span><span aria-hidden="true">↗</span>
+          </a>
+        )}
         {navItems.map((item) => (
           <a
             class:list={['header-mobile-link', item.isActive && 'is-active']}
@@ -331,7 +345,11 @@ const mobilePanelId = 'site-mobile-menu';
     };
 
     const updateScrolledState = () => {
-      header.classList.toggle('is-scrolled', window.scrollY > 16);
+      // Shrinking this in-flow header can move the scroll anchor upwards.
+      // Separate entry/exit thresholds prevent that adjustment from repeatedly
+      // expanding and shrinking the page while a form control is focused.
+      const wasScrolled = header.classList.contains('is-scrolled');
+      header.classList.toggle('is-scrolled', window.scrollY > (wasScrolled ? 8 : 48));
       syncIndicator();
     };
 
@@ -594,6 +612,39 @@ const mobilePanelId = 'site-mobile-menu';
 
   [data-site-header] .header-primary-cta {
     order: 1;
+  }
+
+  [data-site-header] .header-crm-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-width: 36px;
+    min-height: 36px;
+    border: 1px solid var(--header-bar-border);
+    border-radius: 12px;
+    color: var(--header-nav-text);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  [data-site-header] .header-crm-link:hover,
+  [data-site-header] .header-crm-link:focus-visible {
+    color: var(--header-nav-text-active);
+    background: var(--header-nav-pill);
+    outline: 2px solid rgba(124, 58, 237, 0.35);
+    outline-offset: 2px;
+  }
+
+  [data-site-header] .header-crm-link span { display: none; }
+
+  @media (min-width: 1280px) {
+    [data-site-header] .header-crm-link { padding: 0 0.65rem; }
+    [data-site-header] .header-crm-link span { display: inline; }
+  }
+
+  @media (max-width: 767px) {
+    [data-site-header] .header-crm-link { display: none; }
   }
 
   [data-site-header] .header-menu-toggle {
