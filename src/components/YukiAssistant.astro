@@ -1,5 +1,6 @@
 ---
 import type { Lang } from '../data';
+import { getSiteChatCapabilities } from '../server/yuki/siteChat';
 
 interface Props {
   lang?: Lang;
@@ -7,9 +8,8 @@ interface Props {
 
 const { lang = 'es' } = Astro.props;
 const isEnglish = lang === 'en';
-// This capability is off until the dedicated gateway's scoped persistence
-// has been wired and verified. Presence of the chat UI is not that evidence.
-const historyEnabled = process.env.YUKI_SITE_CHAT_HISTORY_ENABLED === 'true';
+// Public capabilities are derived from validated server-only configuration.
+const { historyEnabled } = getSiteChatCapabilities();
 const copy = isEnglish
   ? {
       close: 'Close Yuki chat',
@@ -269,12 +269,14 @@ const copy = isEnglish
         ? {
             assistant: 'Yuki',
             error: 'Something went wrong. Please try again in a moment.',
+            pending: 'Your message is saved for the team to review. A reply is pending.',
             sending: 'Thinking…',
             send: 'Send',
             user: 'You',
           }
         : {
             assistant: 'Yuki',
+            pending: 'Tu mensaje quedó registrado para que el equipo lo revise. La respuesta está pendiente.',
             error: 'Algo salió mal. Inténtalo nuevamente en un momento.',
             sending: 'Pensando…',
             send: 'Enviar',
@@ -348,7 +350,7 @@ const copy = isEnglish
       try {
         const response = await fetch('/api/yuki-chat', {
           method: 'POST',
-          signal: AbortSignal.timeout(25_000),
+          signal: AbortSignal.timeout(65_000),
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             message,
@@ -364,7 +366,7 @@ const copy = isEnglish
         pending.remove();
         appendMessage(
           'assistant',
-          answer ||
+          (response.status === 202 && result?.status === 'pending_review' ? labels.pending : answer) ||
             (result && typeof result.message === 'string'
               ? result.message
               : labels.error),

@@ -11,7 +11,8 @@ import {
   normalizeText,
   readBodyWithinLimit,
 } from '../../server/security/requestGuards';
-import { askYukiSiteChat } from '../../server/yuki/siteChat';
+import { askYukiSiteChat, getSiteChatCapabilities } from '../../server/yuki/siteChat';
+import { getRuntimeEnv } from '../../server/runtimeEnv';
 
 export const prerender = false;
 
@@ -76,6 +77,13 @@ export const POST: APIRoute = async ({ request, cookies, clientAddress }) => {
     );
   }
 
+  if (payload.remember && !getSiteChatCapabilities().historyEnabled) {
+    return jsonResponse(
+      { success: false, code: 'HISTORY_UNAVAILABLE', message: 'El historial no está disponible. Puedes continuar sin guardarlo.' },
+      409
+    );
+  }
+
   const storedVisitorId = cookies.get(COOKIE_NAME)?.value;
   const storedMemoryState = cookies.get(MEMORY_STATE_COOKIE_NAME)?.value;
   const validStoredVisitorId = storedVisitorId && SESSION_PATTERN.test(storedVisitorId) ? storedVisitorId : undefined;
@@ -87,12 +95,15 @@ export const POST: APIRoute = async ({ request, cookies, clientAddress }) => {
   // The opaque visitor key is persistent only after opt-in. On revocation it
   // is rotated, rewritten as a session cookie, and cannot link new turns to
   // the identifier that scoped previously consented memory.
+  const requestUrl = new URL(request.url);
+  const developmentLoopback = getRuntimeEnv('NODE_ENV') === 'development' &&
+    requestUrl.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(requestUrl.hostname);
   const cookieOptions = {
     httpOnly: true,
     ...(payload.remember ? { maxAge: 60 * 60 * 24 * 30 } : {}),
     path: '/',
     sameSite: 'strict' as const,
-    secure: import.meta.env.PROD,
+    secure: requestUrl.protocol === 'https:' || (import.meta.env.PROD && !developmentLoopback),
   };
   cookies.set(COOKIE_NAME, visitorId, cookieOptions);
   cookies.set(
@@ -123,6 +134,10 @@ export const POST: APIRoute = async ({ request, cookies, clientAddress }) => {
       { success: false, message: 'Yuki no pudo responder ahora. Int\u00e9ntalo nuevamente en unos segundos.' },
       502
     );
+  }
+
+  if (result.pending) {
+    return jsonResponse({ success: true, status: 'pending_review' }, 202);
   }
 
   return jsonResponse({ success: true, response: result.response });

@@ -1,8 +1,14 @@
 # Integración con Yuki
 
-## Estado vigente: gateway público aislado
+La integración del espacio CYSTEMS con la cuenta privada del CRM y los modos
+actuales del proxy se describen en
+[Espacio CYSTEMS y CRM unificado](#espacio-cystems-y-crm-unificado). El código
+soporta ambos destinos; cambiar el código no activa ni redirige un servicio
+existente sin configuración explícita del servidor.
 
-La integración de producción usa `deploy/yuki-site-gateway/`, un servicio Node
+## Despliegue documentado: gateway público aislado
+
+La integración de producción documentada utiliza `deploy/yuki-site-gateway/`, un servicio Node
 22 separado del agente privado. No despliega ni importa el repositorio hermano
 `../yuki-bot`. Los apartados históricos inferiores describen la integración
 anterior y no son instrucciones de despliegue vigentes.
@@ -152,3 +158,89 @@ por separado que el estado deshabilitado entrega el control inactivo.
 - Tanto el historial consentido como el aprendizaje de largo plazo siguen pendientes de wiring seguro y verificación con dos visitantes distintos. No asociar indiscriminadamente todos los visitantes a un único scope de cliente/proyecto: se debe probar que ninguna conversación ni recuerdo cruza entre visitantes ni alcanza datos privados del propietario.
 
 Cuando falta configuración, el widget informa de indisponibilidad. No promete haber guardado la consulta ni una respuesta posterior.
+## Espacio CYSTEMS y CRM unificado
+
+El sitio público y el CRM cumplen funciones distintas dentro del mismo espacio
+de trabajo. El enlace **Mi espacio** del encabezado y **Acceder al CRM** del pie
+abre la cuenta privada del CRM. El sitio no crea otra cuenta ni recibe su
+contraseña, sesión, documentos privados o token de MCP.
+
+Configura en el servidor de Astro `CYSTEMS_CRM_URL` con la URL de entrada al CRM,
+por ejemplo `https://crm.example.com/login`. En desarrollo local se admite
+`http://127.0.0.1:3000/login`. En producción se exige HTTPS. La URL no acepta
+credenciales, parámetros, fragmentos ni protocolos ejecutables; sin una URL
+válida el enlace se oculta. No debe llevar el prefijo `PUBLIC_`.
+
+## Elegir el destino de Yuki
+
+El proxy `/api/yuki-chat` conserva dos modos explícitos:
+
+| Configuración | Destino | Historial |
+| --- | --- | --- |
+| `YUKI_SITE_CHAT_MODE=standalone` | Gateway público independiente existente | Siempre desactivado |
+| `YUKI_SITE_CHAT_MODE=unified` | `/v1/site-chat` del agente principal del CRM | Opt-in, sólo con capacidad configurada y una integración activa con proyecto/cliente |
+
+El modo por defecto continúa siendo `standalone`, para que cambiar el código
+del sitio no redirija automáticamente un despliegue existente. Para el espacio
+unificado configura estos valores **sólo en el servidor**, con una credencial
+aleatoria compartida almacenada fuera del repositorio:
+
+```dotenv
+YUKI_SITE_CHAT_ENABLED=true
+YUKI_SITE_CHAT_MODE=unified
+YUKI_SITE_CHAT_HISTORY_ENABLED=true
+YUKI_SITE_API_URL=https://crm.example.com/v1/site-chat
+YUKI_SITE_ORIGIN=https://cystems.ec
+```
+
+`YUKI_SITE_API_TOKEN` es un secreto independiente de la contraseña del CRM y
+del acceso AIRI. El backend debe declarar ese mismo origen exacto, el token
+compartido y una integración web activa asociada al proyecto CYSTEMS bajo su
+propietario real. No basta con activar el checkbox del sitio: las rutas del
+agente validan alcance y autoridad en cada turno consentido.
+
+En desarrollo local, el proxy permite HTTP sólo hacia `localhost`,
+`127.0.0.1` o `::1`. Las pruebas requieren además
+`YUKI_SITE_ALLOW_LOOPBACK_HTTP_FOR_TESTS=true` y `NODE_ENV=test`. Esos permisos
+no habilitan HTTP remoto ni HTTP en producción.
+
+## Conversaciones y privacidad
+
+Sin consentimiento, el turno es efímero: no guarda historial ni concede acceso
+a herramientas o datos privados. Con consentimiento, el identificador opaco
+se conserva en una cookie HttpOnly/SameSite=Strict y el backend decide el
+alcance del historial dentro del proyecto; el navegador no elige un owner,
+cliente, proyecto o integración. Al revocar el opt-in, se cambia el identificador
+y se reescribe la cookie como cookie de sesión. El historial anterior no se
+borra automáticamente.
+
+La UI sólo ofrece el opt-in si el puente tiene configuración válida, modo
+`unified` y capacidad de historial activada. El servidor rechaza `remember:true`
+con `409 HISTORY_UNAVAILABLE` cuando esa capacidad no está disponible, antes
+de emitir cookies persistentes. Los turnos en revisión manual/aprobación del
+CRM producen una confirmación `202 pending_review` con texto bilingüe; no se
+presentan como una respuesta enviada ni exponen metadatos privados.
+
+El proxy envía la credencial y el origen exacto únicamente al endpoint
+`/v1/site-chat`; no sigue redirects. Limita el JSON de respuesta a **64 KiB
+antes de decodificarlo**, el texto visible a 12.000 caracteres y toda la
+operación a 20 segundos. Cancela el stream al superar límites, rechaza UTF-8 o
+JSON inválido y devuelve errores públicos genéricos.
+
+## Validación de esta integración
+
+`npm run test:yuki:proxy` cubre los módulos reales del servidor con respuestas
+en memoria: modos, opt-in, formato de URL/token/origen, entrada pública al CRM,
+respuestas pendientes, límites del stream, cancelación y vencimiento de la
+operación. No usa una cuenta, un modelo ni correo reales. La suite de clicks
+incluye el enlace privado y el mensaje de revisión mediante fixtures.
+
+Un resultado de fixtures no prueba la conexión instalada. El cierre operativo
+debe comprobar un turno real sin opt-in, un turno consentido que aparezca en la
+bandeja del proyecto CYSTEMS, y la revocación del consentimiento. La activación
+del runtime y sus resultados se registran en la documentación del CRM.
+
+La preparación de avatar y voz está en
+[AIRI con el espacio unificado](unified-workspace-airi.md).
+
+---

@@ -52,9 +52,15 @@ export default defineConfig({
           ALLOWED_ORIGINS: `${baseURL},https://cystems.ec,https://www.cystems.ec`,
           EMAIL_USER: '',
           EMAIL_PASS: '',
-          YUKI_SITE_CHAT_ENABLED: 'false',
-          // Exercises consent UI against test responses, not the live gateway.
+          // A dummy, unavailable loopback endpoint enables the public consent
+          // capability for route-stubbed UI tests without any real service key.
+          YUKI_SITE_CHAT_ENABLED: 'true',
+          YUKI_SITE_CHAT_MODE: 'unified',
+          YUKI_SITE_API_URL: 'https://127.0.0.1:9/v1/site-chat',
+          YUKI_SITE_API_TOKEN: 'dummy-fixture-token-00000000000000000000000000000000',
+          YUKI_SITE_ORIGIN: 'https://cystems.ec',
           YUKI_SITE_CHAT_HISTORY_ENABLED: 'true',
+          CYSTEMS_CRM_URL: 'https://crm.example.test/login',
           // Only this isolated loopback fixture acts as a trusted reverse proxy.
           // The security unit fixture separately verifies spoof rejection by default.
           TRUST_PROXY: 'cloudflare',

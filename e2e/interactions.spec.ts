@@ -90,6 +90,28 @@ test('Yuki handles safe rendering, history opt-in and keyboard dismissal', async
   expect(results.violations).toEqual([]);
 });
 
+test('the configured CRM entry is public navigation and never includes a session', async ({ page }) => {
+  await page.goto('/');
+  const links = page.locator('[data-crm-workspace-link]');
+  expect(await links.count()).toBeGreaterThanOrEqual(2);
+  for (const link of await links.all()) {
+    await expect(link).toHaveAttribute('href', 'https://crm.example.test/login');
+    await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    await expect(link).toHaveAttribute('referrerpolicy', 'no-referrer');
+  }
+});
+
+test('Yuki acknowledges a consented message awaiting review without showing private metadata', async ({ page }) => {
+  await page.route('**/api/yuki-chat', (route) => route.fulfill({ status: 202, json: { success: true, status: 'pending_review' } }));
+  await page.goto('/');
+  await page.locator('[data-yuki-open]').click();
+  await page.locator('[data-yuki-consent]').check();
+  await page.locator('[data-yuki-input]').fill('Quiero conversar sobre mi proyecto.');
+  await page.locator('[data-yuki-send]').click();
+  await expect(page.locator('[data-yuki-messages]')).toContainText('La respuesta está pendiente.');
+  await expect(page.locator('[data-yuki-send]')).toBeEnabled();
+});
+
 for (const width of [390, 1440]) {
   test(`Yuki dynamic messages retain their styling and respect reduced motion at ${width}px`, async ({
     page,
