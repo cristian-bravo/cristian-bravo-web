@@ -345,7 +345,11 @@ const crmLabel = lang === 'en' ? 'My workspace' : 'Mi espacio';
     };
 
     const updateScrolledState = () => {
-      header.classList.toggle('is-scrolled', window.scrollY > 16);
+      // Shrinking this in-flow header can move the scroll anchor upwards.
+      // Separate entry/exit thresholds prevent that adjustment from repeatedly
+      // expanding and shrinking the page while a form control is focused.
+      const wasScrolled = header.classList.contains('is-scrolled');
+      header.classList.toggle('is-scrolled', window.scrollY > (wasScrolled ? 8 : 48));
       syncIndicator();
     };
 

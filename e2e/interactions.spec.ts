@@ -1,6 +1,26 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from './fixtures';
 
+test('header stays stable near its scroll threshold while using the inquiry form', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto('/empezar-proyecto/simple?intent=new');
+  const header = page.locator('[data-site-header]');
+  await page.evaluate(() => window.scrollTo(0, 60));
+  await expect(header).toHaveClass(/is-scrolled/);
+  await page.evaluate(() => window.scrollTo(0, 24));
+  const states = await header.evaluate(async (element) => {
+    const samples: boolean[] = [];
+    for (let frame = 0; frame < 12; frame++) {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      samples.push(element.classList.contains('is-scrolled'));
+    }
+    return samples;
+  });
+  expect(states.every(Boolean)).toBe(true);
+  await page.locator('[data-submit-button]').click();
+  await expect(page.locator('[name="name"]')).toHaveAttribute('aria-invalid', 'true');
+});
+
 test('mobile navigation supports keyboard, Escape and inert closed content', async ({
   page,
 }) => {
